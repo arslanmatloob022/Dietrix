@@ -1,0 +1,5 @@
+/*
+  Enable SPA routing in Netlify for Vue/Vite apps
+  All routes redirect to index.html
+*/
+/*    /index.html   200

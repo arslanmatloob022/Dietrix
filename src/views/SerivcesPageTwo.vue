@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
+// ...existing code...
+const visibleFoodChips = computed(() =>
+  foodItems.filter(
+    (_, i) => bowlProgress.value > (i / foodItems.length) * 0.55 + 0.38,
+  ),
+);
 
 const services = [
   {
@@ -342,8 +348,7 @@ onUnmounted(() => {
           <div class="food-chips">
             <transition-group name="chip">
               <span
-                v-for="(item, i) in foodItems"
-                v-if="bowlProgress > (i / foodItems.length) * 0.55 + 0.38"
+                v-for="item in visibleFoodChips"
                 :key="item.label"
                 class="food-chip"
                 >{{ item.emoji }} {{ item.label }}</span

@@ -16,7 +16,7 @@ const bookingStore = reactive({
     this.error = "";
     this.successMessage = "";
   },
-  async createBooking(payload: any) {
+  async createBooking() {
     this.isSubmitting = true;
     await new Promise((r) => setTimeout(r, 1800));
     this.isSubmitting = false;
@@ -78,11 +78,7 @@ function validate() {
 async function reserveSlot() {
   bookingStore.clearStatus();
   if (!validate()) return;
-  await bookingStore.createBooking({
-    ...form,
-    date: bookingStore.selectedDate,
-    time: bookingStore.selectedTime,
-  });
+  await bookingStore.createBooking();
   if (!bookingStore.error) {
     form.name = "";
     form.email = "";
