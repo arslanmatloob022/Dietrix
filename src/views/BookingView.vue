@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, reactive, ref, onMounted } from "vue";
+import { computed, reactive, ref } from "vue";
+import UiButton from "../components/ui/UiButton.vue";
 import { useSeo } from "../composables/useSeo";
 import { pageSeo } from "../data/pageSeo";
+import { submitBooking } from "../services/bookingService";
+import type { BookingPayload } from "../types/models";
 
 useSeo(pageSeo.booking);
 
-// ── Minimal stubs so the file compiles standalone ──
 const bookingStore = reactive({
   selectedDate: "",
   selectedTime: "",
@@ -20,24 +22,32 @@ const bookingStore = reactive({
     this.error = "";
     this.successMessage = "";
   },
-  async createBooking() {
+  async createBooking(payload: BookingPayload) {
     this.isSubmitting = true;
-    await new Promise((r) => setTimeout(r, 1800));
-    this.isSubmitting = false;
-    this.successMessage =
-      "🎉 Appointment reserved! Check your email for confirmation.";
+    try {
+      await submitBooking(payload);
+      this.successMessage =
+        "Appointment reserved. Check your email for confirmation and next steps.";
+    } catch (error) {
+      this.error =
+        error instanceof Error
+          ? error.message
+          : "Could not reserve the slot. Please try again.";
+    } finally {
+      this.isSubmitting = false;
+    }
   },
 });
 
 const times = ["08:00", "09:30", "11:00", "13:00", "15:30", "17:00", "19:00"];
 
 const availableDays = computed(() =>
-  Array.from({ length: 14 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
+  Array.from({ length: 14 }, (_, index) => {
+    const date = new Date();
+    date.setDate(date.getDate() + index);
     return {
-      iso: d.toISOString().split("T")[0],
-      label: d.toLocaleDateString("en-US", {
+      iso: date.toISOString().split("T")[0],
+      label: date.toLocaleDateString("en-US", {
         weekday: "short",
         month: "short",
         day: "numeric",
@@ -49,20 +59,92 @@ const availableDays = computed(() =>
 const form = reactive({ name: "", email: "", healthGoal: "", notes: "" });
 const errors = reactive({ slot: "", name: "", email: "", healthGoal: "" });
 const currentStep = ref(1);
-const mouseX = ref(0);
-const mouseY = ref(0);
 
-onMounted(() => {
-  document.addEventListener("mousemove", (e) => {
-    mouseX.value = (e.clientX / window.innerWidth - 0.5) * 20;
-    mouseY.value = (e.clientY / window.innerHeight - 0.5) * 20;
-  });
+const heroMetrics = [
+  { value: "24h", label: "reply window" },
+  { value: "14+", label: "countries supported" },
+  { value: "4.9/5", label: "client experience" },
+];
+
+const careFeatures = [
+  {
+    code: "01",
+    title: "Personal strategy",
+    desc: "A consultation built around your goal, food culture, schedule, symptoms and lifestyle barriers.",
+  },
+  {
+    code: "02",
+    title: "Clinical clarity",
+    desc: "Support for weight loss, PCOS, diabetes, gut health, thyroid-friendly routines and family meals.",
+  },
+  {
+    code: "03",
+    title: "Remote accountability",
+    desc: "Start from home with structured next steps, progress checkpoints and practical meal guidance.",
+  },
+  {
+    code: "04",
+    title: "Global access",
+    desc: "Flexible online booking for clients in Pakistan, UK, USA, Canada, UAE, KSA, Europe and Australia.",
+  },
+];
+
+const bookingSteps = [
+  {
+    step: "01",
+    title: "Choose a calm slot",
+    detail:
+      "Pick a time that fits your routine. Morning, afternoon and evening options are available.",
+  },
+  {
+    step: "02",
+    title: "Share your health context",
+    detail:
+      "Tell us your goal, symptoms, routine, food preferences and any medical notes you want considered.",
+  },
+  {
+    step: "03",
+    title: "Get your first direction",
+    detail:
+      "Your session starts with a clear roadmap for meals, habits, tracking and the right service path.",
+  },
+];
+
+const testimonials = [
+  {
+    name: "Sarah M.",
+    location: "Toronto, Canada",
+    result: "Lost 18 kg in 4 months",
+    text: "The plan finally matched my work schedule and family meals. I stopped guessing and started seeing steady progress.",
+    avatar: "SM",
+  },
+  {
+    name: "Rahul K.",
+    location: "Dubai, UAE",
+    result: "Improved glucose control",
+    text: "The consultation helped me understand food timing and portions without feeling restricted or overwhelmed.",
+    avatar: "RK",
+  },
+];
+
+const selectedAppointment = computed(() => {
+  if (!bookingStore.selectedDate || !bookingStore.selectedTime) {
+    return "No date chosen";
+  }
+
+  return `${bookingStore.selectedDate} at ${bookingStore.selectedTime}`;
 });
+
+function pickDate(date: string) {
+  bookingStore.clearStatus();
+  bookingStore.setSlot(date, "");
+  currentStep.value = 1;
+}
 
 function pickSlot(date: string, time: string) {
   bookingStore.clearStatus();
   bookingStore.setSlot(date, time);
-  if (date && time) currentStep.value = 2;
+  currentStep.value = 2;
 }
 
 function validate() {
@@ -82,7 +164,17 @@ function validate() {
 async function reserveSlot() {
   bookingStore.clearStatus();
   if (!validate()) return;
-  await bookingStore.createBooking();
+
+  currentStep.value = 3;
+  await bookingStore.createBooking({
+    name: form.name,
+    email: form.email,
+    healthGoal: form.healthGoal,
+    date: bookingStore.selectedDate,
+    time: bookingStore.selectedTime,
+    notes: form.notes,
+  });
+
   if (!bookingStore.error) {
     form.name = "";
     form.email = "";
@@ -90,1602 +182,1439 @@ async function reserveSlot() {
     form.notes = "";
   }
 }
-
-const benefits = [
-  {
-    icon: "🧬",
-    title: "Personalized Plan",
-    desc: "Custom nutrition blueprint tailored to your DNA and lifestyle",
-  },
-  {
-    icon: "📊",
-    title: "Progress Tracking",
-    desc: "Real-time analytics dashboard to monitor your transformation",
-  },
-  {
-    icon: "🤝",
-    title: "1-on-1 Support",
-    desc: "Direct access to your dietitian between sessions",
-  },
-  {
-    icon: "🌿",
-    title: "Holistic Approach",
-    desc: "Mind-body wellness integration beyond just food choices",
-  },
-];
-
-const stats = [
-  { value: "2,400+", label: "Clients Transformed" },
-  { value: "98%", label: "Satisfaction Rate" },
-  { value: "12+", label: "Years Experience" },
-  { value: "50+", label: "Health Conditions" },
-];
-
-const testimonials = [
-  {
-    name: "Sarah M.",
-    result: "Lost 18kg in 4 months",
-    text: "The personalized approach completely changed how I relate to food. Life-changing!",
-    avatar: "SM",
-  },
-  {
-    name: "Rahul K.",
-    result: "Reversed pre-diabetes",
-    text: "My doctor is amazed at my blood sugar levels. Best investment I've ever made.",
-    avatar: "RK",
-  },
-];
 </script>
 
 <template>
-  <main class="page">
-    <!-- ── Ambient background ── -->
-    <div class="ambient-bg">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-      <div class="grid-overlay"></div>
-    </div>
-
-    <!-- ── Floating particles ── -->
-    <div class="particles" aria-hidden="true">
-      <span
-        v-for="n in 20"
-        :key="n"
-        class="particle"
-        :style="{ '--i': n }"
-      ></span>
-    </div>
-
-    <!-- ── Hero Section ── -->
-    <section class="hero container">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        Booking System · Live Availability
-      </div>
-      <h1 class="hero-title">
-        Reserve Your<br />
-        <span class="gradient-text">1-on-1 Nutrition</span><br />
-        Consultation
-      </h1>
-      <p class="hero-sub">
-        Join 2,400+ clients who transformed their health with science-backed,
-        personalized nutrition therapy. Your breakthrough starts with one
-        session.
-      </p>
-
-      <!-- Stats bar -->
-      <div class="stats-row">
-        <div v-for="stat in stats" :key="stat.label" class="stat-pill">
-          <strong>{{ stat.value }}</strong>
-          <span>{{ stat.label }}</span>
+  <main class="booking-page">
+    <section class="container booking-hero reveal">
+      <div class="booking-hero-copy">
+        <p class="eyebrow">Booking System</p>
+        <h1>Reserve Your 1-on-1 Online Nutrition Consultation</h1>
+        <p class="booking-intro">
+          Start with a focused session led by Rimsha Naseer, Nutritionist. We
+          will map your goal, routine, symptoms and food preferences into a
+          practical first strategy for weight loss, PCOS, diabetes, gut health,
+          fitness nutrition or family meal planning.
+        </p>
+        <div class="booking-hero-actions">
+          <a class="booking-primary-link" href="#booking-form">
+            Choose My Slot
+          </a>
+          <UiButton to="/services" variant="outline" size="lg">
+            Compare Programs
+          </UiButton>
+        </div>
+        <div class="booking-metrics" aria-label="Booking trust metrics">
+          <article v-for="metric in heroMetrics" :key="metric.label">
+            <strong>{{ metric.value }}</strong>
+            <span>{{ metric.label }}</span>
+          </article>
         </div>
       </div>
-    </section>
 
-    <!-- ── Benefits Strip ── -->
-    <section class="container benefits-section">
-      <div class="benefits-grid">
-        <div v-for="b in benefits" :key="b.title" class="benefit-card">
-          <div class="benefit-icon">{{ b.icon }}</div>
-          <h3>{{ b.title }}</h3>
-          <p>{{ b.desc }}</p>
+      <aside class="booking-console glass-card" aria-label="Consultation overview">
+        <div class="console-surface" aria-hidden="true"></div>
+        <div class="console-topline">
+          <span>Live intake desk</span>
+          <span class="console-dot"></span>
         </div>
-      </div>
-    </section>
-
-    <!-- ── Progress Steps ── -->
-    <section class="container">
-      <div class="progress-track">
-        <div
-          v-for="(step, i) in ['Choose Slot', 'Your Details', 'Confirm & Pay']"
-          :key="step"
-          class="progress-step"
-          :class="{ active: currentStep === i + 1, done: currentStep > i + 1 }"
-        >
-          <div class="step-bubble">
-            <span v-if="currentStep > i + 1">✓</span>
-            <span v-else>{{ i + 1 }}</span>
+        <div class="consultation-ring">
+          <strong>45</strong>
+          <span>minute strategy call</span>
+        </div>
+        <div class="console-list">
+          <div>
+            <span>Best for</span>
+            <strong>Personal diet plan direction</strong>
           </div>
-          <span class="step-label">{{ step }}</span>
+          <div>
+            <span>Delivery</span>
+            <strong>Online worldwide</strong>
+          </div>
+          <div>
+            <span>Next step</span>
+            <strong>Clear plan recommendation</strong>
+          </div>
         </div>
-        <div class="progress-bar">
-          <div
-            class="progress-fill"
-            :style="{ width: ((currentStep - 1) / 2) * 100 + '%' }"
-          ></div>
-        </div>
+      </aside>
+    </section>
+
+    <section class="container care-feature-grid reveal-group">
+      <article v-for="item in careFeatures" :key="item.title" class="care-card reveal">
+        <span>{{ item.code }}</span>
+        <h2>{{ item.title }}</h2>
+        <p>{{ item.desc }}</p>
+      </article>
+    </section>
+
+    <section class="container booking-progress" aria-label="Booking progress">
+      <div
+        v-for="(step, index) in ['Choose Slot', 'Your Details', 'Confirm']"
+        :key="step"
+        class="progress-node"
+        :class="{ active: currentStep === index + 1, done: currentStep > index + 1 }"
+      >
+        <span>{{ index + 1 }}</span>
+        <strong>{{ step }}</strong>
       </div>
     </section>
 
-    <!-- ── Main Booking Layout ── -->
-    <section class="container booking-layout">
-      <!-- Step 1: Date & Time -->
-      <article
-        class="glass-card booking-card"
-        :class="{ focused: currentStep === 1 }"
-      >
-        <div class="card-glow"></div>
-        <div class="card-header">
-          <div class="step-tag"><span class="step-dot"></span>STEP 01</div>
-          <h2>Choose Date & Time</h2>
-          <p class="card-desc">Premium slots fill up fast. Secure yours now.</p>
+    <section id="booking-form" class="container booking-layout">
+      <article class="booking-panel slot-panel reveal">
+        <div class="panel-sheen" aria-hidden="true"></div>
+        <div class="panel-heading">
+          <p class="eyebrow">Step 01</p>
+          <h2>Choose Date and Time</h2>
+          <p>
+            Select a consultation window. Slots are shown for the next two
+            weeks so you can start while motivation is fresh.
+          </p>
         </div>
 
-        <div class="section-divider">
-          <span>📅 Select Date</span>
+        <div class="selector-block">
+          <div class="selector-title">
+            <span>Date</span>
+            <small>Next 14 days</small>
+          </div>
+          <div class="date-grid" role="listbox" aria-label="Select date">
+            <button
+              v-for="day in availableDays"
+              :key="day.iso"
+              class="slot-button date-button"
+              :class="{ active: bookingStore.selectedDate === day.iso }"
+              type="button"
+              @click="pickDate(day.iso)"
+            >
+              {{ day.label }}
+            </button>
+          </div>
         </div>
 
-        <div class="date-grid" role="listbox" aria-label="Select date">
-          <button
-            v-for="day in availableDays"
-            :key="day.iso"
-            class="slot-btn date-btn"
-            :class="{ active: bookingStore.selectedDate === day.iso }"
-            @click="bookingStore.setSlot(day.iso, '')"
-          >
-            <span class="slot-ripple"></span>
-            {{ day.label }}
-          </button>
+        <div class="selector-block">
+          <div class="selector-title">
+            <span>Time</span>
+            <small>Local availability</small>
+          </div>
+          <div class="time-grid" role="listbox" aria-label="Select time">
+            <button
+              v-for="time in times"
+              :key="time"
+              class="slot-button time-button"
+              :disabled="!bookingStore.selectedDate"
+              :class="{ active: bookingStore.selectedTime === time }"
+              type="button"
+              @click="pickSlot(bookingStore.selectedDate, time)"
+            >
+              <strong>{{ time }}</strong>
+              <span>{{ parseInt(time) < 12 ? "AM" : "PM" }}</span>
+            </button>
+          </div>
         </div>
 
-        <div class="section-divider">
-          <span>⏰ Select Time</span>
-        </div>
-
-        <div class="time-grid" role="listbox" aria-label="Select time">
-          <button
-            v-for="time in times"
-            :key="time"
-            class="slot-btn time-btn"
-            :disabled="!bookingStore.selectedDate"
-            :class="{ active: bookingStore.selectedTime === time }"
-            @click="pickSlot(bookingStore.selectedDate, time)"
-          >
-            <span class="slot-ripple"></span>
-            <span class="time-label">{{ time }}</span>
-            <span class="time-suffix">{{
-              parseInt(time) < 12 ? "AM" : "PM"
-            }}</span>
-          </button>
-        </div>
-
-        <p v-if="errors.slot" class="feedback feedback--error">
-          ⚠ {{ errors.slot }}
+        <p v-if="errors.slot" class="booking-feedback booking-feedback--error">
+          {{ errors.slot }}
         </p>
 
-        <!-- Selected slot preview -->
-        <div
-          v-if="bookingStore.selectedDate && bookingStore.selectedTime"
-          class="slot-preview"
-        >
-          <div class="slot-preview-inner">
-            <span>📌</span>
-            <div>
-              <strong>{{ bookingStore.selectedDate }}</strong>
-              <span> at </span>
-              <strong>{{ bookingStore.selectedTime }}</strong>
-            </div>
-            <span class="slot-badge">Held for 10 min</span>
-          </div>
+        <div class="slot-preview">
+          <span>Selected appointment</span>
+          <strong>{{ selectedAppointment }}</strong>
         </div>
       </article>
 
-      <!-- Step 2: Details -->
-      <article
-        class="glass-card booking-card"
-        :class="{ focused: currentStep === 2 }"
-      >
-        <div class="card-glow card-glow--right"></div>
-        <div class="card-header">
-          <div class="step-tag"><span class="step-dot"></span>STEP 02</div>
+      <article class="booking-panel details-panel reveal">
+        <div class="panel-sheen" aria-hidden="true"></div>
+        <div class="panel-heading">
+          <p class="eyebrow">Step 02</p>
           <h2>Share Your Details</h2>
-          <p class="card-desc">
-            Help us craft the most impactful session for you.
+          <p>
+            A little context helps us prepare a meaningful session instead of a
+            generic diet conversation.
           </p>
         </div>
 
         <form class="booking-form" @submit.prevent="reserveSlot" novalidate>
-          <div class="input-group">
-            <label>
-              <span class="label-text">👤 Full Name</span>
-              <div class="input-wrap">
-                <input
-                  v-model="form.name"
-                  type="text"
-                  placeholder="Your full name"
-                  autocomplete="name"
-                />
-                <div class="input-line"></div>
-              </div>
-              <small v-if="errors.name" class="err">{{ errors.name }}</small>
-            </label>
-          </div>
+          <label>
+            <span>Full Name</span>
+            <input
+              v-model="form.name"
+              type="text"
+              placeholder="Your full name"
+              autocomplete="name"
+            />
+            <small v-if="errors.name">{{ errors.name }}</small>
+          </label>
 
-          <div class="input-group">
-            <label>
-              <span class="label-text">✉️ Email Address</span>
-              <div class="input-wrap">
-                <input
-                  v-model="form.email"
-                  type="email"
-                  placeholder="you@email.com"
-                  autocomplete="email"
-                />
-                <div class="input-line"></div>
-              </div>
-              <small v-if="errors.email" class="err">{{ errors.email }}</small>
-            </label>
-          </div>
+          <label>
+            <span>Email Address</span>
+            <input
+              v-model="form.email"
+              type="email"
+              placeholder="you@email.com"
+              autocomplete="email"
+            />
+            <small v-if="errors.email">{{ errors.email }}</small>
+          </label>
 
-          <div class="input-group">
-            <label>
-              <span class="label-text">🎯 Primary Health Goal</span>
-              <div class="input-wrap textarea-wrap">
-                <textarea
-                  v-model="form.healthGoal"
-                  rows="4"
-                  placeholder="Weight loss, PCOS management, diabetes support…"
-                ></textarea>
-                <div class="input-line"></div>
-              </div>
-              <small v-if="errors.healthGoal" class="err">{{
-                errors.healthGoal
-              }}</small>
-            </label>
-          </div>
+          <label>
+            <span>Primary Health Goal</span>
+            <textarea
+              v-model="form.healthGoal"
+              rows="4"
+              placeholder="Weight loss, PCOS management, diabetes support, gut health, fitness nutrition..."
+            ></textarea>
+            <small v-if="errors.healthGoal">{{ errors.healthGoal }}</small>
+          </label>
 
-          <div class="input-group">
-            <label>
-              <span class="label-text"
-                >📝 Additional Notes <em>(optional)</em></span
-              >
-              <div class="input-wrap textarea-wrap">
-                <textarea
-                  v-model="form.notes"
-                  rows="3"
-                  placeholder="Any schedule or medical context to share?"
-                ></textarea>
-                <div class="input-line"></div>
-              </div>
-            </label>
-          </div>
+          <label>
+            <span>Additional Notes <em>optional</em></span>
+            <textarea
+              v-model="form.notes"
+              rows="3"
+              placeholder="Share schedule, culture, preferences, reports or concerns."
+            ></textarea>
+          </label>
 
           <button
+            class="reserve-button"
             type="submit"
-            class="cta-btn"
-            :class="{ loading: bookingStore.isSubmitting }"
             :disabled="bookingStore.isSubmitting"
           >
-            <span v-if="!bookingStore.isSubmitting" class="btn-content">
-              <span>Reserve Appointment</span>
-              <span class="btn-arrow">→</span>
-            </span>
-            <span v-else class="btn-loader">
-              <span class="spinner"></span> Reserving…
-            </span>
-            <div class="btn-glow"></div>
+            <span v-if="bookingStore.isSubmitting" class="button-loader"></span>
+            {{
+              bookingStore.isSubmitting
+                ? "Reserving Appointment"
+                : "Reserve Appointment"
+            }}
           </button>
         </form>
 
-        <!-- Checkout state -->
-        <div class="checkout-state">
-          <div class="selected-slot-display">
-            <div class="slot-info">
-              <span class="slot-label">Selected Appointment</span>
-              <span class="slot-value">
-                {{ bookingStore.selectedDate || "No date chosen" }}
-                {{
-                  bookingStore.selectedTime
-                    ? "· " + bookingStore.selectedTime
-                    : ""
-                }}
-              </span>
-            </div>
+        <div class="checkout-preview">
+          <div>
+            <span>Appointment</span>
+            <strong>{{ selectedAppointment }}</strong>
           </div>
-          <button class="pay-btn">
-            <span>🔒 Proceed to Secure Payment</span>
-            <span class="pay-icons">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg"
-                alt="Stripe secure payment for online nutrition consultation"
-                height="16"
-                onerror="this.style.display = 'none'"
-              />
-            </span>
+          <button type="button">
+            Secure payment ready
+            <span>Stripe / Razorpay</span>
           </button>
-          <p class="hint">
-            Payment integration-ready UI · Connect Stripe / Razorpay in backend
-            phase
-          </p>
         </div>
 
-        <div v-if="bookingStore.error" class="feedback feedback--error">
+        <div v-if="bookingStore.error" class="booking-feedback booking-feedback--error">
           {{ bookingStore.error }}
         </div>
         <div
           v-if="bookingStore.successMessage"
-          class="feedback feedback--success"
+          class="booking-feedback booking-feedback--success"
         >
           {{ bookingStore.successMessage }}
         </div>
       </article>
     </section>
 
-    <!-- ── Testimonials ── -->
-    <section class="container testimonials-section">
-      <div class="section-eyebrow">What clients say</div>
-      <h2 class="section-title">Real People. Real Results.</h2>
-      <div class="testimonials-grid">
-        <div
-          v-for="t in testimonials"
-          :key="t.name"
-          class="testimonial-card glass-card"
-        >
-          <div class="testimonial-top">
-            <div class="avatar">{{ t.avatar }}</div>
-            <div>
-              <strong>{{ t.name }}</strong>
-              <span class="result-tag">{{ t.result }}</span>
-            </div>
-            <div class="stars">★★★★★</div>
-          </div>
-          <p class="testimonial-text">"{{ t.text }}"</p>
-        </div>
+    <section class="container booking-assurance reveal">
+      <div class="assurance-copy">
+        <p class="eyebrow">What Happens Next</p>
+        <h2>A professional first step, without pressure or confusion</h2>
+        <p>
+          The booking experience is designed for people who want help from home
+          but need clarity before committing to a full program.
+        </p>
+      </div>
+      <div class="assurance-grid">
+        <article v-for="item in bookingSteps" :key="item.step">
+          <span>{{ item.step }}</span>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.detail }}</p>
+        </article>
       </div>
     </section>
 
-    <!-- ── CTA Banner ── -->
-    <section class="container">
-      <div class="cta-banner glass-card">
-        <div class="cta-glow"></div>
-        <div class="cta-content">
-          <h2>Need Help Choosing a Slot?</h2>
-          <p>
-            Our team is available 9am–8pm, 7 days a week. Get instant answers.
-          </p>
-          <div class="cta-actions">
-            <a href="/contact" class="cta-btn-primary">Contact Nutritionist</a>
-            <a href="/services" class="cta-btn-ghost">Browse Services →</a>
+    <section class="container booking-testimonials reveal">
+      <div class="testimonial-heading">
+        <p class="eyebrow">Client Confidence</p>
+        <h2>Real People. Real Results.</h2>
+      </div>
+      <div class="testimonial-grid">
+        <article v-for="item in testimonials" :key="item.name" class="testimonial-card">
+          <div class="testimonial-top">
+            <span class="testimonial-avatar">{{ item.avatar }}</span>
+            <div>
+              <strong>{{ item.name }}</strong>
+              <small>{{ item.location }}</small>
+            </div>
+            <em>5.0</em>
           </div>
-        </div>
-        <div class="cta-visual">🥗</div>
+          <p>{{ item.text }}</p>
+          <span class="result-pill">{{ item.result }}</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="container booking-cta reveal">
+      <div>
+        <p class="eyebrow">Limited Consultation Slots</p>
+        <h2>Unsure which slot or program fits you best?</h2>
+        <p>
+          Send your question or explore the services first. The goal is a clear,
+          sustainable nutrition path, not another rushed diet attempt.
+        </p>
+      </div>
+      <div class="booking-cta-actions">
+        <UiButton to="/contact" size="lg">Ask a Question</UiButton>
+        <UiButton to="/services" variant="outline" size="lg">
+          Explore Services
+        </UiButton>
       </div>
     </section>
   </main>
 </template>
 
-<style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap");
-
-/* ── CSS Variables ── */
-:root {
-  --teal-900: #052e2b;
-  --teal-800: #0a3d38;
-  --teal-700: #0d5c54;
-  --teal-600: #0f7a6e;
-  --teal-500: #18a393;
-  --teal-400: #2ec9b7;
-  --teal-300: #6eddd2;
-  --teal-100: #d0f5f1;
-  --ink-900: #0b1a18;
-  --ink-800: #112220;
-  --ink-700: #1e3633;
-  --ink-600: #2e4f4b;
-  --gold: #f0c060;
-  --glass-bg: rgba(10, 40, 36, 0.6);
-  --glass-border: rgba(46, 201, 183, 0.18);
-  --font-display: "Syne", sans-serif;
-  --font-body: "DM Sans", sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-.page {
-  min-height: 100vh;
-  background: #050f0e;
-  font-family: var(--font-body);
-  color: #e8f5f3;
+<style>
+.booking-page {
   position: relative;
-  overflow: hidden;
   display: grid;
-  gap: 80px;
-  padding-bottom: 100px;
-}
-
-/* ── Ambient BG ── */
-.ambient-bg {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.35;
-}
-
-.orb-1 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, #18a393 0%, transparent 70%);
-  top: -200px;
-  left: -200px;
-  animation: orbFloat1 12s ease-in-out infinite;
-}
-
-.orb-2 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, #0d5c54 0%, transparent 70%);
-  bottom: -100px;
-  right: -100px;
-  animation: orbFloat2 15s ease-in-out infinite;
-}
-
-.orb-3 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, #f0c060 0%, transparent 70%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.08;
-  animation: orbFloat3 20s ease-in-out infinite;
-}
-
-@keyframes orbFloat1 {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(60px, 80px);
-  }
-}
-@keyframes orbFloat2 {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(-50px, -60px);
-  }
-}
-@keyframes orbFloat3 {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.3);
-  }
-}
-
-.grid-overlay {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(46, 201, 183, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(46, 201, 183, 0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-/* ── Particles ── */
-.particles {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-.particle {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--teal-400);
-  opacity: 0;
-  left: calc(var(--i) * 5%);
-  animation: particleRise calc(8s + var(--i) * 0.4s) calc(var(--i) * 0.5s)
-    infinite ease-in;
-}
-@keyframes particleRise {
-  0% {
-    bottom: -10px;
-    opacity: 0;
-    transform: translateX(0) scale(0.5);
-  }
-  20% {
-    opacity: 0.6;
-  }
-  80% {
-    opacity: 0.3;
-  }
-  100% {
-    bottom: 110vh;
-    opacity: 0;
-    transform: translateX(calc(sin(var(--i)) * 80px)) scale(1.5);
-  }
-}
-
-.container {
-  position: relative;
-  z-index: 1;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 24px;
-  width: 100%;
-}
-
-/* ── Hero ── */
-.hero {
-  padding-top: 80px;
-  text-align: center;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(46, 201, 183, 0.12);
-  border: 1px solid rgba(46, 201, 183, 0.3);
-  color: var(--teal-300);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 6px 16px;
-  border-radius: 100px;
-  margin-bottom: 28px;
-  animation: fadeSlideDown 0.8s ease both;
-}
-
-.badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--teal-400);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(46, 201, 183, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 0 8px rgba(46, 201, 183, 0);
-  }
-}
-
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(2.8rem, 6vw, 5.5rem);
-  font-weight: 800;
-  line-height: 1.05;
-  color: #e8f5f3;
-  margin-bottom: 24px;
-  animation: fadeSlideDown 0.8s 0.15s ease both;
-}
-
-.gradient-text {
-  background: linear-gradient(135deg, var(--teal-400), #a8f0e8, var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero-sub {
-  font-size: 1.1rem;
-  color: rgba(232, 245, 243, 0.65);
-  max-width: 620px;
-  margin: 0 auto 40px;
-  line-height: 1.8;
-  animation: fadeSlideDown 0.8s 0.3s ease both;
-}
-
-@keyframes fadeSlideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.stats-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  animation: fadeSlideDown 0.8s 0.45s ease both;
-}
-
-.stat-pill {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  background: rgba(46, 201, 183, 0.08);
-  border: 1px solid rgba(46, 201, 183, 0.2);
-  border-radius: 16px;
-  padding: 14px 24px;
-  backdrop-filter: blur(10px);
-  transition:
-    transform 0.3s,
-    box-shadow 0.3s;
-}
-
-.stat-pill:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(46, 201, 183, 0.15);
-}
-
-.stat-pill strong {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--teal-300);
-}
-
-.stat-pill span {
-  font-size: 0.72rem;
-  color: rgba(232, 245, 243, 0.5);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-}
-
-/* ── Benefits ── */
-.benefits-section {
-}
-
-.benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-.benefit-card {
-  background: rgba(10, 40, 36, 0.5);
-  border: 1px solid rgba(46, 201, 183, 0.15);
-  border-radius: 20px;
-  padding: 24px;
-  backdrop-filter: blur(16px);
-  transition:
-    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.4s;
-  animation: fadeSlideUp 0.6s ease both;
-}
-
-.benefit-card:hover {
-  transform: translateY(-6px) rotateX(3deg);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(46, 201, 183, 0.25);
-}
-
-.benefit-icon {
-  font-size: 2rem;
-  margin-bottom: 12px;
-  display: block;
-  filter: drop-shadow(0 0 12px rgba(46, 201, 183, 0.4));
-}
-
-.benefit-card h3 {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--teal-300);
-  margin-bottom: 6px;
-}
-
-.benefit-card p {
-  font-size: 0.84rem;
-  color: rgba(232, 245, 243, 0.55);
-  line-height: 1.6;
-}
-
-/* ── Progress Track ── */
-.progress-track {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  position: relative;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.progress-bar {
-  position: absolute;
-  left: 60px;
-  right: 60px;
-  height: 2px;
-  background: rgba(46, 201, 183, 0.15);
-  z-index: 0;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--teal-500), var(--teal-300));
-  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 0 12px rgba(46, 201, 183, 0.5);
-}
-
-.progress-step {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  position: relative;
-  z-index: 1;
-}
-
-.step-bubble {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(10, 40, 36, 0.8);
-  border: 2px solid rgba(46, 201, 183, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: rgba(232, 245, 243, 0.4);
-  transition: all 0.4s;
-}
-
-.progress-step.active .step-bubble {
-  border-color: var(--teal-400);
-  background: rgba(46, 201, 183, 0.15);
-  color: var(--teal-300);
-  box-shadow: 0 0 20px rgba(46, 201, 183, 0.3);
-  animation: stepPulse 2s infinite;
-}
-
-.progress-step.done .step-bubble {
-  background: var(--teal-600);
-  border-color: var(--teal-400);
-  color: white;
-}
-
-@keyframes stepPulse {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(46, 201, 183, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(46, 201, 183, 0.6);
-  }
-}
-
-.step-label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: rgba(232, 245, 243, 0.4);
-}
-
-.progress-step.active .step-label {
-  color: var(--teal-300);
-}
-.progress-step.done .step-label {
-  color: var(--teal-400);
-}
-
-/* ── Glass Card ── */
-.glass-card {
-  background: rgba(8, 30, 27, 0.65);
-  border: 1px solid rgba(46, 201, 183, 0.18);
-  border-radius: 28px;
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  position: relative;
+  gap: 72px;
+  padding-bottom: 82px;
   overflow: hidden;
-  transition:
-    border-color 0.4s,
-    box-shadow 0.4s;
-  padding: 36px;
-  animation: fadeSlideUp 0.7s ease both;
 }
 
-.glass-card.focused {
-  border-color: rgba(46, 201, 183, 0.4);
-  box-shadow:
-    0 0 60px rgba(46, 201, 183, 0.1),
-    inset 0 0 40px rgba(46, 201, 183, 0.03);
-}
-
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.card-glow {
-  position: absolute;
-  top: -80px;
-  left: -80px;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(
-    circle,
-    rgba(46, 201, 183, 0.12) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
-  animation: glowPulse 4s ease-in-out infinite;
-}
-
-.card-glow--right {
-  left: auto;
-  right: -80px;
-  top: -80px;
-  background: radial-gradient(
-    circle,
-    rgba(240, 192, 96, 0.08) 0%,
-    transparent 70%
-  );
-}
-
-@keyframes glowPulse {
-  0%,
-  100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-.card-header {
-  margin-bottom: 28px;
-}
-
-.step-tag {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--teal-400);
-  margin-bottom: 10px;
-}
-
-.step-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--teal-400);
-  animation: pulse 2s infinite;
-}
-
-.card-header h2 {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-  font-weight: 700;
-  color: #e8f5f3;
-  margin-bottom: 6px;
-}
-
-.card-desc {
-  color: rgba(232, 245, 243, 0.5);
-  font-size: 0.88rem;
-  line-height: 1.6;
-}
-
-/* ── Section Divider ── */
-.section-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 24px 0 14px;
-}
-
-.section-divider::before,
-.section-divider::after {
+.booking-page::before {
   content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(46, 201, 183, 0.2),
-    transparent
-  );
-}
-
-.section-divider span {
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--teal-400);
-  white-space: nowrap;
-}
-
-/* ── Slot Buttons ── */
-.date-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-}
-
-.time-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-
-.slot-btn {
-  position: relative;
-  border: 1px solid rgba(46, 201, 183, 0.2);
-  border-radius: 14px;
-  background: rgba(46, 201, 183, 0.04);
-  padding: 10px 8px;
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  color: rgba(232, 245, 243, 0.7);
-  cursor: pointer;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.slot-btn:hover:not(:disabled) {
-  border-color: rgba(46, 201, 183, 0.5);
-  background: rgba(46, 201, 183, 0.1);
-  color: var(--teal-300);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(46, 201, 183, 0.15);
-}
-
-.slot-btn.active {
-  border-color: var(--teal-400);
-  background: linear-gradient(
-    135deg,
-    rgba(46, 201, 183, 0.2),
-    rgba(24, 163, 147, 0.15)
-  );
-  color: var(--teal-300);
-  font-weight: 700;
-  box-shadow:
-    0 0 20px rgba(46, 201, 183, 0.2),
-    inset 0 0 12px rgba(46, 201, 183, 0.05);
-  transform: scale(1.02);
-}
-
-.slot-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.time-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.time-label {
-  font-weight: 600;
-}
-.time-suffix {
-  font-size: 0.65rem;
-  opacity: 0.6;
-}
-
-.slot-ripple {
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    circle at center,
-    rgba(46, 201, 183, 0.3) 0%,
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 0.3s;
+  inset: -80px 0 auto;
+  height: 760px;
+  z-index: -1;
+  background:
+    linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.82),
+      rgba(236, 253, 245, 0.34)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(6, 95, 70, 0.055) 0,
+      rgba(6, 95, 70, 0.055) 1px,
+      transparent 1px,
+      transparent 42px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(6, 95, 70, 0.045) 0,
+      rgba(6, 95, 70, 0.045) 1px,
+      transparent 1px,
+      transparent 42px
+    );
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
 }
 
-.slot-btn.active .slot-ripple {
-  opacity: 1;
-  animation: ripplePulse 2s infinite;
-}
-
-@keyframes ripplePulse {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-
-/* ── Slot Preview ── */
-.slot-preview {
-  margin-top: 20px;
-  animation: fadeSlideUp 0.4s ease both;
-}
-
-.slot-preview-inner {
-  display: flex;
+.booking-hero {
+  display: grid;
+  gap: 34px;
   align-items: center;
-  gap: 12px;
-  background: linear-gradient(
-    135deg,
-    rgba(46, 201, 183, 0.12),
-    rgba(46, 201, 183, 0.06)
-  );
-  border: 1px solid rgba(46, 201, 183, 0.3);
-  border-radius: 14px;
-  padding: 14px 18px;
-  font-size: 0.9rem;
+  padding-top: 16px;
 }
 
-.slot-badge {
-  margin-left: auto;
-  background: rgba(240, 192, 96, 0.15);
-  border: 1px solid rgba(240, 192, 96, 0.3);
-  color: var(--gold);
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 100px;
-  animation: urgencyPulse 2s infinite;
-}
-
-@keyframes urgencyPulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-/* ── Form ── */
-.booking-form {
+.booking-hero-copy {
   display: grid;
   gap: 18px;
 }
 
-.input-group label {
+.booking-page .eyebrow {
+  margin: 0;
+}
+
+.booking-page h1,
+.booking-page h2,
+.booking-page h3 {
+  letter-spacing: 0;
+}
+
+.booking-page h1 {
+  max-width: 790px;
+  margin: 0;
+  font-size: 3rem;
+  line-height: 1.04;
+  color: var(--ink-900);
+}
+
+.booking-intro {
+  max-width: 780px;
+  margin: 0;
+  color: var(--ink-600);
+  font-size: 1.08rem;
+  line-height: 1.78;
+}
+
+.booking-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.booking-primary-link {
+  min-height: 58px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  padding: 0 34px;
+  color: white;
+  font-weight: 800;
+  text-decoration: none;
+  background: linear-gradient(
+    135deg,
+    var(--emerald-700),
+    var(--emerald-500) 62%,
+    var(--teal-500)
+  );
+  box-shadow:
+    0 16px 38px rgba(5, 150, 105, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.booking-primary-link:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 24px 54px rgba(5, 150, 105, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+}
+
+.booking-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 680px;
+  margin-top: 8px;
+}
+
+.booking-metrics article {
+  min-height: 96px;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(16, 185, 129, 0.16);
+  box-shadow:
+    0 18px 44px rgba(6, 78, 59, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.booking-metrics strong {
+  color: var(--emerald-700);
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.booking-metrics span {
+  color: var(--ink-500);
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.booking-console {
+  position: relative;
+  min-height: 430px;
+  display: grid;
+  align-content: space-between;
+  overflow: hidden;
+  padding: 26px;
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  background: rgba(255, 255, 255, 0.72);
+  transform-style: preserve-3d;
+}
+
+.console-surface {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(
+      circle at 78% 22%,
+      rgba(20, 184, 166, 0.2),
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.88),
+      rgba(236, 253, 245, 0.48)
+    ),
+    repeating-linear-gradient(
+      135deg,
+      rgba(6, 95, 70, 0.06) 0,
+      rgba(6, 95, 70, 0.06) 1px,
+      transparent 1px,
+      transparent 20px
+    );
+}
+
+.booking-console::after,
+.booking-panel::after,
+.booking-assurance::after,
+.booking-cta::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    112deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.76) 42%,
+    transparent 62%
+  );
+  transform: translateX(-78%);
+  animation: booking-sheen 7s ease-in-out infinite;
+}
+
+.booking-console > :not(.console-surface),
+.booking-panel > :not(.panel-sheen),
+.booking-assurance > *,
+.booking-cta > * {
+  position: relative;
+  z-index: 2;
+}
+
+.console-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.console-topline span:first-child {
+  border-radius: 999px;
+  padding: 9px 13px;
+  color: var(--emerald-800);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.console-dot {
+  width: 14px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--emerald-500);
+  box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.14);
+  animation: booking-pulse 2.4s ease-in-out infinite;
+}
+
+.consultation-ring {
+  width: min(230px, 72%);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  margin: 18px auto;
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--glass-strong), var(--glass-strong)) padding-box,
+    conic-gradient(
+        from 20deg,
+        var(--emerald-700),
+        var(--teal-400),
+        #f59e0b,
+        var(--emerald-700)
+      )
+      border-box;
+  border: 10px solid transparent;
+  box-shadow:
+    0 28px 72px rgba(6, 78, 59, 0.18),
+    inset 0 0 28px rgba(16, 185, 129, 0.14);
+  transform: translateZ(34px);
+}
+
+.consultation-ring strong {
+  color: var(--ink-900);
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  line-height: 0.9;
+}
+
+.consultation-ring span {
+  max-width: 120px;
+  color: var(--ink-500);
+  font-size: 0.78rem;
+  font-weight: 850;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.console-list {
+  display: grid;
+  gap: 10px;
+}
+
+.console-list div {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(16, 185, 129, 0.13);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.console-list span {
+  color: var(--emerald-700);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.console-list strong {
+  color: var(--ink-800);
+  line-height: 1.25;
+}
+
+.care-feature-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.care-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 205px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(16, 185, 129, 0.16);
+  box-shadow:
+    0 18px 52px rgba(6, 78, 59, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  transform-style: preserve-3d;
+  transition:
+    transform 320ms ease,
+    box-shadow 320ms ease,
+    border-color 320ms ease;
+}
+
+.care-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 88% 16%,
+      rgba(20, 184, 166, 0.14),
+      transparent 34%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), transparent 54%);
+  pointer-events: none;
+}
+
+.care-card:hover {
+  transform: perspective(1100px) rotateX(2deg) rotateY(-2deg) translateY(-7px);
+  border-color: rgba(16, 185, 129, 0.36);
+  box-shadow:
+    0 28px 72px rgba(6, 78, 59, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.care-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.care-card > span {
+  width: 48px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  color: white;
+  background: linear-gradient(135deg, var(--emerald-700), var(--teal-500));
+  font-family: var(--font-heading);
+  font-weight: 900;
+  box-shadow: 0 14px 32px rgba(5, 150, 105, 0.22);
+}
+
+.care-card h2 {
+  margin: 0;
+  color: var(--ink-900);
+  font-size: 1.35rem;
+}
+
+.care-card p {
+  margin: 0;
+  color: var(--ink-600);
+  line-height: 1.68;
+}
+
+.booking-progress {
+  width: min(620px, 100% - 40px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 8px;
+  position: relative;
+}
+
+.booking-progress::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 17%;
+  right: 17%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(16, 185, 129, 0.28),
+    rgba(20, 184, 166, 0.12)
+  );
+}
+
+.progress-node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  color: var(--ink-400);
+}
+
+.progress-node span {
+  width: 44px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--emerald-800);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  font-weight: 900;
+  box-shadow: 0 12px 26px rgba(6, 78, 59, 0.09);
+}
+
+.progress-node strong {
+  color: currentColor;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.progress-node.active,
+.progress-node.done {
+  color: var(--emerald-700);
+}
+
+.progress-node.active span,
+.progress-node.done span {
+  color: white;
+  background: linear-gradient(135deg, var(--emerald-700), var(--teal-500));
+  box-shadow: 0 16px 34px rgba(5, 150, 105, 0.24);
+}
+
+.booking-layout {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+}
+
+.booking-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  padding: clamp(22px, 3vw, 34px);
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  box-shadow:
+    0 22px 64px rgba(6, 78, 59, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  isolation: isolate;
+}
+
+.panel-sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(20, 184, 166, 0.14),
+      transparent 34%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(16, 185, 129, 0.045) 0,
+      rgba(16, 185, 129, 0.045) 1px,
+      transparent 1px,
+      transparent 32px
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent 42%);
+}
+
+.panel-heading {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.panel-heading h2 {
+  margin: 0;
+  color: var(--ink-900);
+  font-size: 2.2rem;
+}
+
+.panel-heading p:not(.eyebrow) {
+  max-width: 560px;
+  margin: 0;
+  color: var(--ink-600);
+  line-height: 1.72;
+}
+
+.selector-block {
+  display: grid;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(16, 185, 129, 0.13);
+}
+
+.selector-block + .selector-block {
+  margin-top: 24px;
+}
+
+.selector-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+}
+
+.selector-title span {
+  color: var(--ink-900);
+  font-weight: 900;
+}
+
+.selector-title small {
+  color: var(--emerald-700);
+  font-weight: 850;
+}
+
+.date-grid,
+.time-grid {
+  display: grid;
+  gap: 9px;
+}
+
+.date-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.time-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.slot-button {
+  min-height: 48px;
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  border-radius: 16px;
+  color: var(--ink-700);
+  background: rgba(255, 255, 255, 0.7);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.slot-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: rgba(16, 185, 129, 0.42);
+  background: rgba(236, 253, 245, 0.82);
+  box-shadow: 0 12px 28px rgba(6, 78, 59, 0.1);
+}
+
+.slot-button.active {
+  color: white;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--emerald-700), var(--teal-500));
+  box-shadow:
+    0 16px 34px rgba(5, 150, 105, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.slot-button:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+.time-button {
+  min-height: 60px;
+  display: grid;
+  gap: 2px;
+  align-content: center;
+  justify-items: center;
+}
+
+.time-button strong {
+  font-size: 0.96rem;
+}
+
+.time-button span {
+  font-size: 0.68rem;
+  font-weight: 900;
+  opacity: 0.7;
+}
+
+.slot-preview,
+.checkout-preview {
+  margin-top: 22px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(236, 253, 245, 0.72);
+  border: 1px solid rgba(16, 185, 129, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+.slot-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.slot-preview span,
+.checkout-preview span {
+  color: var(--ink-500);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.slot-preview strong,
+.checkout-preview strong {
+  color: var(--emerald-800);
+}
+
+.booking-form {
+  display: grid;
+  gap: 14px;
+}
+
+.booking-form label {
   display: grid;
   gap: 8px;
 }
 
-.label-text {
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: rgba(232, 245, 243, 0.7);
+.booking-form label > span {
+  color: var(--ink-800);
+  font-weight: 900;
 }
 
-.label-text em {
+.booking-form em {
+  color: var(--ink-400);
   font-style: normal;
-  font-weight: 400;
-  opacity: 0.6;
-}
-
-.input-wrap {
-  position: relative;
-}
-
-.input-wrap input,
-.input-wrap textarea {
-  width: 100%;
-  background: rgba(46, 201, 183, 0.04);
-  border: 1px solid rgba(46, 201, 183, 0.18);
-  border-radius: 12px;
-  padding: 13px 16px;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: #e8f5f3;
-  transition:
-    border-color 0.3s,
-    box-shadow 0.3s,
-    background 0.3s;
-  resize: none;
-}
-
-.input-wrap input::placeholder,
-.input-wrap textarea::placeholder {
-  color: rgba(232, 245, 243, 0.28);
-}
-
-.input-wrap input:focus,
-.input-wrap textarea:focus {
-  outline: none;
-  border-color: rgba(46, 201, 183, 0.5);
-  background: rgba(46, 201, 183, 0.07);
-  box-shadow:
-    0 0 0 3px rgba(46, 201, 183, 0.1),
-    0 4px 20px rgba(46, 201, 183, 0.1);
-}
-
-.input-line {
-  position: absolute;
-  bottom: 0;
-  left: 12px;
-  right: 12px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--teal-400), transparent);
-  border-radius: 2px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.input-wrap:focus-within .input-line {
-  opacity: 1;
-}
-
-.err {
-  color: #ff7878;
-  font-size: 0.78rem;
-}
-
-/* ── CTA Button ── */
-.cta-btn {
-  position: relative;
-  width: 100%;
-  padding: 16px 24px;
-  border: none;
-  border-radius: 16px;
-  background: linear-gradient(
-    135deg,
-    var(--teal-600),
-    var(--teal-500),
-    var(--teal-400)
-  );
-  color: white;
-  font-family: var(--font-display);
-  font-size: 1rem;
   font-weight: 700;
-  cursor: pointer;
-  overflow: hidden;
+}
+
+.booking-form input,
+.booking-form textarea {
+  width: 100%;
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 16px;
+  color: var(--ink-800);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 15px 16px;
+  font: inherit;
+  font-weight: 700;
+  outline: none;
+  resize: vertical;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
   transition:
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.3s;
-  background-size: 200% 200%;
-  animation: gradientShift 4s ease infinite;
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background 220ms ease;
 }
 
-@keyframes gradientShift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.cta-btn:hover:not(:disabled) {
-  transform: translateY(-3px) scale(1.01);
+.booking-form input:focus,
+.booking-form textarea:focus {
+  border-color: rgba(16, 185, 129, 0.58);
+  background: rgba(255, 255, 255, 0.94);
   box-shadow:
-    0 12px 40px rgba(46, 201, 183, 0.35),
-    0 0 0 1px rgba(46, 201, 183, 0.4);
+    0 0 0 4px rgba(16, 185, 129, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-.cta-btn:active {
-  transform: scale(0.98);
+.booking-form input::placeholder,
+.booking-form textarea::placeholder {
+  color: var(--ink-400);
 }
 
-.cta-btn:disabled {
-  opacity: 0.7;
-  cursor: wait;
+.booking-form small {
+  color: #b42318;
+  font-weight: 800;
 }
 
-.btn-content {
-  display: flex;
+.reserve-button {
+  min-height: 56px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-}
-
-.btn-arrow {
-  display: inline-block;
-  transition: transform 0.3s;
-}
-
-.cta-btn:hover .btn-arrow {
-  transform: translateX(4px);
-}
-
-.btn-loader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.btn-glow {
-  position: absolute;
-  inset: -2px;
+  border: 0;
   border-radius: 18px;
-  background: linear-gradient(
-    135deg,
-    var(--teal-400),
-    transparent,
-    var(--teal-300)
-  );
-  opacity: 0;
-  z-index: -1;
-  transition: opacity 0.3s;
-  filter: blur(8px);
+  color: white;
+  background: linear-gradient(135deg, var(--emerald-700), var(--teal-500));
+  box-shadow:
+    0 16px 38px rgba(5, 150, 105, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 240ms ease,
+    box-shadow 240ms ease,
+    opacity 240ms ease;
 }
 
-.cta-btn:hover .btn-glow {
-  opacity: 0.5;
+.reserve-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow:
+    0 24px 54px rgba(5, 150, 105, 0.33),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
 }
 
-/* ── Checkout State ── */
-.checkout-state {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(46, 201, 183, 0.12);
+.reserve-button:disabled {
+  cursor: progress;
+  opacity: 0.82;
+}
+
+.button-loader {
+  width: 18px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.42);
+  border-top-color: white;
+  animation: booking-spin 900ms linear infinite;
+}
+
+.checkout-preview {
   display: grid;
   gap: 12px;
 }
 
-.selected-slot-display {
-  background: rgba(46, 201, 183, 0.06);
-  border: 1px solid rgba(46, 201, 183, 0.15);
-  border-radius: 12px;
-  padding: 14px 18px;
-}
-
-.slot-info {
+.checkout-preview div {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-}
-
-.slot-label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: rgba(232, 245, 243, 0.4);
-}
-
-.slot-value {
-  font-weight: 700;
-  color: var(--teal-300);
-  font-size: 0.88rem;
-}
-
-.pay-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(46, 201, 183, 0.08);
-  border: 1px solid rgba(46, 201, 183, 0.25);
-  border-radius: 14px;
-  padding: 14px 18px;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--teal-300);
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.pay-btn:hover {
-  background: rgba(46, 201, 183, 0.14);
-  border-color: rgba(46, 201, 183, 0.4);
-  transform: translateY(-2px);
-}
-
-.hint {
-  font-size: 0.74rem;
-  color: rgba(232, 245, 243, 0.3);
-  text-align: center;
-}
-
-/* ── Feedback ── */
-.feedback {
-  margin-top: 14px;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 0.88rem;
-  animation: fadeSlideUp 0.3s ease both;
-}
-
-.feedback--error {
-  background: rgba(166, 64, 64, 0.15);
-  border: 1px solid rgba(166, 64, 64, 0.3);
-  color: #ff9090;
-}
-
-.feedback--success {
-  background: rgba(46, 201, 183, 0.12);
-  border: 1px solid rgba(46, 201, 183, 0.3);
-  color: var(--teal-300);
-}
-
-/* ── Booking Layout ── */
-.booking-layout {
-  display: grid;
-  gap: 20px;
-}
-
-/* ── Testimonials ── */
-.testimonials-section {
-  text-align: center;
-}
-
-.section-eyebrow {
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--teal-400);
-  margin-bottom: 12px;
-}
-
-.section-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3vw, 2.8rem);
-  font-weight: 700;
-  color: #e8f5f3;
-  margin-bottom: 36px;
-}
-
-.testimonials-grid {
-  display: grid;
   gap: 16px;
 }
 
-.testimonial-card {
-  text-align: left;
-  padding: 28px;
-  transition:
-    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.4s;
+.checkout-preview button {
+  min-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  border-radius: 15px;
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  color: var(--emerald-800);
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0 16px;
+  font: inherit;
+  font-weight: 900;
 }
 
-.testimonial-card:hover {
-  transform: translateY(-6px);
+.checkout-preview button span {
+  color: var(--teal-600);
+  font-size: 0.72rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.booking-feedback {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-weight: 850;
+}
+
+.booking-feedback--error {
+  color: #9f331f;
+  background: rgba(254, 226, 226, 0.72);
+  border: 1px solid rgba(248, 113, 113, 0.28);
+}
+
+.booking-feedback--success {
+  color: var(--emerald-800);
+  background: rgba(209, 250, 229, 0.72);
+  border: 1px solid rgba(16, 185, 129, 0.24);
+}
+
+.booking-assurance,
+.booking-cta {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(16, 185, 129, 0.16);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(236, 253, 245, 0.86),
+      rgba(255, 255, 255, 0.66)
+    ),
+    rgba(255, 255, 255, 0.72);
+  box-shadow: 0 22px 62px rgba(6, 78, 59, 0.09);
+  isolation: isolate;
+}
+
+.booking-assurance {
+  display: grid;
+  gap: 28px;
+  padding: clamp(24px, 4vw, 38px);
+}
+
+.assurance-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.assurance-copy h2,
+.testimonial-heading h2,
+.booking-cta h2 {
+  margin: 0;
+  color: var(--ink-900);
+  font-size: 2.45rem;
+}
+
+.assurance-copy p:not(.eyebrow),
+.booking-cta p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--ink-600);
+  line-height: 1.74;
+}
+
+.assurance-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.assurance-grid article {
+  min-height: 190px;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(16, 185, 129, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.assurance-grid span {
+  width: 46px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  color: white;
+  background: linear-gradient(135deg, var(--emerald-700), var(--teal-500));
+  font-family: var(--font-heading);
+  font-weight: 900;
+}
+
+.assurance-grid h3 {
+  margin: 0;
+  color: var(--ink-900);
+  font-size: 1.22rem;
+}
+
+.assurance-grid p {
+  margin: 0;
+  color: var(--ink-600);
+  line-height: 1.66;
+}
+
+.booking-testimonials {
+  display: grid;
+  gap: 22px;
+}
+
+.testimonial-heading {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  text-align: center;
+}
+
+.testimonial-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.testimonial-card {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(16, 185, 129, 0.16);
   box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(46, 201, 183, 0.2);
+    0 18px 48px rgba(6, 78, 59, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
 }
 
 .testimonial-top {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: 12px;
 }
 
-.avatar {
-  width: 44px;
-  height: 44px;
+.testimonial-avatar {
+  width: 48px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--teal-700), var(--teal-500));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.8rem;
   color: white;
-  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--emerald-700), var(--teal-500));
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: 0 14px 28px rgba(5, 150, 105, 0.22);
+}
+
+.testimonial-top div {
+  display: grid;
 }
 
 .testimonial-top strong {
-  display: block;
-  font-weight: 700;
-  color: #e8f5f3;
-  font-size: 0.9rem;
+  color: var(--ink-900);
 }
 
-.result-tag {
-  font-size: 0.72rem;
-  color: var(--teal-400);
-  background: rgba(46, 201, 183, 0.1);
-  border-radius: 6px;
-  padding: 2px 8px;
+.testimonial-top small {
+  color: var(--ink-500);
 }
 
-.stars {
+.testimonial-top em {
   margin-left: auto;
-  color: var(--gold);
-  font-size: 0.85rem;
+  color: #f59e0b;
+  font-style: normal;
+  font-weight: 900;
 }
 
-.testimonial-text {
-  font-size: 0.9rem;
-  color: rgba(232, 245, 243, 0.65);
-  line-height: 1.7;
-  font-style: italic;
+.testimonial-card p {
+  margin: 0;
+  color: var(--ink-600);
+  line-height: 1.72;
 }
 
-/* ── CTA Banner ── */
-.cta-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.result-pill {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--emerald-800);
+  background: rgba(16, 185, 129, 0.11);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.booking-cta {
+  display: grid;
   gap: 24px;
-  padding: 40px 48px;
+  align-items: center;
+  padding: clamp(28px, 5vw, 46px);
+  background:
+    radial-gradient(
+      circle at 86% 22%,
+      rgba(20, 184, 166, 0.32),
+      transparent 34%
+    ),
+    linear-gradient(135deg, var(--emerald-900), var(--emerald-700), var(--teal-600));
+  box-shadow: 0 28px 76px rgba(6, 78, 59, 0.18);
 }
 
-.cta-glow {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(46, 201, 183, 0.06) 0%,
-    transparent 60%
-  );
-  pointer-events: none;
+.booking-cta .eyebrow,
+.booking-cta .eyebrow::before {
+  color: var(--emerald-200);
 }
 
-.cta-content h2 {
-  font-family: var(--font-display);
-  font-size: clamp(1.3rem, 2.5vw, 2rem);
-  font-weight: 700;
-  color: #e8f5f3;
-  margin-bottom: 8px;
+.booking-cta h2 {
+  max-width: 720px;
+  color: white;
 }
 
-.cta-content p {
-  color: rgba(232, 245, 243, 0.55);
-  font-size: 0.9rem;
-  margin-bottom: 24px;
+.booking-cta p {
+  color: rgba(255, 255, 255, 0.78);
 }
 
-.cta-actions {
+.booking-cta-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
 }
 
-.cta-btn-primary {
-  background: linear-gradient(135deg, var(--teal-600), var(--teal-400));
-  color: white;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 700;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition:
-    transform 0.3s,
-    box-shadow 0.3s;
+@keyframes booking-sheen {
+  0%,
+  38% {
+    transform: translateX(-78%);
+  }
+  68%,
+  100% {
+    transform: translateX(78%);
+  }
 }
 
-.cta-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(46, 201, 183, 0.3);
-}
-
-.cta-btn-ghost {
-  color: var(--teal-400);
-  padding: 12px 24px;
-  border-radius: 12px;
-  border: 1px solid rgba(46, 201, 183, 0.25);
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.3s;
-}
-
-.cta-btn-ghost:hover {
-  background: rgba(46, 201, 183, 0.08);
-  border-color: rgba(46, 201, 183, 0.4);
-}
-
-.cta-visual {
-  font-size: 5rem;
-  filter: drop-shadow(0 0 30px rgba(46, 201, 183, 0.3));
-  flex-shrink: 0;
-  animation: floatEmoji 4s ease-in-out infinite;
-}
-
-@keyframes floatEmoji {
+@keyframes booking-pulse {
   0%,
   100% {
-    transform: translateY(0) rotate(-5deg);
+    transform: scale(1);
+    opacity: 1;
   }
   50% {
-    transform: translateY(-12px) rotate(5deg);
+    transform: scale(0.82);
+    opacity: 0.72;
   }
 }
 
-/* ── Responsive ── */
-@media (min-width: 900px) {
+@keyframes booking-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (min-width: 760px) {
+  .care-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .assurance-grid,
+  .testimonial-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .testimonial-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 980px) {
+  .booking-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.56fr);
+  }
+
+  .booking-page h1 {
+    font-size: 4.35rem;
+  }
+
   .booking-layout {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
   }
 
   .date-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .benefits-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .testimonials-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .booking-cta {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 }
 
-@media (max-width: 600px) {
-  .glass-card {
-    padding: 22px 16px;
+@media (max-width: 720px) {
+  .booking-page {
+    gap: 54px;
+    padding-bottom: 64px;
   }
+
+  .booking-page h1 {
+    font-size: 2.35rem;
+  }
+
+  .booking-intro {
+    font-size: 1rem;
+  }
+
+  .booking-hero-actions,
+  .booking-cta-actions {
+    display: grid;
+  }
+
+  .booking-primary-link,
+  .booking-hero-actions .ui-button,
+  .booking-cta-actions .ui-button {
+    width: 100%;
+  }
+
+  .booking-metrics {
+    grid-template-columns: 1fr;
+  }
+
   .time-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .cta-banner {
-    flex-direction: column;
-    text-align: center;
+
+  .booking-progress {
+    width: min(100% - 40px, 620px);
   }
-  .cta-visual {
-    font-size: 3rem;
+
+  .progress-node strong {
+    font-size: 0.66rem;
   }
-  .cta-actions {
-    justify-content: center;
+
+  .slot-preview,
+  .checkout-preview div,
+  .checkout-preview button {
+    display: grid;
+    justify-content: stretch;
+  }
+
+  .assurance-copy h2,
+  .testimonial-heading h2,
+  .booking-cta h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .date-grid,
+  .time-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-panel {
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-console::after,
+  .booking-panel::after,
+  .booking-assurance::after,
+  .booking-cta::after,
+  .console-dot,
+  .button-loader {
+    animation: none;
+  }
+
+  .booking-primary-link:hover,
+  .care-card:hover,
+  .slot-button:hover:not(:disabled),
+  .reserve-button:hover:not(:disabled) {
+    transform: none;
   }
 }
 </style>
