@@ -15,32 +15,25 @@ import {
   nutritionistProfile,
   certifications,
   services,
-  siteName,
   testimonials,
   transformations,
   trustBadges,
 } from "../data/content";
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
+import {
+  buildFaqSchema,
+  buildOrganizationSchema,
+  buildPersonSchema,
+  buildWebsiteSchema,
+} from "../data/seo";
+import { pageSeo } from "../data/pageSeo";
 
-useSeo({
-  title:
-    "Online Nutritionist for Weight Loss & Clinical Nutrition | Dietrix Nutrition",
-  description:
-    "Book online consultations for weight loss, PCOS, diabetes, and personalized diet coaching with a certified nutritionist. Globally accessible, evidence-based care.",
-});
+useSeo(pageSeo.home);
 
-upsertJsonLd("dietrix-schema", {
-  "@context": "https://schema.org",
-  "@type": "MedicalBusiness",
-  name: siteName,
-  medicalSpecialty: "Nutrition",
-  areaServed: "Worldwide",
-  url: window.location.origin,
-  availableService: services.map((s) => ({
-    "@type": "Service",
-    name: s.title,
-  })),
-});
+upsertJsonLd("dietrix-organization-schema", buildOrganizationSchema(services));
+upsertJsonLd("dietrix-person-schema", buildPersonSchema());
+upsertJsonLd("dietrix-website-schema", buildWebsiteSchema());
+upsertJsonLd("dietrix-home-faq-schema", buildFaqSchema(faqs));
 
 // Rotating hero headline word
 const heroWords = ["Weight", "Health", "Energy", "Life", "Habits"];

@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { computed, reactive, ref, onMounted } from "vue";
+import { useSeo } from "../composables/useSeo";
+import { pageSeo } from "../data/pageSeo";
+
+useSeo(pageSeo.booking);
 
 // ── Minimal stubs so the file compiles standalone ──
 const bookingStore = reactive({
@@ -404,7 +408,7 @@ const testimonials = [
             <span class="pay-icons">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg"
-                alt="Stripe"
+                alt="Stripe secure payment for online nutrition consultation"
                 height="16"
                 onerror="this.style.display = 'none'"
               />

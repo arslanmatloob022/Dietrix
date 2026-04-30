@@ -47,24 +47,42 @@ export const services: ServiceItem[] = [
     {
         id: 'srv1',
         title: 'Weight Loss Accelerator',
-        summary: 'Structured fat-loss roadmap for busy professionals with weekly accountability.',
-        features: ['Metabolic assessment', 'Weekly progress review', 'Travel-friendly meal swaps'],
+        summary: 'Structured fat-loss roadmap for busy professionals with weekly accountability, appetite control, and flexible meals that survive real life.',
+        features: [
+            'Metabolic and routine assessment',
+            'Protein, fiber and portion targets',
+            'Weekly progress and plateau review',
+            'Travel-friendly meal swaps',
+            'Craving and weekend strategy',
+        ],
         priceFrom: '$149',
         ctaText: 'Start Weight Loss Plan',
     },
     {
         id: 'srv2',
         title: 'Medical Nutrition Therapy',
-        summary: 'Condition-specific planning for PCOS, diabetes, thyroid, gut and inflammatory issues.',
-        features: ['Clinical symptom tracker', 'Lab-based adjustments', 'Medication-food timing support'],
+        summary: 'Condition-specific planning for PCOS, diabetes, thyroid, gut and inflammatory concerns with symptom-aware food structure.',
+        features: [
+            'Clinical symptom tracker',
+            'Lab-aware nutrition adjustments',
+            'Medication-food timing support',
+            'Insulin and inflammation strategy',
+            'Doctor-friendly progress notes',
+        ],
         priceFrom: '$189',
         ctaText: 'Get Clinical Guidance',
     },
     {
         id: 'srv3',
         title: 'Custom Diet Blueprint',
-        summary: 'Personalized plans aligned with your culture, schedule, and food preferences.',
-        features: ['Macro-personalized menu', 'Recipe packs', 'Habit reset framework'],
+        summary: 'Personalized meal architecture aligned with your culture, schedule, budget, food preferences, family meals and cooking energy.',
+        features: [
+            'Macro-personalized menu',
+            'Grocery and recipe packs',
+            'Habit reset framework',
+            'Dining-out decision guide',
+            'Family meal adaptation',
+        ],
         priceFrom: '$119',
         ctaText: 'Build My Plan',
     },
@@ -76,8 +94,14 @@ export const pricingTiers: PricingTier[] = [
         name: 'Starter Reset',
         price: '$99',
         billing: 'one-time',
-        description: 'Ideal for first-time clients needing a clear action plan.',
-        features: ['1 consultation (45 min)', '14-day meal structure', 'Email support for 7 days'],
+        description: 'Ideal for first-time clients needing a clear action plan before committing to coaching.',
+        features: [
+            '1 consultation (45 min)',
+            '14-day meal structure',
+            'Goal and barrier audit',
+            'Email support for 7 days',
+            'Simple grocery starter list',
+        ],
         highlighted: false,
         scarcity: 'Only 12 slots this month',
         ctaText: 'Book Starter Reset',
@@ -87,8 +111,14 @@ export const pricingTiers: PricingTier[] = [
         name: 'Transformation Plus',
         price: '$249',
         billing: 'monthly',
-        description: 'Most popular package for sustainable fat loss and behavior change.',
-        features: ['4 consultations per month', 'Weekly plan revisions', 'WhatsApp accountability'],
+        description: 'Most popular package for sustainable fat loss, habit coaching and measurable routine change.',
+        features: [
+            '4 consultations per month',
+            'Weekly plan revisions',
+            'WhatsApp accountability',
+            'Progress dashboard review',
+            'Plateau and craving fixes',
+        ],
         highlighted: true,
         scarcity: 'Limited to 20 active clients',
         ctaText: 'Choose Transformation Plus',
@@ -98,8 +128,14 @@ export const pricingTiers: PricingTier[] = [
         name: 'Clinical Care Pro',
         price: '$359',
         billing: 'monthly',
-        description: 'For medical conditions requiring close monitoring and nutrition therapy.',
-        features: ['Bi-weekly deep reviews', 'Lab report interpretation', 'Priority messaging support'],
+        description: 'For medical conditions requiring close monitoring, nutrition therapy and higher-touch guidance.',
+        features: [
+            'Bi-weekly deep reviews',
+            'Lab report interpretation',
+            'Priority messaging support',
+            'Symptom and medication timing log',
+            'Clinical nutrition progress summary',
+        ],
         highlighted: false,
         scarcity: 'High-touch care, limited onboarding',
         ctaText: 'Apply for Clinical Care',
@@ -115,7 +151,7 @@ export const transformations: Transformation[] = [
         beforeMetric: 'Body Fat: 38%',
         afterMetric: 'Body Fat: 29%',
         image:
-            'https://images.unsplash.com/photo-1594824475317-a916f3d3f54a?auto=format&fit=crop&w=900&q=80',
+            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80',
     },
     {
         id: 'tr2',
@@ -125,7 +161,7 @@ export const transformations: Transformation[] = [
         beforeMetric: 'HbA1c: 8.2',
         afterMetric: 'HbA1c: 6.4',
         image:
-            'https://images.unsplash.com/photo-1541534401786-2077eed87a72?auto=format&fit=crop&w=900&q=80',
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80',
     },
     {
         id: 'tr3',
@@ -182,6 +218,48 @@ export const testimonials: Testimonial[] = [
         image:
             'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80',
     },
+    {
+        id: 'ts4',
+        name: 'Ayesha M.',
+        location: 'Lahore, Pakistan',
+        rating: 5,
+        goal: 'Manage PCOS cravings with family meals',
+        result: 'Cycle tracking improved and cravings reduced',
+        quote:
+            'I did not need a separate diet from my family. The swaps worked with our usual food and made consistency possible.',
+        beforeLabel: 'Before: intense evening cravings',
+        afterLabel: 'After: calmer appetite rhythm',
+        image:
+            'https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?auto=format&fit=crop&w=600&q=80',
+    },
+    {
+        id: 'ts5',
+        name: 'Emily W.',
+        location: 'London, UK',
+        rating: 5,
+        goal: 'Rebuild energy after stress weight gain',
+        result: 'Lost 7.4 kg and felt steady through workdays',
+        quote:
+            'The best part was how normal it felt. I could eat out, work late, and still know what to do the next day.',
+        beforeLabel: 'Before: skipped meals + fatigue',
+        afterLabel: 'After: steady meals + energy',
+        image:
+            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
+    },
+    {
+        id: 'ts6',
+        name: 'Omar S.',
+        location: 'Doha, Qatar',
+        rating: 5,
+        goal: 'Improve cholesterol and waist measurement',
+        result: 'Waist down 9 cm with better lipid habits',
+        quote:
+            'I understood my portions for the first time. The plan was practical enough for business lunches and travel weeks.',
+        beforeLabel: 'Before: random portions',
+        afterLabel: 'After: controlled plates + routine',
+        image:
+            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80',
+    },
 ]
 
 export const faqs: FaqItem[] = [
@@ -211,7 +289,7 @@ export const blogPosts: BlogPost[] = [
         title: 'Best High-Protein Breakfast Ideas for Sustainable Fat Loss',
         seoTitle: 'High-Protein Breakfast for Weight Loss | Dietrix Nutrition',
         seoDescription:
-            'Discover practical high-protein breakfast ideas that improve satiety, reduce cravings, and support sustainable weight loss.',
+            'Discover high-protein breakfast ideas that improve fullness, reduce cravings, and support sustainable weight loss without crash dieting or meal stress.',
         category: 'Weight Loss',
         excerpt:
             'A strategic breakfast can reduce evening cravings and improve total daily calorie control. Here is how to design one.',
@@ -242,6 +320,21 @@ export const blogPosts: BlogPost[] = [
                     'If your appetite is low in the morning, start with a lighter protein smoothie and scale up over 1 to 2 weeks.',
                 ],
             },
+            {
+                heading: 'High-Protein Breakfast Templates',
+                subheading: 'Use repeatable meals instead of daily guesswork',
+                paragraphs: [
+                    'A strong breakfast template includes one protein anchor, one fiber source, one colorful plant food, and one satisfaction element such as avocado, olive oil, nuts, or seeds.',
+                    'Examples include Greek yogurt with berries and chia, eggs with vegetables and seeded toast, tofu scramble with beans, or a protein smoothie paired with fruit and nuts.',
+                ],
+            },
+            {
+                heading: 'How to Adjust for Fat Loss',
+                paragraphs: [
+                    'For fat loss, keep the protein stable and adjust energy through portions of fats and carbohydrates. This preserves fullness while giving the body a controlled calorie signal.',
+                    'Track afternoon hunger, evening cravings, and workout energy for two weeks. These signals often show whether breakfast needs more fiber, more protein, or a lighter portion.',
+                ],
+            },
         ],
         internalLinks: [
             { label: 'Explore our weight loss services', to: '/services' },
@@ -253,7 +346,7 @@ export const blogPosts: BlogPost[] = [
         title: 'PCOS Diet Plan Basics That Actually Work for Hormonal Balance',
         seoTitle: 'PCOS Diet Plan Online | Nutrition Coaching',
         seoDescription:
-            'Learn the core nutrition principles for PCOS, including meal timing, insulin-friendly food choices, and practical habit strategies.',
+            'Learn PCOS diet plan basics with meal timing, insulin-friendly foods, protein, fiber, and habit strategies for hormonal balance and cravings naturally.',
         category: 'Health Conditions',
         excerpt:
             'PCOS nutrition is not about extreme restriction. It is about insulin-aware structure, anti-inflammatory foods, and stress management.',
@@ -284,6 +377,21 @@ export const blogPosts: BlogPost[] = [
                     'Track cycle length, energy, and cravings weekly to observe meaningful trend changes.',
                 ],
             },
+            {
+                heading: 'Build an Insulin-Friendly Plate',
+                subheading: 'Make every meal easier to repeat',
+                paragraphs: [
+                    'Start with protein, add high-fiber vegetables, choose a controlled portion of slow carbohydrate, then include a small amount of healthy fat for satisfaction.',
+                    'This structure helps reduce glucose swings and makes meals easier to adapt across Pakistani, Middle Eastern, European, or North American food routines.',
+                ],
+            },
+            {
+                heading: 'What to Track for Better Decisions',
+                paragraphs: [
+                    'PCOS progress is not measured by weight alone. Track cravings, energy dips, cycle length, acne changes, sleep quality, waist measurement, and lab markers when available.',
+                    'A weekly review makes the plan feel less emotional. Instead of guessing whether the diet is working, you can adjust meals based on real patterns.',
+                ],
+            },
         ],
         internalLinks: [
             { label: 'See our medical nutrition therapy program', to: '/services' },
@@ -295,7 +403,7 @@ export const blogPosts: BlogPost[] = [
         title: 'Simple Weekly Diet Planning Framework for Busy Professionals',
         seoTitle: 'Weekly Diet Planning for Busy Professionals',
         seoDescription:
-            'A realistic weekly meal planning system for professionals who want healthy eating without spending hours in the kitchen.',
+            'Use a realistic weekly diet planning system for busy professionals who want healthy eating without spending hours in the kitchen every week at home.',
         category: 'Diet Plans',
         excerpt:
             'This 60-minute weekly planning method reduces food decisions and keeps you aligned with your health goals.',
@@ -326,10 +434,172 @@ export const blogPosts: BlogPost[] = [
                     'Your environment should support your goals even on chaotic days.',
                 ],
             },
+            {
+                heading: 'Design a Flexible Grocery System',
+                subheading: 'Shop by meal roles, not random recipes',
+                paragraphs: [
+                    'Choose two proteins, two fiber-rich carbohydrates, three vegetables, two fruits, and two flavor builders each week. This keeps variety high without making planning exhausting.',
+                    'When groceries have clear roles, you can build plates quickly even when the exact recipe changes.',
+                ],
+            },
+            {
+                heading: 'Plan for Weekends Before They Happen',
+                paragraphs: [
+                    'Most busy professionals do well Monday to Thursday and lose structure on weekends. Decide your restaurant strategy, hydration target, and protein anchors before Friday arrives.',
+                    'The goal is not to avoid social meals. The goal is to keep enough rhythm that one relaxed meal does not become three chaotic days.',
+                ],
+            },
         ],
         internalLinks: [
             { label: 'View custom diet blueprint service', to: '/services' },
             { label: 'Reserve a planning consultation', to: '/booking' },
+        ],
+    },
+    {
+        slug: 'diabetes-friendly-plate-method-for-busy-families',
+        title: 'Diabetes-Friendly Plate Method for Busy Families',
+        seoTitle: 'Diabetes-Friendly Plate Method | Online Nutritionist',
+        seoDescription:
+            'Learn a diabetes-friendly plate method for family meals, blood sugar stability, portion control, and easier weekly nutrition decisions at home safely.',
+        category: 'Health Conditions',
+        excerpt:
+            'Blood sugar support becomes easier when meals follow a repeatable plate structure instead of strict food fear.',
+        publishedAt: '2026-03-28',
+        readTime: '8 min read',
+        heroImage:
+            'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80',
+        sections: [
+            {
+                heading: 'Start With Meal Architecture',
+                paragraphs: [
+                    'A diabetes-friendly plate usually starts with non-starchy vegetables, adds lean protein, includes a measured slow carbohydrate, and finishes with a healthy fat or flavor element.',
+                    'This structure lowers decision fatigue because the food can change while the plate logic stays the same.',
+                ],
+            },
+            {
+                heading: 'Choose Carbohydrates With Context',
+                subheading: 'Portion and pairing matter',
+                paragraphs: [
+                    'Rice, roti, potatoes, oats, beans, and fruit can fit many diabetes plans when portions are intentional and paired with protein and fiber.',
+                    'The question is not only what carbohydrate you eat, but how much, how often, and what surrounds it on the plate.',
+                ],
+            },
+            {
+                heading: 'Use Family Meals Strategically',
+                paragraphs: [
+                    'Separate diet food often fails because it isolates the client. A better approach is to adjust the shared meal: add salad, increase protein, reduce refined portions, and improve timing.',
+                    'When the family meal supports the plan, consistency improves without extra cooking burden.',
+                ],
+            },
+            {
+                heading: 'Track Trends, Not Single Readings',
+                paragraphs: [
+                    'One glucose reading is information, not a verdict. Review patterns around breakfast, late dinners, stress, sleep, and walking after meals.',
+                    'These trends help a nutritionist refine meal timing and food pairings with much more confidence.',
+                ],
+            },
+        ],
+        internalLinks: [
+            { label: 'Explore medical nutrition therapy', to: '/services' },
+            { label: 'Book diabetes nutrition support', to: '/booking' },
+        ],
+    },
+    {
+        slug: 'gut-health-meal-rhythm-for-bloating-relief',
+        title: 'Gut Health Meal Rhythm for Bloating Relief',
+        seoTitle: 'Gut Health Meal Rhythm for Bloating Relief',
+        seoDescription:
+            'Use meal timing, fiber progression, hydration, and symptom tracking to support better digestion and reduce bloating with calm daily structure at home.',
+        category: 'Diet Plans',
+        excerpt:
+            'Gut health plans work better when fiber, timing, hydration, stress, and symptom tracking move together.',
+        publishedAt: '2026-04-09',
+        readTime: '7 min read',
+        heroImage:
+            'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=1200&q=80',
+        sections: [
+            {
+                heading: 'Create a Predictable Meal Rhythm',
+                paragraphs: [
+                    'Irregular meals can make bloating harder to interpret. A consistent meal rhythm gives the gut clearer signals and makes symptom patterns easier to track.',
+                    'Start by spacing meals in a way that prevents constant grazing while still avoiding extreme hunger.',
+                ],
+            },
+            {
+                heading: 'Increase Fiber Gradually',
+                subheading: 'More is not always better at first',
+                paragraphs: [
+                    'Fiber is helpful, but sudden increases can worsen bloating. Add legumes, vegetables, seeds, and whole grains gradually while monitoring tolerance.',
+                    'Hydration matters because fiber without enough fluid can increase discomfort.',
+                ],
+            },
+            {
+                heading: 'Identify Trigger Patterns',
+                paragraphs: [
+                    'Track symptoms alongside meal timing, stress, sleep, caffeine, dairy, legumes, cruciferous vegetables, and eating speed.',
+                    'Patterns usually become clearer after two weeks of calm observation rather than one day of strict elimination.',
+                ],
+            },
+            {
+                heading: 'Know When to Get Support',
+                paragraphs: [
+                    'Persistent pain, unexplained weight loss, blood in stool, or severe symptoms should be discussed with a qualified medical professional.',
+                    'Nutrition coaching can support day-to-day structure, but red-flag symptoms deserve clinical review.',
+                ],
+            },
+        ],
+        internalLinks: [
+            { label: 'See custom diet blueprint service', to: '/services' },
+            { label: 'Ask about gut nutrition support', to: '/contact' },
+        ],
+    },
+    {
+        slug: 'ramadan-nutrition-plan-for-energy-and-fat-loss',
+        title: 'Ramadan Nutrition Plan for Energy and Fat Loss',
+        seoTitle: 'Ramadan Nutrition Plan for Energy and Fat Loss',
+        seoDescription:
+            'Build a balanced Ramadan nutrition plan for suhoor, iftar, hydration, energy, digestion, and sustainable fat-loss support without rebound cravings daily.',
+        category: 'Weight Loss',
+        excerpt:
+            'Fasting routines can support health goals when suhoor, iftar, hydration, and protein are planned with intention.',
+        publishedAt: '2026-02-08',
+        readTime: '8 min read',
+        heroImage:
+            'https://images.unsplash.com/photo-1543352634-a1c51d9f1fa7?auto=format&fit=crop&w=1200&q=80',
+        sections: [
+            {
+                heading: 'Build a Strong Suhoor',
+                paragraphs: [
+                    'Suhoor should focus on protein, slow carbohydrates, fiber, and hydration. This combination supports fullness and steadier energy through the fasting window.',
+                    'Good options include eggs with roti and vegetables, Greek yogurt with oats and fruit, lentils with salad, or chicken with whole grains.',
+                ],
+            },
+            {
+                heading: 'Break the Fast Calmly',
+                subheading: 'Avoid turning iftar into a rebound meal',
+                paragraphs: [
+                    'Start with water and a small portion, pause briefly, then build a balanced plate. This reduces overeating after long fasting hours.',
+                    'Keep fried foods occasional rather than daily, especially if fat loss, digestion, or blood sugar stability is a goal.',
+                ],
+            },
+            {
+                heading: 'Hydrate Between Iftar and Sleep',
+                paragraphs: [
+                    'Hydration is easier when spread across the evening rather than forced all at once. Include water, soups, fruits, and mineral-rich foods.',
+                    'Caffeine timing matters. Late tea or coffee can reduce sleep quality, which affects cravings and next-day energy.',
+                ],
+            },
+            {
+                heading: 'Protect Protein and Movement',
+                paragraphs: [
+                    'Protein often drops during Ramadan because meals become snack-heavy. Anchor both suhoor and iftar with a clear protein source.',
+                    'Light walking after iftar can support digestion and glucose control without adding pressure during fasting hours.',
+                ],
+            },
+        ],
+        internalLinks: [
+            { label: 'Start a weight loss coaching plan', to: '/services' },
+            { label: 'Book Ramadan nutrition consultation', to: '/booking' },
         ],
     },
 ]

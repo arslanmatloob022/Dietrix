@@ -108,4 +108,10 @@ export type BookingPayload = {
 export type SiteMeta = {
     title: string
     description: string
+    path?: string
+    canonicalPath?: string
+    keywords?: string[]
+    type?: 'website' | 'article' | 'profile'
+    robots?: string
+    image?: string
 }

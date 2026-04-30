@@ -120,13 +120,60 @@ async function onSubmit() {
 
 <style scoped>
 .lead-form {
+  position: relative;
   display: grid;
   gap: 14px;
-  padding: 18px;
-  border-radius: 18px;
-  border: 1px solid rgba(97, 174, 164, 0.3);
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(8px);
+  padding: clamp(16px, 2.6vw, 24px);
+  border-radius: 22px;
+  border: 1px solid rgba(97, 174, 164, 0.28);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(236, 253, 245, 0.42)),
+    rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 18px 46px rgba(6, 78, 59, 0.08);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.lead-form::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), transparent 38%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(16, 185, 129, 0.04) 0,
+      rgba(16, 185, 129, 0.04) 1px,
+      transparent 1px,
+      transparent 32px
+    );
+}
+
+.lead-form::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.74) 42%,
+    transparent 62%
+  );
+  transform: translateX(-82%);
+  transition: transform 800ms ease;
+}
+
+.lead-form:hover::after {
+  transform: translateX(82%);
 }
 
 .lead-form--compact {
@@ -136,47 +183,87 @@ async function onSubmit() {
 label {
   display: grid;
   gap: 8px;
-  font-weight: 600;
+  font-weight: 800;
   color: var(--ink-700);
+  font-size: 0.92rem;
 }
 
 input,
 textarea {
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid rgba(108, 171, 163, 0.32);
-  border-radius: 12px;
-  background: white;
-  padding: 12px;
+  border: 1px solid rgba(108, 171, 163, 0.34);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.76);
+  padding: 14px 15px;
   font: inherit;
   color: var(--ink-800);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.86),
+    0 8px 20px rgba(6, 78, 59, 0.04);
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background 220ms ease,
+    transform 220ms ease;
 }
 
 textarea {
   resize: vertical;
-  min-height: 90px;
+  min-height: 116px;
 }
 
 input:focus,
 textarea:focus {
-  outline: 3px solid rgba(62, 170, 155, 0.2);
+  outline: 0;
   border-color: var(--teal-500);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 0 0 4px rgba(20, 184, 166, 0.13),
+    0 14px 28px rgba(6, 78, 59, 0.08);
+  transform: translateY(-1px);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(61, 102, 96, 0.62);
 }
 
 small {
   color: #a64040;
+  font-weight: 700;
 }
 
 .feedback {
   margin: 0;
   font-size: 0.92rem;
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-weight: 700;
 }
 
 .feedback--error {
   color: #a64040;
+  background: rgba(166, 64, 64, 0.08);
+  border: 1px solid rgba(166, 64, 64, 0.14);
 }
 
 .feedback--success {
   color: #0f6d63;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lead-form::after,
+  input,
+  textarea {
+    transition: none;
+  }
+
+  input:focus,
+  textarea:focus {
+    transform: none;
+  }
 }
 </style>

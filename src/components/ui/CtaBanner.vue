@@ -54,6 +54,7 @@ withDefaults(
   box-shadow:
     0 32px 80px rgba(6, 78, 59, 0.3),
     0 8px 24px rgba(6, 78, 59, 0.16);
+  margin-bottom: 22px;
 }
 
 .cta-bg {

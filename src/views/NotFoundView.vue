@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import UiButton from "../components/ui/UiButton.vue";
 import { useSeo } from "../composables/useSeo";
+import { pageSeo } from "../data/pageSeo";
 
-useSeo({
-  title: "Page Not Found | Dietrix Nutrition",
-  description:
-    "The page you requested does not exist. Return to Dietrix home and continue your health journey.",
-});
+useSeo(pageSeo.notFound);
 </script>
 
 <template>
