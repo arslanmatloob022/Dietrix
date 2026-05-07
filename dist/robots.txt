@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dietrix.fit/sitemap.xml
