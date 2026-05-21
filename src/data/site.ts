@@ -1,7 +1,7 @@
 export const siteUrl = "https://dietrix.fit";
 export const siteName = "Dietrix Nutrition";
 export const nutritionistName = "Dn. Rimsha Naseer";
-export const contactEmail = "hello@dietrixnutrition.com";
+export const contactEmail = "rimshanaseer101@gmail.com";
 
 export const targetMarkets = [
   { country: "Pakistan", keywordLabel: "online nutritionist Pakistan" },

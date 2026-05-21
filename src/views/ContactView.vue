@@ -17,14 +17,14 @@ const responseStats = [
 const contactChannels = [
   {
     label: "Email",
-    value: "hello@dietrixnutrition.com",
-    href: "mailto:hello@dietrixnutrition.com",
+    value: "rimshanaseer101@gmail.com",
+    href: "mailto:rimshanaseer101@gmail.com",
     note: "Best for detailed goals, reports and collaboration requests.",
   },
   {
     label: "WhatsApp",
     value: "+1 555-210-8102",
-    href: "https://wa.me/15552108102",
+    href: "https://wa.me/+9203007626555",
     note: "Fastest path for slot questions and quick consultation support.",
   },
   {
@@ -88,7 +88,7 @@ const marketSupportNotes = [
           <UiButton to="/booking" size="lg">Book Consultation</UiButton>
           <a
             class="hero-whatsapp"
-            href="https://wa.me/15552108102"
+            href="https://wa.me/+9203007626555"
             target="_blank"
             rel="noreferrer"
           >
@@ -205,7 +205,10 @@ const marketSupportNotes = [
         </ul>
       </div>
 
-      <div class="market-grid" aria-label="Target countries for Dietrix Nutrition">
+      <div
+        class="market-grid"
+        aria-label="Target countries for Dietrix Nutrition"
+      >
         <article v-for="market in targetMarkets" :key="market.country">
           <span>{{ market.country }}</span>
           <strong>{{ market.keywordLabel }}</strong>
