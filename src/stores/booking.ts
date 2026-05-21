@@ -11,6 +11,10 @@ type StoredBooking = BookingPayload & {
 const STORAGE_KEY = 'dietrix_bookings'
 
 function readBookings(): StoredBooking[] {
+    if (typeof localStorage === 'undefined') {
+        return []
+    }
+
     try {
         const raw = localStorage.getItem(STORAGE_KEY)
         if (!raw) {
@@ -57,7 +61,9 @@ export const useBookingStore = defineStore('bookings', {
                 }
 
                 this.bookings.unshift(booking)
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(this.bookings))
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.bookings))
+                }
                 this.successMessage =
                     'Session reserved. Continue to payment during checkout to confirm your appointment.'
             } catch (error) {

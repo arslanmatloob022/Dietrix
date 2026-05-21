@@ -10,6 +10,10 @@ type StoredLead = LeadPayload & {
 const STORAGE_KEY = 'dietrix_leads'
 
 function readStoredLeads(): StoredLead[] {
+    if (typeof localStorage === 'undefined') {
+        return []
+    }
+
     try {
         const raw = localStorage.getItem(STORAGE_KEY)
         if (!raw) {
@@ -50,7 +54,9 @@ export const useLeadStore = defineStore('leads', {
                     createdAt: response.createdAt,
                 }
                 this.leads.unshift(lead)
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(this.leads))
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.leads))
+                }
                 this.successMessage = 'Thanks! We received your request and will contact you shortly.'
             } catch (error) {
                 this.error = error instanceof Error ? error.message : 'Something went wrong. Please try again.'

@@ -1,8 +1,8 @@
-import { createApp } from 'vue'
+import { ViteSSG } from 'vite-ssg'
 import { createPinia } from 'pinia'
 import './style.css'
 import App from './App.vue'
-import router from './router'
+import { routerOptions } from './router'
 import { useBookingStore } from './stores/booking'
 import { useLeadStore } from './stores/leads'
 
@@ -33,33 +33,34 @@ function initializeAnalytics() {
     analyticsWindow.gtag('config', googleAnalyticsId)
 }
 
-const app = createApp(App)
-const pinia = createPinia()
+export const createApp = ViteSSG(
+    App,
+    routerOptions,
+    ({ app, router }) => {
+        const pinia = createPinia()
 
-app.use(pinia)
-app.use(router)
+        app.use(pinia)
 
-const leadStore = useLeadStore(pinia)
-const bookingStore = useBookingStore(pinia)
+        if (import.meta.env.SSR) {
+            return
+        }
 
-leadStore.initialize()
-bookingStore.initialize()
-initializeAnalytics()
+        const leadStore = useLeadStore(pinia)
+        const bookingStore = useBookingStore(pinia)
 
-router.afterEach((to) => {
-    if (!googleAnalyticsId || typeof window === 'undefined') {
-        return
-    }
+        leadStore.initialize()
+        bookingStore.initialize()
+        initializeAnalytics()
 
-    const analyticsWindow = window as AnalyticsWindow
-    analyticsWindow.gtag?.('config', googleAnalyticsId, {
-        page_path: to.fullPath,
-    })
-})
+        router.afterEach((to) => {
+            if (!googleAnalyticsId || typeof window === 'undefined') {
+                return
+            }
 
-async function bootstrap() {
-    await router.isReady()
-    app.mount('#app')
-}
-
-bootstrap()
+            const analyticsWindow = window as AnalyticsWindow
+            analyticsWindow.gtag?.('config', googleAnalyticsId, {
+                page_path: to.fullPath,
+            })
+        })
+    },
+)

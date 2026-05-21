@@ -1,3 +1,4 @@
+import { useHead } from '@unhead/vue'
 import type { SiteMeta } from '../types/models'
 import { absoluteUrl, siteName } from '../data/site'
 
@@ -46,24 +47,55 @@ function upsertLink(rel: string, href: string) {
 }
 
 export function useSeo(meta: SiteMeta) {
+    const canonicalPath = meta.canonicalPath ?? meta.path ?? '/'
+    const canonicalUrl = absoluteUrl(canonicalPath)
+    const robots = meta.robots ?? 'index, follow, max-image-preview:large'
+    const type = meta.type === 'article' ? 'article' : 'website'
+    const keywords = meta.keywords?.join(', ') ?? ''
+    const googleVerification = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION as string | undefined
+
+    if (import.meta.env.SSR) {
+        useHead({
+            title: meta.title,
+            meta: [
+                { name: 'description', content: meta.description },
+                { name: 'robots', content: robots },
+                { name: 'keywords', content: keywords },
+                { name: 'twitter:card', content: meta.image ? 'summary_large_image' : 'summary' },
+                { name: 'twitter:title', content: meta.title },
+                { name: 'twitter:description', content: meta.description },
+                ...(googleVerification ? [{ name: 'google-site-verification', content: googleVerification }] : []),
+                ...(meta.image ? [{ name: 'twitter:image', content: meta.image }] : []),
+            ],
+            link: [{ rel: 'canonical', href: canonicalUrl }],
+            script: [],
+        })
+
+        useHead({
+            meta: [
+                { property: 'og:type', content: type },
+                { property: 'og:site_name', content: siteName },
+                { property: 'og:title', content: meta.title },
+                { property: 'og:description', content: meta.description },
+                { property: 'og:url', content: canonicalUrl },
+                ...(meta.image ? [{ property: 'og:image', content: meta.image }] : []),
+            ],
+        })
+        return
+    }
+
     if (typeof document === 'undefined') {
         return
     }
 
-    const canonicalPath = meta.canonicalPath ?? meta.path ?? window.location.pathname
-    const canonicalUrl = absoluteUrl(canonicalPath)
-    const robots = meta.robots ?? 'index, follow, max-image-preview:large'
-    const type = meta.type === 'article' ? 'article' : 'website'
-
     document.title = meta.title
     upsertMeta('description', meta.description)
     upsertMeta('robots', robots)
-    upsertMeta('keywords', meta.keywords?.join(', ') ?? '')
+    upsertMeta('keywords', keywords)
     upsertMeta('twitter:card', meta.image ? 'summary_large_image' : 'summary')
     upsertMeta('twitter:title', meta.title)
     upsertMeta('twitter:description', meta.description)
 
-    const googleVerification = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION as string | undefined
     if (googleVerification) {
         upsertMeta('google-site-verification', googleVerification)
     }
@@ -85,6 +117,20 @@ export function useSeo(meta: SiteMeta) {
 }
 
 export function upsertJsonLd(id: string, data: Record<string, unknown>) {
+    if (import.meta.env.SSR) {
+        useHead({
+            script: [
+                {
+                    key: id,
+                    id,
+                    type: 'application/ld+json',
+                    innerHTML: JSON.stringify(data),
+                },
+            ],
+        })
+        return
+    }
+
     if (typeof document === 'undefined') {
         return
     }
@@ -102,6 +148,10 @@ export function upsertJsonLd(id: string, data: Record<string, unknown>) {
 }
 
 export function removeJsonLd(id: string) {
+    if (import.meta.env.SSR) {
+        return
+    }
+
     if (typeof document === 'undefined') {
         return
     }

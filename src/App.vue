@@ -60,13 +60,14 @@ onMounted(() => {
 watch(
   () => route.fullPath,
   async () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
     await nextTick();
     requestAnimationFrame(() => {
       attachRevealAnimations();
     });
-  },
-  {
-    immediate: true,
   },
 );
 

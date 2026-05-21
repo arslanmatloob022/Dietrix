@@ -1,8 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { pageSeo } from '../data/pageSeo'
-import { useSeo } from '../composables/useSeo'
 
-const routes = [
+export const routes: RouteRecordRaw[] = [
     {
         path: '/',
         name: 'home',
@@ -62,37 +61,19 @@ const routes = [
     },
 ]
 
-const router = createRouter({
-    history: createWebHistory(),
+export const routerOptions = {
     routes,
-    scrollBehavior(to) {
+    scrollBehavior(to: RouteLocationNormalized) {
         if (to.hash) {
             return {
                 el: to.hash,
-                behavior: 'smooth',
+                behavior: 'smooth' as const,
             }
         }
 
         return {
             top: 0,
-            behavior: 'smooth',
+            behavior: 'smooth' as const,
         }
     },
-})
-
-router.afterEach((to) => {
-    if (typeof document === 'undefined') {
-        return
-    }
-
-    useSeo({
-        title: typeof to.meta.title === 'string' ? to.meta.title : pageSeo.home.title,
-        description: typeof to.meta.description === 'string' ? to.meta.description : pageSeo.home.description,
-        path: typeof to.meta.path === 'string' ? to.meta.path : to.path,
-        keywords: Array.isArray(to.meta.keywords) ? (to.meta.keywords as string[]) : [],
-        type: typeof to.meta.type === 'string' ? (to.meta.type as 'website' | 'article' | 'profile') : 'website',
-        robots: typeof to.meta.robots === 'string' ? to.meta.robots : undefined,
-    })
-})
-
-export default router
+}
