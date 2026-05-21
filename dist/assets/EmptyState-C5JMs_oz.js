@@ -1,1 +1,0 @@
-import{N as e,S as t,a as n,f as r,h as i,y as a}from"./app-cnpVdpxC.js";var o={class:`empty-state`,role:`status`,"aria-live":`polite`},s=n(a({__name:`EmptyState`,props:{title:{},description:{}},setup(n){return(a,s)=>(t(),i(`div`,o,[r(`h3`,null,e(n.title),1),r(`p`,null,e(n.description||`No data available to show`),1)]))}}),[[`__scopeId`,`data-v-806e5e7f`]]);export{s as t};

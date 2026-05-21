@@ -23,8 +23,8 @@ const contactChannels = [
   },
   {
     label: "WhatsApp",
-    value: "+1 555-210-8102",
-    href: "https://wa.me/+9203007626555",
+    value: "++92 0300 7626555",
+    href: "https://wa.me/+92 0300 7626555",
     note: "Fastest path for slot questions and quick consultation support.",
   },
   {
@@ -88,7 +88,7 @@ const marketSupportNotes = [
           <UiButton to="/booking" size="lg">Book Consultation</UiButton>
           <a
             class="hero-whatsapp"
-            href="https://wa.me/+9203007626555"
+            href="https://wa.me/+92 0300 7626555"
             target="_blank"
             rel="noreferrer"
           >
