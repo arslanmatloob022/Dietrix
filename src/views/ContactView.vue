@@ -23,7 +23,7 @@ const contactChannels = [
   },
   {
     label: "WhatsApp",
-    value: "++92 0300 7626555",
+    value: "+92 0300 7626555",
     href: "https://wa.me/+92 0300 7626555",
     note: "Fastest path for slot questions and quick consultation support.",
   },
