@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import UiButton from "../components/ui/UiButton.vue";
 import { useSeo } from "../composables/useSeo";
 import { pageSeo } from "../data/pageSeo";
 import { submitBooking } from "../services/bookingService";
 import type { BookingPayload } from "../types/models";
+import { ensureMotion } from "../lib/motion";
 
 useSeo(pageSeo.booking);
 
@@ -182,6 +183,100 @@ async function reserveSlot() {
     form.notes = "";
   }
 }
+
+// ── Page motion ───────────────────────────────────────────────────────────────
+let bookingKills: (() => void)[] = [];
+
+onMounted(async () => {
+  const motion = await ensureMotion();
+  if (!motion || typeof window === "undefined") return;
+  const { gsap, ScrollTrigger } = motion;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  // Helper
+  function st(trigger: string, start: string, fn: () => void) {
+    const s = ScrollTrigger.create({ trigger, start, once: true, onEnter: fn });
+    bookingKills.push(() => s.kill());
+  }
+
+  // ── Consultation ring: elastic spin-in ─────────────────────────────────
+  st(".consultation-ring", "top 65%", () => {
+    gsap.from(".consultation-ring", {
+      scale: 0.28, opacity: 0, rotation: -140,
+      duration: 1.4, ease: "elastic.out(0.9, 0.42)",
+    });
+  });
+
+  // ── Console detail rows cascade from right ─────────────────────────────
+  st(".console-list", "top 65%", () => {
+    gsap.from(".console-list div", {
+      x: 36, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power3.out",
+    });
+  });
+
+  // ── Hero metric cards spring up ─────────────────────────────────────────
+  st(".booking-metrics", "top 65%", () => {
+    gsap.from(".booking-metrics article", {
+      y: 32, scale: 0.86, opacity: 0,
+      duration: 0.65, stagger: 0.11, ease: "back.out(1.6)",
+    });
+  });
+
+  // ── Progress step nodes pop in sequence ────────────────────────────────
+  st(".booking-progress", "top 80%", () => {
+    gsap.from(".progress-node span", {
+      scale: 0, opacity: 0, duration: 0.5, stagger: 0.2, ease: "back.out(2.2)",
+    });
+    gsap.from(".progress-node strong", {
+      opacity: 0, y: 8, duration: 0.4, stagger: 0.2, delay: 0.18, ease: "power3.out",
+    });
+  });
+
+  // ── Date buttons wave from bottom ──────────────────────────────────────
+  st(".date-grid", "top 60%", () => {
+    gsap.from(".date-button", {
+      y: 22, scale: 0.88, opacity: 0,
+      duration: 0.42, stagger: 0.04, ease: "back.out(1.5)",
+    });
+  });
+
+  // ── Time buttons bounce in ─────────────────────────────────────────────
+  st(".time-grid", "top 60%", () => {
+    gsap.from(".time-button", {
+      y: 16, scale: 0.86, opacity: 0,
+      duration: 0.38, stagger: 0.05, ease: "back.out(1.6)",
+    });
+  });
+
+  // ── Assurance steps: alternating left / right slides ──────────────────
+  document.querySelectorAll<HTMLElement>(".assurance-grid article").forEach((el, i) => {
+    const s = ScrollTrigger.create({
+      trigger: el, start: "top 65%", once: true,
+      onEnter() {
+        gsap.from(el, {
+          x: i % 2 === 0 ? -52 : 52, y: 28, opacity: 0,
+          duration: 0.78, ease: "power3.out",
+        });
+      },
+    });
+    bookingKills.push(() => s.kill());
+  });
+
+  // ── Testimonial cards spring up ─────────────────────────────────────────
+  st(".testimonial-grid", "top 72%", () => {
+    gsap.from(".testimonial-card", {
+      y: 48, scale: 0.91, opacity: 0,
+      duration: 0.72, stagger: 0.15, ease: "back.out(1.5)",
+    });
+  });
+
+  ScrollTrigger.refresh();
+});
+
+onUnmounted(() => {
+  bookingKills.forEach((fn) => fn());
+  bookingKills = [];
+});
 </script>
 
 <template>

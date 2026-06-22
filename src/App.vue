@@ -1,83 +1,129 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, watch } from "vue";
-import { RouterView, useRoute } from "vue-router";
-import AppFooter from "./components/layout/AppFooter.vue";
-import FloatingChatbot from "./components/layout/FloatingChatbot.vue";
-import AppNavbar from "./components/layout/AppNavbar.vue";
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
+import AppFooter from './components/layout/AppFooter.vue'
+import FloatingChatbot from './components/layout/FloatingChatbot.vue'
+import AppNavbar from './components/layout/AppNavbar.vue'
+import CustomCursor from './components/ui/CustomCursor.vue'
+import { ensureMotion, getLenis } from './lib/motion'
 
-const route = useRoute();
-let observer: IntersectionObserver | null = null;
+const route = useRoute()
+const progressFill = ref<HTMLElement>()
+let revealTriggers: any[] = []
+let progressCleanup: (() => void) | null = null
 
-function attachRevealAnimations() {
-  const elements = Array.from(
-    document.querySelectorAll(".reveal"),
-  ) as HTMLElement[];
+async function attachGsapReveals() {
+  if (typeof window === 'undefined') return
 
-  if (!elements.length) {
-    return;
-  }
+  const motion = await ensureMotion()
+  if (!motion) return
+  const { gsap, ScrollTrigger } = motion
 
-  if (!("IntersectionObserver" in window)) {
-    elements.forEach((element) => {
-      element.classList.remove("reveal-pending");
-      element.classList.add("is-visible");
-    });
-    return;
-  }
+  // Kill previous triggers to avoid accumulation on route change
+  revealTriggers.forEach((t) => t?.kill?.())
+  revealTriggers = []
 
-  observer?.disconnect();
+  // ── Staggered reveal groups (spring bounce, bigger offset) ───────────
+  document.querySelectorAll<HTMLElement>('.reveal-group').forEach((group) => {
+    const children = Array.from(group.children) as HTMLElement[]
+    if (!children.length) return
+    const st = ScrollTrigger.create({
+      trigger: group,
+      start: 'top 86%',
+      once: true,
+      onEnter() {
+        gsap.from(children, {
+          y: 52,
+          opacity: 0,
+          scale: 0.93,
+          duration: 0.78,
+          stagger: 0.12,
+          ease: 'back.out(1.5)',
+          clearProps: 'all',
+        })
+      },
+    })
+    revealTriggers.push(st)
+  })
 
-  observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
-
-        entry.target.classList.remove("reveal-pending");
-        entry.target.classList.add("is-visible");
-        observer?.unobserve(entry.target);
-      });
-    },
-    {
-      threshold: 0.15,
-    },
-  );
-
-  elements.forEach((element, index) => {
-    const htmlElement = element as HTMLElement;
-    htmlElement.classList.remove("is-visible");
-    htmlElement.classList.add("reveal-pending");
-    htmlElement.style.transitionDelay = `${Math.min(index * 50, 260)}ms`;
-    observer?.observe(htmlElement);
-  });
+  // ── Individual reveals — alternate left/right x-slide ────────────────
+  let revealIdx = 0
+  document.querySelectorAll<HTMLElement>('.reveal:not(.reveal-group .reveal)').forEach((el) => {
+    const xFrom = revealIdx % 2 === 0 ? -48 : 48
+    revealIdx++
+    const st = ScrollTrigger.create({
+      trigger: el,
+      start: 'top 88%',
+      once: true,
+      onEnter() {
+        gsap.from(el, {
+          y: 46,
+          x: xFrom,
+          opacity: 0,
+          scale: 0.96,
+          duration: 0.75,
+          ease: 'power3.out',
+          clearProps: 'all',
+        })
+      },
+    })
+    revealTriggers.push(st)
+  })
 }
 
-onMounted(() => {
-  attachRevealAnimations();
-});
+function initScrollProgress() {
+  if (typeof window === 'undefined') return
+  const fill = progressFill.value
+  if (!fill) return
+
+  // Wire to Lenis for accurate smooth-scroll progress
+  const lenis = getLenis()
+  if (lenis) {
+    const handler = ({ progress }: { progress: number }) => {
+      fill.style.transform = `scaleX(${progress})`
+    }
+    lenis.on('scroll', handler)
+    progressCleanup = () => lenis.off('scroll', handler)
+  } else {
+    // Fallback: native scroll
+    const handler = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      if (total > 0) fill.style.transform = `scaleX(${Math.min(window.scrollY / total, 1)})`
+    }
+    window.addEventListener('scroll', handler, { passive: true })
+    progressCleanup = () => window.removeEventListener('scroll', handler)
+  }
+}
+
+onMounted(async () => {
+  await ensureMotion()
+  await nextTick()
+  await attachGsapReveals()
+  initScrollProgress()
+})
 
 watch(
   () => route.fullPath,
   async () => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    await nextTick();
-    requestAnimationFrame(() => {
-      attachRevealAnimations();
-    });
+    if (typeof window === 'undefined') return
+    await nextTick()
+    requestAnimationFrame(attachGsapReveals)
   },
-);
+)
 
-onBeforeUnmount(() => {
-  observer?.disconnect();
-});
+onUnmounted(() => {
+  revealTriggers.forEach((t) => t?.kill?.())
+  progressCleanup?.()
+})
 </script>
 
 <template>
   <div class="app-shell">
+    <!-- Scroll progress line (top of viewport) -->
+    <div class="scroll-progress-bar" aria-hidden="true">
+      <div ref="progressFill" class="scroll-progress-fill"></div>
+    </div>
+    <CustomCursor />
     <AppNavbar />
     <RouterView v-slot="{ Component, route: currentRoute }">
       <Transition name="page" mode="out-in">
@@ -104,6 +150,28 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/* ── Scroll progress bar ─────────────────────────────── */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 99999;
+  background: rgba(16, 185, 129, 0.1);
+  pointer-events: none;
+}
+
+.scroll-progress-fill {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--emerald-700), var(--emerald-400), var(--teal-400));
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6), 0 0 3px rgba(16, 185, 129, 0.4);
+  will-change: transform;
+}
+
 .route-loading {
   min-height: 60vh;
   display: grid;

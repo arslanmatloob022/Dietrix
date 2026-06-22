@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <div class="faq-list">
-    <details v-for="item in items" :key="item.id" class="faq-item reveal">
+    <details v-for="item in items" :key="item.id" class="faq-item">
       <summary>{{ item.question }}</summary>
       <p>{{ item.answer }}</p>
     </details>

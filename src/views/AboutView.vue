@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted } from "vue";
 import CtaBanner from "../components/ui/CtaBanner.vue";
 import SectionTitle from "../components/ui/SectionTitle.vue";
 import UiButton from "../components/ui/UiButton.vue";
@@ -11,6 +12,7 @@ import {
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
 import { buildPersonSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
+import { ensureMotion } from "../lib/motion";
 
 useSeo(pageSeo.about);
 upsertJsonLd("dietrix-person-schema", buildPersonSchema());
@@ -99,6 +101,130 @@ const remoteSupportSignals = [
   "Progress review",
   "Culture-fit swaps",
 ];
+
+// ── Page motion ───────────────────────────────────────────────────────────────
+let aboutKills: (() => void)[] = [];
+
+onMounted(async () => {
+  const motion = await ensureMotion();
+  if (!motion || typeof window === "undefined") return;
+  const { gsap, ScrollTrigger } = motion;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  function st(trigger: string, start: string, fn: () => void) {
+    const s = ScrollTrigger.create({ trigger, start, once: true, onEnter: fn });
+    aboutKills.push(() => s.kill());
+  }
+
+  // ── Portrait floats in from left, copy from right ──────────────────────
+  st(".about-hero", "top 72%", () => {
+    gsap.from(".portrait-shell", {
+      x: -62, opacity: 0, duration: 1.0, ease: "power3.out",
+    });
+    gsap.from(".profile-panel", {
+      x: 44, opacity: 0, duration: 0.85, delay: 0.2, ease: "power3.out",
+    });
+    gsap.from(".signal-grid div", {
+      y: 22, opacity: 0, duration: 0.5, stagger: 0.08, delay: 0.4, ease: "back.out(1.4)",
+    });
+  });
+
+  // ── Principle cards slide from left in sequence ────────────────────────
+  document.querySelectorAll<HTMLElement>(".principle-card").forEach((el, i) => {
+    const s = ScrollTrigger.create({
+      trigger: el, start: "top 65%", once: true,
+      onEnter() {
+        gsap.from(el, {
+          x: -60, opacity: 0, duration: 0.72, delay: i * 0.1, ease: "power3.out",
+        });
+      },
+    });
+    aboutKills.push(() => s.kill());
+  });
+
+  // ── Method cards: fan-in with rotateX ─────────────────────────────────
+  st(".method-grid", "top 68%", () => {
+    gsap.from(".method-card", {
+      y: 52, scale: 0.9, opacity: 0, rotateX: 10,
+      duration: 0.78, stagger: 0.13, ease: "back.out(1.4)", clearProps: "transform",
+    });
+  });
+
+  // ── Credential cards cascade from right ───────────────────────────────
+  document.querySelectorAll<HTMLElement>(".credential-card").forEach((el, i) => {
+    const s = ScrollTrigger.create({
+      trigger: el, start: "top 65%", once: true,
+      onEnter() {
+        gsap.from(el, {
+          x: 54, opacity: 0, duration: 0.65, delay: i * 0.08, ease: "power3.out",
+        });
+      },
+    });
+    aboutKills.push(() => s.kill());
+  });
+
+  // ── Specialty track cards spring in ───────────────────────────────────
+  st(".track-grid", "top 68%", () => {
+    gsap.from(".track-card", {
+      y: 44, scale: 0.9, opacity: 0,
+      duration: 0.7, stagger: 0.12, ease: "back.out(1.5)",
+    });
+  });
+
+  // ── Track meter bars fill on scroll (scaleX 0 → natural width) ────────
+  document.querySelectorAll<HTMLElement>(".track-meter span").forEach((bar) => {
+    const targetW = bar.style.width || "80%";
+    gsap.set(bar, { scaleX: 0, transformOrigin: "left center" });
+    const s = ScrollTrigger.create({
+      trigger: bar, start: "top 68%", once: true,
+      onEnter() {
+        gsap.to(bar, {
+          scaleX: 1, duration: 1.1, ease: "power2.out",
+        });
+      },
+    });
+    aboutKills.push(() => {
+      s.kill();
+      gsap.set(bar, { scaleX: 1 });
+      bar.style.width = targetW;
+    });
+  });
+
+  // ── Support chips pop in with stagger ─────────────────────────────────
+  st(".support-strip", "top 65%", () => {
+    gsap.from(".support-chip", {
+      scale: 0.72, opacity: 0, duration: 0.45, stagger: 0.08, ease: "back.out(1.8)",
+    });
+  });
+
+  // ── Remote status numbers count up ────────────────────────────────────
+  document.querySelectorAll<HTMLElement>(".remote-status strong").forEach((el) => {
+    const raw = el.textContent ?? "";
+    const num = parseFloat(raw.replace(/[^\d.]/g, ""));
+    const suffix = raw.replace(/[\d.]/g, "");
+    if (isNaN(num)) return;
+    const obj = { val: 0 };
+    const s = ScrollTrigger.create({
+      trigger: el, start: "top 68%", once: true,
+      onEnter() {
+        gsap.to(obj, {
+          val: num, duration: 1.8, ease: "power2.out",
+          onUpdate() {
+            el.textContent = (Number.isInteger(num) ? Math.round(obj.val) : obj.val.toFixed(1)) + suffix;
+          },
+        });
+      },
+    });
+    aboutKills.push(() => s.kill());
+  });
+
+  ScrollTrigger.refresh();
+});
+
+onUnmounted(() => {
+  aboutKills.forEach((fn) => fn());
+  aboutKills = [];
+});
 </script>
 
 <template>
