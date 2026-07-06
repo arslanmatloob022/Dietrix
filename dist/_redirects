@@ -1,5 +1,6 @@
-/*
-  Enable SPA routing in Netlify for Vue/Vite apps
-  All routes redirect to index.html
-*/
+# Dietrix — Netlify _redirects
+# NOTE: All SSG page routing and trailing-slash canonicalization is handled
+# in netlify.toml (which takes priority). This file provides a safety-net
+# SPA fallback only, for any client-side route not covered above.
+
 /*    /index.html   200

@@ -1,9 +1,209 @@
-# Netlify configuration for Vite + Vue SPA
+# Netlify configuration for Dietrix — vite-ssg (Static Site Generation)
+# dirStyle: 'nested' produces dist/about/index.html, dist/services/index.html, etc.
+# Without explicit rewrites, Netlify's "pretty-URLs" issues a 301 from /about → /about/
+# which Google Search Console reports as "Page with redirect" and refuses to index.
+# Fix: force-rewrite each SSG page to its file so NO redirect fires.
+
 [build]
   publish = "dist"
-  command = "npm run build"
+  command = "pnpm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 1. TRAILING-SLASH CANONICALIZATION (301 permanent)
+#    Redirect /about/ → /about  to match the sitemap canonical.
+#    Must come BEFORE the 200 rewrites so Netlify processes them first.
+# ─────────────────────────────────────────────────────────────────────────────
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from  = "/about/"
+  to    = "/about"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/services/"
+  to    = "/services"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/booking/"
+  to    = "/booking"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/blog/"
+  to    = "/blog"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/testimonials/"
+  to    = "/testimonials"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/contact/"
+  to    = "/contact"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/blog/best-high-protein-breakfast-for-fat-loss/"
+  to    = "/blog/best-high-protein-breakfast-for-fat-loss"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/blog/pcos-diet-plan-basics-that-actually-work/"
+  to    = "/blog/pcos-diet-plan-basics-that-actually-work"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/blog/simple-weekly-diet-planning-for-busy-professionals/"
+  to    = "/blog/simple-weekly-diet-planning-for-busy-professionals"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/blog/diabetes-friendly-plate-method-for-busy-families/"
+  to    = "/blog/diabetes-friendly-plate-method-for-busy-families"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/blog/gut-health-meal-rhythm-for-bloating-relief/"
+  to    = "/blog/gut-health-meal-rhythm-for-bloating-relief"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from  = "/blog/ramadan-nutrition-plan-for-energy-and-fat-loss/"
+  to    = "/blog/ramadan-nutrition-plan-for-energy-and-fat-loss"
+  status = 301
+  force  = true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. SSG PAGE REWRITES (200 = serve the file, no redirect to user)
+#    force = true overrides Netlify's pretty-URL trailing-slash redirect.
+#    Each entry maps the clean canonical URL to the generated index.html file.
+# ─────────────────────────────────────────────────────────────────────────────
+
+[[redirects]]
+  from  = "/about"
+  to    = "/about/index.html"
   status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/services"
+  to    = "/services/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/booking"
+  to    = "/booking/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/blog"
+  to    = "/blog/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/testimonials"
+  to    = "/testimonials/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/contact"
+  to    = "/contact/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/blog/best-high-protein-breakfast-for-fat-loss"
+  to    = "/blog/best-high-protein-breakfast-for-fat-loss/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/blog/pcos-diet-plan-basics-that-actually-work"
+  to    = "/blog/pcos-diet-plan-basics-that-actually-work/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/blog/simple-weekly-diet-planning-for-busy-professionals"
+  to    = "/blog/simple-weekly-diet-planning-for-busy-professionals/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/blog/diabetes-friendly-plate-method-for-busy-families"
+  to    = "/blog/diabetes-friendly-plate-method-for-busy-families/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/blog/gut-health-meal-rhythm-for-bloating-relief"
+  to    = "/blog/gut-health-meal-rhythm-for-bloating-relief/index.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from  = "/blog/ramadan-nutrition-plan-for-energy-and-fat-loss"
+  to    = "/blog/ramadan-nutrition-plan-for-energy-and-fat-loss/index.html"
+  status = 200
+  force  = true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 3. SPA FALLBACK — catch-all for any client-side route not pre-rendered
+# ─────────────────────────────────────────────────────────────────────────────
+
+[[redirects]]
+  from  = "/*"
+  to    = "/index.html"
+  status = 200
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. HTTP HEADERS — caching, security, SEO signals
+# ─────────────────────────────────────────────────────────────────────────────
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+    Permissions-Policy     = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
