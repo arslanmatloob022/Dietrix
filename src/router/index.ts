@@ -37,7 +37,7 @@ export const routes: RouteRecordRaw[] = [
         name: 'blog-article',
         component: () => import('../views/BlogArticleView.vue'),
         meta: {
-            title: 'Nutrition Blog Article | Dietrix Nutrition',
+            title: 'Nutrition Blog Article | Dietrix Fit',
             description: 'Practical nutrition guidance from certified professionals to support your health and wellness goals.',
         },
     },
@@ -52,6 +52,12 @@ export const routes: RouteRecordRaw[] = [
         name: 'contact',
         component: () => import('../views/ContactView.vue'),
         meta: pageSeo.contact,
+    },
+    {
+        path: '/404',
+        name: 'not-found-document',
+        component: () => import('../views/NotFoundView.vue'),
+        meta: pageSeo.notFound,
     },
     {
         path: '/:pathMatch(.*)*',

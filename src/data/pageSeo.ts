@@ -119,7 +119,7 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
   testimonials: {
     title: "Nutritionist Reviews & Results | Dietrix",
     description:
-      "See Dietrix Nutrition reviews, transformation stories, and client results from online weight loss, PCOS, diabetes, and meal planning coaching worldwide.",
+      "See Dietrix Fit reviews, transformation stories, and client results from online weight loss, PCOS, diabetes, and meal planning coaching worldwide.",
     path: "/testimonials",
     keywords: [
       "online nutritionist reviews",
@@ -130,7 +130,7 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
   contact: {
     title: "Contact Online Nutritionist Worldwide | Dietrix",
     description:
-      "Contact Dietrix Nutrition for online diet plans in Pakistan, USA, UK, Canada, Germany, France, KSA, Dubai, Australia, and worldwide support from home.",
+      "Contact Dietrix Fit for online diet plans in Pakistan, USA, UK, Canada, Germany, France, KSA, Dubai, Australia, and worldwide support from home.",
     path: "/contact",
     keywords: [
       "contact online nutritionist",
@@ -144,11 +144,11 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
     ],
   },
   notFound: {
-    title: "Page Not Found | Dietrix Nutrition",
+    title: "Page Not Found | Dietrix Fit",
     description:
-      "The page could not be found. Explore Dietrix Nutrition services, blog guides, testimonials, or book an online nutrition consultation today worldwide now.",
+      "The page could not be found. Explore Dietrix Fit services, blog guides, testimonials, or book an online nutrition consultation today worldwide now.",
     path: "/404",
-    keywords: ["Dietrix Nutrition"],
+    keywords: ["Dietrix Fit"],
     robots: "noindex, follow",
   },
 };

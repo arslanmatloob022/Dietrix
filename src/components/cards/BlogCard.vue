@@ -13,7 +13,7 @@ defineProps<{ post: BlogPost; featured?: boolean }>();
     <div class="img-wrap">
       <img
         :src="post.heroImage"
-        :alt="`${post.title} nutrition guide by Dietrix Nutrition`"
+        :alt="`${post.title} nutrition guide by Dietrix Fit`"
         loading="lazy"
       />
       <div class="image-shade" aria-hidden="true"></div>

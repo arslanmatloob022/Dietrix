@@ -1,4 +1,4 @@
-# Dietrix Nutrition Website
+# Dietrix Fit Website
 
 High-converting, SEO-focused personal branding and lead generation website for an online nutritionist practice.
 
@@ -49,3 +49,9 @@ Build for production:
 ```bash
 npm run build
 ```
+
+AWS/Nginx deployment and canonical URL verification are documented in
+[`docs/aws-nginx-deployment.md`](docs/aws-nginx-deployment.md).
+
+Logo variants, app icons, colors, and usage rules are documented in
+[`docs/brand-assets.md`](docs/brand-assets.md).

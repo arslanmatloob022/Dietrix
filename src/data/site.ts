@@ -1,5 +1,5 @@
 export const siteUrl = "https://dietrix.fit";
-export const siteName = "Dietrix Nutrition";
+export const siteName = "Dietrix Fit";
 export const nutritionistName = "Dn. Rimsha Naseer";
 export const contactEmail = "rimshanaseer101@gmail.com";
 

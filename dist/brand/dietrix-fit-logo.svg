@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="96" viewBox="0 0 384 96" fill="none">
+  <title>Dietrix Fit</title>
+  <defs>
+    <linearGradient id="dietrix-logo-gradient" x1="16" y1="16" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#059669"/>
+      <stop offset="1" stop-color="#0d9488"/>
+    </linearGradient>
+    <mask id="dietrix-logo-leaf">
+      <rect x="16" y="16" width="64" height="64" fill="white"/>
+      <path d="M43.2 55.5c3.6-5.4 7.7-9.8 13-13.6" stroke="black" stroke-width="2.4" stroke-linecap="round"/>
+    </mask>
+  </defs>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M24 22h20c18.8 0 32 10.7 32 26S62.8 74 44 74H24V22Zm14 12v28h6c10.3 0 18-5.8 18-14s-7.7-14-18-14h-6Z" fill="url(#dietrix-logo-gradient)"/>
+  <path d="M41.2 55.8c1.1-10.2 7.6-16.6 18.1-17.8-.9 10.5-7.5 16.9-18.1 17.8Z" fill="url(#dietrix-logo-gradient)" mask="url(#dietrix-logo-leaf)"/>
+  <text x="96" y="64" font-family="Bricolage Grotesque, Plus Jakarta Sans, Segoe UI, sans-serif" font-size="48" font-weight="800" letter-spacing="-1.5"><tspan fill="#0e1e1b">Dietrix</tspan><tspan dx="8" fill="#059669">Fit</tspan></text>
+</svg>

@@ -1,4 +1,4 @@
-# Dietrix Nutrition SEO Implementation
+# Dietrix Fit SEO Implementation
 
 This file summarizes the implemented SEO foundation for `dietrix.fit`.
 
@@ -18,7 +18,7 @@ The source of truth is `src/data/seo.ts`.
 
 ## Target Countries
 
-Dietrix Nutrition now explicitly targets remote clients in:
+Dietrix Fit now explicitly targets remote clients in:
 
 - Pakistan
 - United Kingdom
@@ -79,7 +79,7 @@ Implemented schema helpers:
 - FAQPage schema
 - Article schema
 - BreadcrumbList schema
-- Review schema on testimonials
+- CollectionPage schema on testimonials, with no first-party Review or AggregateRating markup
 
 ## Technical SEO
 
@@ -90,6 +90,8 @@ Generated assets:
 - `public/llms.txt`
 
 The `prebuild` script regenerates SEO assets before production builds.
+
+AWS/Nginx canonical routing, real-404 behavior, deployment steps, and live checks are documented in `docs/aws-nginx-deployment.md`.
 
 ## Tracking
 

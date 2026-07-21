@@ -1,0 +1,1 @@
+import{C as e,P as t,b as n,g as r,o as i,p as a}from"./app-uYPTIQPP.js";var o={class:`empty-state`,role:`status`,"aria-live":`polite`},s=i(n({__name:`EmptyState`,props:{title:{},description:{}},setup(n){return(i,s)=>(e(),r(`div`,o,[a(`h3`,null,t(n.title),1),a(`p`,null,t(n.description||`No data available to show`),1)]))}}),[[`__scopeId`,`data-v-806e5e7f`]]);export{s as t};

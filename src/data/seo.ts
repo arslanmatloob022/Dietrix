@@ -381,9 +381,9 @@ export const globalSeoFaqs: FaqItem[] = [
   },
   {
     id: "seo-faq-5",
-    question: "Is Dietrix Nutrition available internationally?",
+    question: "Is Dietrix Fit available internationally?",
     answer:
-      "Yes. Dietrix Nutrition is remote-first and supports clients worldwide through online consultations, personalized diet plans, progress reviews, and digital communication.",
+      "Yes. Dietrix Fit is remote-first and supports clients worldwide through online consultations, personalized diet plans, progress reviews, and digital communication.",
   },
   {
     id: "seo-faq-6",
@@ -393,9 +393,9 @@ export const globalSeoFaqs: FaqItem[] = [
   },
   {
     id: "seo-faq-7",
-    question: "Can clients in Pakistan book Dietrix Nutrition online?",
+    question: "Can clients in Pakistan book Dietrix Fit online?",
     answer:
-      "Yes. Clients in Pakistan can book Dietrix Nutrition online for weight loss, PCOS, diabetes, gut health, fitness nutrition, and custom diet plans built around Pakistani meals and routines.",
+      "Yes. Clients in Pakistan can book Dietrix Fit online for weight loss, PCOS, diabetes, gut health, fitness nutrition, and custom diet plans built around Pakistani meals and routines.",
   },
   {
     id: "seo-faq-8",
@@ -405,9 +405,9 @@ export const globalSeoFaqs: FaqItem[] = [
   },
   {
     id: "seo-faq-9",
-    question: "Can clients in the UK, England, USA, Canada, Australia, Germany, or France book Dietrix Nutrition?",
+    question: "Can clients in the UK, England, USA, Canada, Australia, Germany, or France book Dietrix Fit?",
     answer:
-      "Yes. Dietrix Nutrition supports international clients in the UK, England, USA, Canada, Australia, Germany, and France through online consultations, custom diet plans, and remote progress reviews.",
+      "Yes. Dietrix Fit supports international clients in the UK, England, USA, Canada, Australia, Germany, and France through online consultations, custom diet plans, and remote progress reviews.",
   },
   {
     id: "seo-faq-10",
@@ -424,6 +424,7 @@ export function buildOrganizationSchema(services: ServiceItem[]) {
     "@id": `${siteUrl}/#organization`,
     name: siteName,
     url: siteUrl,
+    logo: absoluteUrl("/brand/dietrix-fit-organization-logo-512.png"),
     email: contactEmail,
     medicalSpecialty: ["Nutrition", "Dietitian", "Weight Loss"],
     areaServed: ["Worldwide", ...targetMarkets.map((market) => market.country)],

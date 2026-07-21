@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, reactive, ref } from "vue";
 import { useLeadStore } from "../../stores/leads";
+import BrandMark from "../ui/BrandMark.vue";
 import UiButton from "../ui/UiButton.vue";
 
 type ChatMessage = {
@@ -17,7 +18,7 @@ const messages = ref<ChatMessage[]>([
   {
     id: crypto.randomUUID(),
     from: "bot",
-    text: "Hi! I'm your Dietrix Nutrition Assistant 🌿 I can help with diet plans, pricing, PCOS support, and booking. What's your main health goal?",
+    text: "Hi! I'm your Dietrix Fit Assistant 🌿 I can help with diet plans, pricing, PCOS support, and booking. What's your main health goal?",
   },
 ]);
 
@@ -65,16 +66,7 @@ async function submitLeadFromChat() {
         <!-- Header -->
         <header class="panel-header">
           <div class="bot-avatar" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <circle cx="11" cy="11" r="10" fill="url(#bh)"/>
-              <path d="M7 11c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-              <circle cx="11" cy="7" r="1.2" fill="white"/>
-              <defs>
-                <linearGradient id="bh" x1="1" y1="1" x2="21" y2="21" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#059669"/><stop offset="1" stop-color="#0d9488"/>
-                </linearGradient>
-              </defs>
-            </svg>
+            <BrandMark :size="22" variant="inverse" />
           </div>
           <div class="header-text">
             <h2>Dietrix AI Assistant</h2>

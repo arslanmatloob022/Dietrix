@@ -35,7 +35,7 @@ const contactChannels = [
   },
   {
     label: "LinkedIn",
-    value: "Dietrix Nutrition",
+    value: "Dietrix Fit",
     href: "https://www.linkedin.com",
     note: "For corporate wellness, partnerships and professional inquiries.",
   },
@@ -196,7 +196,7 @@ const marketSupportNotes = [
         <p class="eyebrow">International Clients</p>
         <h2>Online nutrition support across your target countries</h2>
         <p>
-          Dietrix Nutrition is positioned for clients searching from Pakistan,
+          Dietrix Fit is positioned for clients searching from Pakistan,
           the UK, England, USA, Canada, Germany, France, KSA, Dubai, UAE and
           Australia, with remote consultation and personalized diet planning.
         </p>
@@ -207,7 +207,7 @@ const marketSupportNotes = [
 
       <div
         class="market-grid"
-        aria-label="Target countries for Dietrix Nutrition"
+        aria-label="Target countries for Dietrix Fit"
       >
         <article v-for="market in targetMarkets" :key="market.country">
           <span>{{ market.country }}</span>
@@ -810,7 +810,7 @@ const marketSupportNotes = [
     rgba(255, 255, 255, 0.68);
   border: 1px solid rgba(16, 185, 129, 0.16);
   box-shadow: 0 20px 58px rgba(6, 78, 59, 0.09);
-  border-bottom: 22px;
+  margin-bottom: clamp(48px, 6vw, 80px);
 }
 
 .contact-page .fit-strip ul {

@@ -7,34 +7,24 @@ import UiButton from "../components/ui/UiButton.vue";
 import { testimonials, transformations } from "../data/content";
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
 import { pageSeo } from "../data/pageSeo";
+import { absoluteUrl, siteUrl } from "../data/site";
 
 useSeo(pageSeo.testimonials);
 
 upsertJsonLd("dietrix-testimonials-schema", {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  name: "Dietrix Nutrition Client Success Stories",
+  "@type": "CollectionPage",
+  "@id": `${absoluteUrl("/testimonials")}#collection`,
+  url: absoluteUrl("/testimonials"),
+  name: "Dietrix Fit Client Success Stories",
   description:
-    "Client reviews, nutrition coaching outcomes, before-after highlights, and remote consultation proof for Dietrix Nutrition.",
-  about: {
-    "@type": "MedicalBusiness",
-    name: "Dietrix Nutrition",
-    medicalSpecialty: "Nutrition",
-    areaServed: "Worldwide",
+    "Client reviews, nutrition coaching outcomes, before-after highlights, and remote consultation proof for Dietrix Fit.",
+  isPartOf: {
+    "@id": `${siteUrl}/#website`,
   },
-  review: testimonials.map((testimonial) => ({
-    "@type": "Review",
-    author: {
-      "@type": "Person",
-      name: testimonial.name,
-    },
-    reviewBody: testimonial.quote,
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: testimonial.rating,
-      bestRating: 5,
-    },
-  })),
+  about: {
+    "@id": `${siteUrl}/#organization`,
+  },
 });
 
 const proofStats = [

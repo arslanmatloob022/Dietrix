@@ -168,13 +168,13 @@
   force  = true
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 3. SPA FALLBACK — catch-all for any client-side route not pre-rendered
+# 3. REAL 404 — serve the pre-rendered branded error document with status 404
 # ─────────────────────────────────────────────────────────────────────────────
 
 [[redirects]]
   from  = "/*"
-  to    = "/index.html"
-  status = 200
+  to    = "/404/index.html"
+  status = 404
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 4. HTTP HEADERS — caching, security, SEO signals

@@ -9,7 +9,7 @@ import type {
     TrustBadge,
 } from '../types/models'
 
-export const siteName = 'Dietrix Nutrition'
+export const siteName = 'Dietrix Fit'
 
 export const nutritionistProfile = {
     name: 'Dn. Rimsha Naseer',
@@ -287,7 +287,7 @@ export const blogPosts: BlogPost[] = [
     {
         slug: 'best-high-protein-breakfast-for-fat-loss',
         title: 'Best High-Protein Breakfast Ideas for Sustainable Fat Loss',
-        seoTitle: 'High-Protein Breakfast for Weight Loss | Dietrix Nutrition',
+        seoTitle: 'High-Protein Breakfast for Weight Loss | Dietrix Fit',
         seoDescription:
             'Discover high-protein breakfast ideas that improve fullness, reduce cravings, and support sustainable weight loss without crash dieting or meal stress.',
         category: 'Weight Loss',

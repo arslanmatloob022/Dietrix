@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import BrandMark from "../ui/BrandMark.vue";
+</script>
+
 <template>
   <footer class="site-footer">
     <div class="footer-top">
@@ -7,35 +11,13 @@
           <RouterLink
             to="/"
             class="footer-brand"
-            aria-label="Dietrix Nutrition home"
+            aria-label="Dietrix Fit home"
           >
             <div class="brand-icon" aria-hidden="true">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                <circle cx="16" cy="16" r="15" fill="url(#fbg)" />
-                <path
-                  d="M10 16c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6"
-                  stroke="white"
-                  stroke-width="2.2"
-                  stroke-linecap="round"
-                />
-                <circle cx="16" cy="10" r="1.8" fill="white" />
-                <defs>
-                  <linearGradient
-                    id="fbg"
-                    x1="1"
-                    y1="1"
-                    x2="31"
-                    y2="31"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stop-color="#059669" />
-                    <stop offset="1" stop-color="#0d9488" />
-                  </linearGradient>
-                </defs>
-              </svg>
+              <BrandMark :size="32" variant="inverse" />
             </div>
             <div>
-              <span class="brand-name">Dietrix <em>Nutrition</em></span>
+              <span class="brand-name">Dietrix <em>Fit</em></span>
             </div>
           </RouterLink>
           <p class="brand-desc">
@@ -190,7 +172,7 @@
     <div class="footer-bottom">
       <div class="container bottom-row">
         <p>
-          © {{ new Date().getFullYear() }} Dietrix Nutrition. All rights
+          © {{ new Date().getFullYear() }} Dietrix Fit. All rights
           reserved.
         </p>
         <p class="disclaimer">

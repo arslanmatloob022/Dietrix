@@ -314,7 +314,7 @@ onUnmounted(() => {
         <p class="eyebrow">Care Framework</p>
         <h2>A nutrition system built for bodies, schedules and emotions</h2>
         <p>
-          Dietrix Nutrition blends clinical nutrition, habit psychology and
+          Dietrix Fit blends clinical nutrition, habit psychology and
           practical meal planning so clients can change health markers without
           losing their culture, family meals or normal life.
         </p>

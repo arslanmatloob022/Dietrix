@@ -89,9 +89,9 @@ const articleFaqs = computed(() => {
     },
     {
       id: `${article.value.slug}-faq-3`,
-      question: "Can Dietrix Nutrition support clients outside Pakistan?",
+      question: "Can Dietrix Fit support clients outside Pakistan?",
       answer:
-        "Yes. Dietrix Nutrition is remote-first and supports international clients through online consultations, digital plans, and progress reviews.",
+        "Yes. Dietrix Fit is remote-first and supports international clients through online consultations, digital plans, and progress reviews.",
     },
   ];
 });
@@ -153,7 +153,7 @@ watchEffect(() => {
         <div class="hero-media glass-card">
           <img
             :src="article.heroImage"
-            :alt="`${article.title} nutrition article by Dietrix Nutrition`"
+            :alt="`${article.title} nutrition article by Dietrix Fit`"
             loading="lazy"
           />
           <div class="media-overlay" aria-hidden="true"></div>

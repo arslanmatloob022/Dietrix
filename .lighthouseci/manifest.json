@@ -1,0 +1,50 @@
+[
+  {
+    "url": "http://localhost:44027/",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/vo-lcom-009/Music/WorkSpace/Dietrix/.lighthouseci/localhost--2026_07_21_18_36_39.report.html",
+    "jsonPath": "/home/vo-lcom-009/Music/WorkSpace/Dietrix/.lighthouseci/localhost--2026_07_21_18_36_39.report.json",
+    "summary": {
+      "performance": 0.99,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:44027/services/weight-management",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/vo-lcom-009/Music/WorkSpace/Dietrix/.lighthouseci/localhost-services_weight_management-2026_07_21_18_36_51.report.html",
+    "jsonPath": "/home/vo-lcom-009/Music/WorkSpace/Dietrix/.lighthouseci/localhost-services_weight_management-2026_07_21_18_36_51.report.json",
+    "summary": {
+      "performance": 0.99,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:44027/blog/best-high-protein-breakfast-for-fat-loss",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/vo-lcom-009/Music/WorkSpace/Dietrix/.lighthouseci/localhost-blog_best_high_protein_breakfast_for_fat_loss-2026_07_21_18_37_02.report.html",
+    "jsonPath": "/home/vo-lcom-009/Music/WorkSpace/Dietrix/.lighthouseci/localhost-blog_best_high_protein_breakfast_for_fat_loss-2026_07_21_18_37_02.report.json",
+    "summary": {
+      "performance": 0.98,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:44027/booking",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/vo-lcom-009/Music/WorkSpace/Dietrix/.lighthouseci/localhost-booking-2026_07_21_18_37_13.report.html",
+    "jsonPath": "/home/vo-lcom-009/Music/WorkSpace/Dietrix/.lighthouseci/localhost-booking-2026_07_21_18_37_13.report.json",
+    "summary": {
+      "performance": 0.99,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    }
+  }
+]

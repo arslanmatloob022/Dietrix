@@ -23,7 +23,7 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResponse> {
         name: payload.name.trim(),
         email: payload.email.trim(),
         message: [
-            'New Dietrix Nutrition contact request',
+            'New Dietrix Fit contact request',
             `Source: ${payload.source}`,
             `Name: ${payload.name.trim()}`,
             `Email: ${payload.email.trim()}`,

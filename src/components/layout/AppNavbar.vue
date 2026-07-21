@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import BrandMark from "../ui/BrandMark.vue";
 import UiButton from "../ui/UiButton.vue";
 
 const route = useRoute();
@@ -35,40 +36,11 @@ watch(
 <template>
   <header class="app-header" :class="{ scrolled }">
     <div class="container nav-shell">
-      <RouterLink to="/" class="brand" aria-label="Dietrix Nutrition home">
+      <RouterLink to="/" class="brand" aria-label="Dietrix Fit home">
         <span class="brand-icon" aria-hidden="true">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <circle
-              cx="14"
-              cy="14"
-              r="13"
-              fill="url(#ng)"
-              stroke="rgba(255,255,255,0.4)"
-              stroke-width="1.5"
-            />
-            <path
-              d="M9 14c0-2.76 2.24-5 5-5s5 2.24 5 5-2.24 5-5 5"
-              stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-            <circle cx="14" cy="9" r="1.5" fill="white" />
-            <defs>
-              <linearGradient
-                id="ng"
-                x1="0"
-                y1="0"
-                x2="28"
-                y2="28"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stop-color="#059669" />
-                <stop offset="1" stop-color="#0d9488" />
-              </linearGradient>
-            </defs>
-          </svg>
+          <BrandMark :size="28" />
         </span>
-        <span class="brand-text">Dietrix <em>Nutrition</em></span>
+        <span class="brand-text">Dietrix <em>Fit</em></span>
       </RouterLink>
 
       <button

@@ -72,9 +72,9 @@ Allow: /
 Sitemap: ${absolute("/sitemap.xml")}
 `;
 
-const llms = `# Dietrix Nutrition
+const llms = `# Dietrix Fit
 
-Dietrix Nutrition is a global online nutrition platform led by Dn. Rimsha Naseer, Certified Clinical Nutritionist.
+Dietrix Fit is a global online nutrition platform led by Dn. Rimsha Naseer, Certified Clinical Nutritionist.
 
 Primary URL: ${siteUrl}
 Services: personalized diet plans, online nutrition consultations, weight loss coaching, PCOS diet support, diabetes meal planning, gut health nutrition, fitness nutrition, family meal planning.

@@ -24,7 +24,7 @@ export async function submitBooking(payload: BookingPayload): Promise<BookingRes
         name: payload.name.trim(),
         email: payload.email.trim(),
         message: [
-            'New Dietrix Nutrition booking reservation',
+            'New Dietrix Fit booking reservation',
             `Name: ${payload.name.trim()}`,
             `Email: ${payload.email.trim()}`,
             `Selected date: ${payload.date}`,

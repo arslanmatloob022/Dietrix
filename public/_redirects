@@ -1,6 +1,5 @@
-# Dietrix — Netlify _redirects
-# NOTE: All SSG page routing and trailing-slash canonicalization is handled
-# in netlify.toml (which takes priority). This file provides a safety-net
-# SPA fallback only, for any client-side route not covered above.
+# Dietrix — Netlify safety net.
+# AWS/Nginx production routing is defined in deploy/nginx/dietrix.conf.
+# Unknown URLs must return the pre-rendered noindex error page with status 404.
 
-/*    /index.html   200
+/*    /404/index.html   404
