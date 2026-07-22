@@ -425,7 +425,22 @@ export function buildOrganizationSchema(services: ServiceItem[]) {
     name: siteName,
     url: siteUrl,
     logo: absoluteUrl("/brand/dietrix-fit-organization-logo-512.png"),
+    image: absoluteUrl("/brand/dietrix-fit-organization-logo-512.png"),
+    
     email: contactEmail,
+
+    telephone: "03007626555", // Replace with your actual phone number
+
+    priceRange: "$50", // or "PKR 3,000 - PKR 10,000"
+  address: {
+  "@type": "PostalAddress",
+  streetAddress: "PO Box 242",
+  addressLocality: "Evergreen",
+  addressRegion: "Colorado",
+  postalCode: "80437",
+  addressCountry: "USA",
+},
+
     medicalSpecialty: ["Nutrition", "Dietitian", "Weight Loss"],
     areaServed: ["Worldwide", ...targetMarkets.map((market) => market.country)],
     availableService: services.map((service) => ({
