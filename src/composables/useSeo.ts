@@ -2,6 +2,8 @@ import { useHead } from '@unhead/vue'
 import type { SiteMeta } from '../types/models'
 import { absoluteUrl, siteName } from '../data/site'
 
+const DEFAULT_SOCIAL_IMAGE = absoluteUrl('/media/dietrix-social-card.png')
+
 function upsertMeta(name: string, content: string) {
     let element = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null
 
@@ -14,10 +16,6 @@ function upsertMeta(name: string, content: string) {
     element.setAttribute('content', content)
 }
 
-function removeMeta(name: string) {
-    document.querySelector(`meta[name="${name}"]`)?.remove()
-}
-
 function upsertProperty(property: string, content: string) {
     let element = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null
 
@@ -28,10 +26,6 @@ function upsertProperty(property: string, content: string) {
     }
 
     element.setAttribute('content', content)
-}
-
-function removeProperty(property: string) {
-    document.querySelector(`meta[property="${property}"]`)?.remove()
 }
 
 function upsertLink(rel: string, href: string) {
@@ -52,6 +46,7 @@ export function useSeo(meta: SiteMeta) {
     const robots = meta.robots ?? 'index, follow, max-image-preview:large'
     const type = meta.type === 'article' ? 'article' : 'website'
     const keywords = meta.keywords?.join(', ') ?? ''
+    const image = meta.image ?? DEFAULT_SOCIAL_IMAGE
     const googleVerification = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION as string | undefined
 
     if (import.meta.env.SSR) {
@@ -61,13 +56,17 @@ export function useSeo(meta: SiteMeta) {
                 { name: 'description', content: meta.description },
                 { name: 'robots', content: robots },
                 { name: 'keywords', content: keywords },
-                { name: 'twitter:card', content: meta.image ? 'summary_large_image' : 'summary' },
+                { name: 'twitter:card', content: 'summary_large_image' },
                 { name: 'twitter:title', content: meta.title },
                 { name: 'twitter:description', content: meta.description },
+                { name: 'twitter:image', content: image },
                 ...(googleVerification ? [{ name: 'google-site-verification', content: googleVerification }] : []),
-                ...(meta.image ? [{ name: 'twitter:image', content: meta.image }] : []),
             ],
-            link: [{ rel: 'canonical', href: canonicalUrl }],
+            link: [
+                { rel: 'canonical', href: canonicalUrl },
+                { rel: 'alternate', hreflang: 'en', href: canonicalUrl },
+                { rel: 'alternate', hreflang: 'x-default', href: canonicalUrl },
+            ],
             script: [],
         })
 
@@ -78,7 +77,9 @@ export function useSeo(meta: SiteMeta) {
                 { property: 'og:title', content: meta.title },
                 { property: 'og:description', content: meta.description },
                 { property: 'og:url', content: canonicalUrl },
-                ...(meta.image ? [{ property: 'og:image', content: meta.image }] : []),
+                { property: 'og:image', content: image },
+                { property: 'og:image:width', content: '1200' },
+                { property: 'og:image:height', content: '630' },
             ],
         })
         return
@@ -92,22 +93,16 @@ export function useSeo(meta: SiteMeta) {
     upsertMeta('description', meta.description)
     upsertMeta('robots', robots)
     upsertMeta('keywords', keywords)
-    upsertMeta('twitter:card', meta.image ? 'summary_large_image' : 'summary')
+    upsertMeta('twitter:card', 'summary_large_image')
     upsertMeta('twitter:title', meta.title)
     upsertMeta('twitter:description', meta.description)
+    upsertMeta('twitter:image', image)
 
     if (googleVerification) {
         upsertMeta('google-site-verification', googleVerification)
     }
 
-    if (meta.image) {
-        upsertMeta('twitter:image', meta.image)
-        upsertProperty('og:image', meta.image)
-    } else {
-        removeMeta('twitter:image')
-        removeProperty('og:image')
-    }
-
+    upsertProperty('og:image', image)
     upsertProperty('og:type', type)
     upsertProperty('og:site_name', siteName)
     upsertProperty('og:title', meta.title)
