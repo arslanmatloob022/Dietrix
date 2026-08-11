@@ -1,1 +1,0 @@
-import{D as e,b as t,d as n,m as r,pt as i,r as a}from"./pageSeo-CzqQ6Bjs.js";var o={class:`empty-state`,role:`status`,"aria-live":`polite`},s=a(t({__name:`EmptyState`,props:{title:{},description:{}},setup(t){return(a,s)=>(e(),r(`div`,o,[n(`h3`,null,i(t.title),1),n(`p`,null,i(t.description||`No data available to show`),1)]))}}),[[`__scopeId`,`data-v-293c8ac4`]]);export{s as t};
