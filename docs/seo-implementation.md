@@ -85,7 +85,8 @@ Implemented schema helpers:
 
 Generated assets:
 
-- `public/sitemap.xml`
+- `public/sitemap_index.xml` (canonical sitemap; the old `/sitemap.xml` is
+  permanently redirected — see "Sitemap URL" below)
 - `public/robots.txt`
 - `public/llms.txt`
 
@@ -100,9 +101,20 @@ Environment-ready integrations:
 - `VITE_GA_ID` injects Google Analytics
 - `VITE_GOOGLE_SITE_VERIFICATION` injects Google Search Console verification
 
+## Sitemap URL
+
+The canonical sitemap is `https://dietrix.fit/sitemap_index.xml`. It was
+renamed from `/sitemap.xml` on 2026-08-13 after that URL accumulated weeks
+of "Couldn't fetch" history in Search Console during a hosting outage —
+Google re-verifies a previously-failing URL on a slower schedule than a
+fresh one. `/sitemap.xml` now 301-redirects to the new URL (both
+`netlify.toml` and `deploy/nginx/dietrix.conf`); it should stay retired
+rather than reused for a future sitemap.
+
 ## Next Off-Site SEO Work
 
-- Submit `https://dietrix.fit/sitemap.xml` in Google Search Console.
+- In Search Console, remove the old `https://dietrix.fit/sitemap.xml`
+  submission and submit `https://dietrix.fit/sitemap_index.xml` instead.
 - Register Google Business Profile when a public business address or service-area profile is ready.
 - Build backlinks from health blogs, fitness websites, women health directories, and nutrition guest posts.
 - Turn testimonials into shareable case studies and infographics.
