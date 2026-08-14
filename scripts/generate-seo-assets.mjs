@@ -87,10 +87,18 @@ ${[...staticRoutes, ...blogRoutes]
 </urlset>
 `;
 
+// The sitemap lives at /sitemap_index.xml rather than /sitemap.xml. The old
+// path accumulated weeks of failed-fetch history in Search Console from a
+// real hosting outage; Google re-verifies a URL with a failure history on a
+// slower, more cautious schedule than one it has never had trouble with.
+// Retiring the old path (redirected server-side, see deploy/nginx and
+// netlify.toml) and submitting a fresh URL gives it a clean slate.
+const sitemapPath = "/sitemap_index.xml";
+
 const robots = `User-agent: *
 Allow: /
 
-Sitemap: ${absolute("/sitemap.xml")}
+Sitemap: ${absolute(sitemapPath)}
 `;
 
 const llms = `# Dietrix Fit
@@ -131,7 +139,7 @@ ${blogSlugs.map((slug) => `- ${absolute(`/blog/${slug}`)}`).join("\n")}
 `;
 
 mkdirSync(publicDir, { recursive: true });
-writeFileSync(resolve(publicDir, "sitemap.xml"), sitemap);
+writeFileSync(resolve(publicDir, sitemapPath.slice(1)), sitemap);
 writeFileSync(resolve(publicDir, "robots.txt"), robots);
 writeFileSync(resolve(publicDir, "llms.txt"), llms);
 

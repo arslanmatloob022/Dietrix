@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const distDir = resolve(root, "dist");
-const sitemapFile = resolve(distDir, "sitemap.xml");
+const sitemapFile = resolve(distDir, "sitemap_index.xml");
 const nginxFile = resolve(root, "deploy/nginx/dietrix.conf");
 const canonicalOrigin = "https://dietrix.fit";
 
@@ -56,7 +56,7 @@ function walk(value, visit) {
   Object.values(value).forEach((entry) => walk(entry, visit));
 }
 
-check(existsSync(sitemapFile), "dist/sitemap.xml is missing; run the production build first");
+check(existsSync(sitemapFile), "dist/sitemap_index.xml is missing; run the production build first");
 check(existsSync(nginxFile), "deploy/nginx/dietrix.conf is missing");
 
 if (existsSync(sitemapFile)) {

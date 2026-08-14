@@ -48,6 +48,7 @@ curl -I 'http://www.dietrix.fit/testimonials/?seo_probe=1'
 curl -I 'https://www.dietrix.fit/testimonials?seo_probe=1'
 curl -I 'https://dietrix.fit/a-page-that-does-not-exist'
 curl -I 'https://dietrix.fit/blog/an-article-that-does-not-exist'
+curl -I 'https://dietrix.fit/sitemap.xml'
 ```
 
 Expected results:
@@ -55,7 +56,8 @@ Expected results:
 - The first request returns `200`.
 - The next four requests return `301` with exactly one canonical destination: `https://dietrix.fit/testimonials?seo_probe=1`.
 - Both unknown URLs return `404`, not `200`, and include `X-Robots-Tag: noindex, follow`. Their HTML also contains the branded error view and a robots noindex meta tag.
+- `/sitemap.xml` returns `301` to `https://dietrix.fit/sitemap_index.xml` — that path was retired after accumulating a failed-fetch history in Search Console; it must keep redirecting, not serve content again.
 
-Then crawl every `<loc>` in `https://dietrix.fit/sitemap.xml`; each must return `200` without following a redirect and must expose the same URL in its canonical tag. Check `/testimonials` in Google Rich Results Test and Schema.org Validator. It should expose `CollectionPage`, with no Review Snippet item or review-related validation error.
+Then crawl every `<loc>` in `https://dietrix.fit/sitemap_index.xml`; each must return `200` without following a redirect and must expose the same URL in its canonical tag. Check `/testimonials` in Google Rich Results Test and Schema.org Validator. It should expose `CollectionPage`, with no Review Snippet item or review-related validation error.
 
-After the live checks pass, resubmit the sitemap in Search Console, inspect `/testimonials`, and start validation for both historical Review Snippets issues. Old 301 crawl rows can remain until Google recrawls the affected URLs.
+After the live checks pass, in Search Console remove the old `https://dietrix.fit/sitemap.xml` submission and submit `https://dietrix.fit/sitemap_index.xml`, inspect `/testimonials`, and start validation for both historical Review Snippets issues. Old 301 crawl rows can remain until Google recrawls the affected URLs.

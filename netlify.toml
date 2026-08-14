@@ -168,7 +168,19 @@
   force  = true
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 3. REAL 404 — serve the pre-rendered branded error document with status 404
+# 3. SITEMAP RETIREMENT — /sitemap.xml moved to /sitemap_index.xml to shed a
+#    failed-fetch history accumulated in Search Console during a hosting
+#    outage. Redirect the old path rather than 404 it or leave a stale copy.
+# ─────────────────────────────────────────────────────────────────────────────
+
+[[redirects]]
+  from  = "/sitemap.xml"
+  to    = "/sitemap_index.xml"
+  status = 301
+  force  = true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. REAL 404 — serve the pre-rendered branded error document with status 404
 # ─────────────────────────────────────────────────────────────────────────────
 
 [[redirects]]
@@ -177,7 +189,7 @@
   status = 404
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 4. HTTP HEADERS — caching, security, SEO signals
+# 5. HTTP HEADERS — caching, security, SEO signals
 # ─────────────────────────────────────────────────────────────────────────────
 
 [[headers]]
@@ -199,7 +211,7 @@
     Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
-  for = "/sitemap.xml"
+  for = "/sitemap_index.xml"
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
