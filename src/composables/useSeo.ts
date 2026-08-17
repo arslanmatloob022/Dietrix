@@ -45,7 +45,6 @@ export function useSeo(meta: SiteMeta) {
     const canonicalUrl = absoluteUrl(canonicalPath)
     const robots = meta.robots ?? 'index, follow, max-image-preview:large'
     const type = meta.type === 'article' ? 'article' : 'website'
-    const keywords = meta.keywords?.join(', ') ?? ''
     const image = meta.image ?? DEFAULT_SOCIAL_IMAGE
     const googleVerification = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION as string | undefined
 
@@ -55,7 +54,6 @@ export function useSeo(meta: SiteMeta) {
             meta: [
                 { name: 'description', content: meta.description },
                 { name: 'robots', content: robots },
-                { name: 'keywords', content: keywords },
                 { name: 'twitter:card', content: 'summary_large_image' },
                 { name: 'twitter:title', content: meta.title },
                 { name: 'twitter:description', content: meta.description },
@@ -92,7 +90,6 @@ export function useSeo(meta: SiteMeta) {
     document.title = meta.title
     upsertMeta('description', meta.description)
     upsertMeta('robots', robots)
-    upsertMeta('keywords', keywords)
     upsertMeta('twitter:card', 'summary_large_image')
     upsertMeta('twitter:title', meta.title)
     upsertMeta('twitter:description', meta.description)

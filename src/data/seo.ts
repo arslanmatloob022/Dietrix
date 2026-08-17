@@ -493,6 +493,22 @@ export function buildWebsiteSchema() {
   };
 }
 
+export function buildHowToSchema(steps: Array<{ title: string; desc: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to start online nutrition coaching with Dietrix Fit",
+    description:
+      "The three-step process to book a consultation, receive a personalized nutrition plan, and track progress with Dietrix Fit.",
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.title,
+      text: step.desc,
+    })),
+  };
+}
+
 export function buildFaqSchema(faqs: FaqItem[]) {
   return {
     "@context": "https://schema.org",

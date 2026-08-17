@@ -22,6 +22,7 @@ import {
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
 import {
   buildFaqSchema,
+  buildHowToSchema,
   buildOrganizationSchema,
   buildPersonSchema,
   buildWebsiteSchema,
@@ -493,6 +494,8 @@ const processSteps = [
   { num: "02", emoji: "🎯", title: "Get Your Blueprint", desc: "Receive a personalized nutrition plan designed around your unique body, goals, and lifestyle." },
   { num: "03", emoji: "📈", title: "Track Real Progress", desc: "Weekly check-ins, plan adjustments, and continuous support until you hit your target." },
 ];
+
+upsertJsonLd("dietrix-home-howto-schema", buildHowToSchema(processSteps));
 </script>
 
 <template>
