@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { BlogPost } from "../../types/models";
+import { nutritionistName } from "../../data/seo";
 
 defineProps<{ post: BlogPost; featured?: boolean }>();
 </script>
@@ -13,7 +14,7 @@ defineProps<{ post: BlogPost; featured?: boolean }>();
     <div class="img-wrap">
       <img
         :src="post.heroImage"
-        :alt="`${post.title} nutrition guide by Dietrix Fit`"
+        :alt="`${post.title} nutrition guide by ${nutritionistName}`"
         loading="lazy"
       />
       <div class="image-shade" aria-hidden="true"></div>

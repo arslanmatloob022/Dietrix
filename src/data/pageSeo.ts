@@ -21,7 +21,7 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
   home: {
     title: "Online Nutritionist Pakistan, USA, UK | Dietrix",
     description:
-      "Book online nutritionist consultations for Pakistan, USA, UK, Canada, UAE, KSA, Germany, France, and Australia with custom diet plans and support online.",
+      "Get a personalized diet plan from a certified nutritionist, 100% online. Real results for weight loss, PCOS, and diabetes — trusted by 1,800+ clients worldwide.",
     path: "/",
     keywords: [
       "online nutritionist consultation",

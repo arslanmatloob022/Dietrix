@@ -12,6 +12,7 @@ import {
   buildArticleSchema,
   buildBreadcrumbSchema,
   buildFaqSchema,
+  nutritionistName,
 } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
 
@@ -139,7 +140,9 @@ watchEffect(() => {
     <article class="container article-shell">
       <header class="article-hero reveal">
         <div class="hero-copy">
-          <p class="meta">{{ article.category }} · {{ article.readTime }}</p>
+          <p class="meta">
+            By {{ nutritionistName }} · {{ article.category }} · {{ article.readTime }}
+          </p>
           <h1>{{ article.title }}</h1>
           <p class="excerpt">{{ article.excerpt }}</p>
           <div class="hero-actions">
@@ -153,7 +156,7 @@ watchEffect(() => {
         <div class="hero-media glass-card">
           <img
             :src="article.heroImage"
-            :alt="`${article.title} nutrition article by Dietrix Fit`"
+            :alt="`${article.title} nutrition article by ${nutritionistName}`"
             loading="lazy"
           />
           <div class="media-overlay" aria-hidden="true"></div>

@@ -281,6 +281,36 @@ export const faqs: FaqItem[] = [
         answer:
             'Most clients begin within 3 to 5 days. Priority onboarding is available based on active slot capacity.',
     },
+    {
+        id: 'fq4',
+        question: 'How much does online nutrition coaching cost?',
+        answer:
+            'Plans start from $119, depending on your goals and the length of support you need. Every plan includes a personalized nutrition plan and ongoing check-ins.',
+    },
+    {
+        id: 'fq5',
+        question: 'What happens after I book a consultation?',
+        answer:
+            'You share your health background and goals, then receive a personalized nutrition blueprint built around your body, routine, and preferences, followed by weekly check-ins to track progress.',
+    },
+    {
+        id: 'fq6',
+        question: 'Do I need to visit in person?',
+        answer:
+            'No. Dietrix Fit is a 100% remote practice — consultations, plans, and check-ins all happen online, so you can work with a certified nutritionist from anywhere in the world.',
+    },
+    {
+        id: 'fq7',
+        question: 'How does ongoing support work after I get my plan?',
+        answer:
+            'You get weekly check-ins and plan adjustments based on your progress, with continuous support until you hit your target.',
+    },
+    {
+        id: 'fq8',
+        question: 'Can I book a consultation from outside Pakistan?',
+        answer:
+            'Yes. Dietrix Fit coaches clients across 14+ countries, including the USA, UK, Canada, Germany, France, Saudi Arabia, the UAE, and Australia, entirely online.',
+    },
 ]
 
 export const blogPosts: BlogPost[] = [
