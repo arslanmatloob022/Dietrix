@@ -6,11 +6,18 @@ import SectionTitle from "../components/ui/SectionTitle.vue";
 import UiButton from "../components/ui/UiButton.vue";
 import { pricingTiers, services } from "../data/content";
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
-import { buildOrganizationSchema } from "../data/seo";
+import { buildBreadcrumbSchema, buildOrganizationSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
 
 useSeo(pageSeo.services);
 upsertJsonLd("dietrix-services-schema", buildOrganizationSchema(services));
+upsertJsonLd(
+  "dietrix-services-breadcrumb-schema",
+  buildBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Services", path: "/services" },
+  ]),
+);
 
 const serviceMetrics = [
   { value: "1,800+", label: "clients coached" },

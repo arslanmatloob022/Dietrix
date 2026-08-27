@@ -9,10 +9,8 @@ import { upsertJsonLd, useSeo } from "../composables/useSeo";
 import {
   buildBreadcrumbSchema,
   buildFaqSchema,
-  blogTopicIdeas,
   contentClusters,
   globalSeoFaqs,
-  keywordMap,
 } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
 import type { BlogCategory } from "../types/models";
@@ -77,8 +75,6 @@ const readerPaths = [
   "Move from reading to a personalized online consultation",
 ];
 
-const featuredKeywords = keywordMap.slice(0, 8);
-const plannedTopics = blogTopicIdeas.slice(0, 12);
 </script>
 
 <template>
@@ -199,20 +195,6 @@ const plannedTopics = blogTopicIdeas.slice(0, 12);
       </div>
     </section>
 
-    <section class="container keyword-map reveal">
-      <div>
-        <p class="eyebrow">Keyword Mapping</p>
-        <h2>Every major keyword has a destination page</h2>
-      </div>
-      <div class="keyword-grid">
-        <article v-for="item in featuredKeywords" :key="item.keyword">
-          <span>{{ item.intent }}</span>
-          <strong>{{ item.keyword }}</strong>
-          <RouterLink :to="item.page">{{ item.page }}</RouterLink>
-        </article>
-      </div>
-    </section>
-
     <section class="container ai-faq reveal">
       <div class="faq-copy">
         <p class="eyebrow">AI Answer Targets</p>
@@ -228,16 +210,6 @@ const plannedTopics = blogTopicIdeas.slice(0, 12);
           <p>{{ faq.answer }}</p>
         </article>
       </div>
-    </section>
-
-    <section class="container topic-pipeline reveal">
-      <div>
-        <p class="eyebrow">Next 50+ Article Pipeline</p>
-        <h2>Planned long-tail topics for organic growth</h2>
-      </div>
-      <ul>
-        <li v-for="topic in plannedTopics" :key="topic">{{ topic }}</li>
-      </ul>
     </section>
 
     <section class="container reader-paths reveal">

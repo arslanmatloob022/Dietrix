@@ -22,7 +22,6 @@ import {
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
 import {
   buildFaqSchema,
-  buildHowToSchema,
   buildOrganizationSchema,
   buildPersonSchema,
   buildWebsiteSchema,
@@ -108,11 +107,13 @@ async function initAnimations() {
 
   // ── 1. Hero entrance timeline ──────────────────────────────────────────────
   if (!reducedMotion) {
+    // Note: .hero-h1 (the LCP candidate) is intentionally excluded from this
+    // opacity-from-0 entrance — animating it delays first paint until the
+    // lazily-loaded gsap chunk executes, which hurts LCP on real devices.
     const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
     heroTl
       .from(".hero-eyebrow-row", { y: 24, opacity: 0, duration: 0.6 })
-      .from(".hero-h1", { y: 44, opacity: 0, duration: 0.85 }, "-=0.35")
-      .from(".hero-sub", { y: 22, opacity: 0, duration: 0.65 }, "-=0.55")
+      .from(".hero-sub", { y: 22, opacity: 0, duration: 0.65 }, "-=0.35")
       .from(".hero-actions", { y: 18, opacity: 0, duration: 0.55 }, "-=0.45")
       .from(".hero-proof, .hero-urgency", { y: 14, opacity: 0, stagger: 0.1, duration: 0.5 }, "-=0.35")
       .from(".hero-form-card", { x: 48, opacity: 0, duration: 0.85, ease: "power2.out" }, "-=0.9")
@@ -494,8 +495,6 @@ const processSteps = [
   { num: "02", emoji: "🎯", title: "Get Your Blueprint", desc: "Receive a personalized nutrition plan designed around your unique body, goals, and lifestyle." },
   { num: "03", emoji: "📈", title: "Track Real Progress", desc: "Weekly check-ins, plan adjustments, and continuous support until you hit your target." },
 ];
-
-upsertJsonLd("dietrix-home-howto-schema", buildHowToSchema(processSteps));
 </script>
 
 <template>

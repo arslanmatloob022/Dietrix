@@ -12,6 +12,7 @@ import {
   buildArticleSchema,
   buildBreadcrumbSchema,
   buildFaqSchema,
+  buildPersonSchema,
   nutritionistName,
 } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
@@ -110,6 +111,7 @@ watchEffect(() => {
     removeJsonLd("dietrix-article-schema");
     removeJsonLd("dietrix-article-faq-schema");
     removeJsonLd("dietrix-article-breadcrumb-schema");
+    removeJsonLd("dietrix-article-author-schema");
     return;
   }
 
@@ -123,6 +125,7 @@ watchEffect(() => {
   });
 
   upsertJsonLd("dietrix-article-schema", buildArticleSchema(article.value));
+  upsertJsonLd("dietrix-article-author-schema", buildPersonSchema());
   upsertJsonLd("dietrix-article-faq-schema", buildFaqSchema(articleFaqs.value));
   upsertJsonLd(
     "dietrix-article-breadcrumb-schema",

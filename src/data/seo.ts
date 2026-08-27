@@ -1,4 +1,5 @@
 import type { BlogPost, FaqItem, ServiceItem } from "../types/models";
+import { certifications } from "./content";
 import { absoluteUrl, contactEmail, nutritionistName, siteName, siteUrl, targetMarkets } from "./site";
 export { absoluteUrl, contactEmail, nutritionistName, siteName, siteUrl, targetMarkets } from "./site";
 
@@ -428,6 +429,15 @@ export function buildOrganizationSchema(services: ServiceItem[]) {
     image: absoluteUrl("/brand/dietrix-fit-organization-logo-512.png"),
     email: contactEmail,
     priceRange: "$50",
+    description:
+      "Evidence-based online nutrition coaching for weight loss, PCOS, diabetes, gut health, and performance, serving clients globally.",
+    founder: {
+      "@type": "Person",
+      "@id": `${siteUrl}/#rimsha-naseer`,
+      name: nutritionistName,
+      jobTitle: "Certified Clinical Nutritionist",
+      url: absoluteUrl("/about"),
+    },
     // No physical premises to declare: Dietrix Fit is a 100% remote
     // consultation practice, so address/telephone are intentionally omitted
     // rather than filled with placeholder values search engines would treat
@@ -444,6 +454,7 @@ export function buildOrganizationSchema(services: ServiceItem[]) {
         priceCurrency: "USD",
       },
     })),
+    sameAs: [],
   };
 }
 
@@ -472,6 +483,10 @@ export function buildPersonSchema() {
       "International online nutrition coaching",
       "Remote diet plans for USA, UK, Canada, Europe, Middle East, and Australia",
     ],
+    hasCredential: certifications.map((credential) => ({
+      "@type": "EducationalOccupationalCredential",
+      name: credential,
+    })),
   };
 }
 
@@ -490,22 +505,6 @@ export function buildWebsiteSchema() {
       target: `${siteUrl}/blog?q={search_term_string}`,
       "query-input": "required name=search_term_string",
     },
-  };
-}
-
-export function buildHowToSchema(steps: Array<{ title: string; desc: string }>) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    name: "How to start online nutrition coaching with Dietrix Fit",
-    description:
-      "The three-step process to book a consultation, receive a personalized nutrition plan, and track progress with Dietrix Fit.",
-    step: steps.map((step, index) => ({
-      "@type": "HowToStep",
-      position: index + 1,
-      name: step.title,
-      text: step.desc,
-    })),
   };
 }
 

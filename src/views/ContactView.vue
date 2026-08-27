@@ -2,11 +2,38 @@
 import LeadCaptureForm from "../components/forms/LeadCaptureForm.vue";
 import SectionTitle from "../components/ui/SectionTitle.vue";
 import UiButton from "../components/ui/UiButton.vue";
-import { useSeo } from "../composables/useSeo";
+import { upsertJsonLd, useSeo } from "../composables/useSeo";
+import { buildBreadcrumbSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
-import { targetMarkets } from "../data/site";
+import { absoluteUrl, contactEmail, siteUrl, targetMarkets } from "../data/site";
 
 useSeo(pageSeo.contact);
+upsertJsonLd(
+  "dietrix-contact-breadcrumb-schema",
+  buildBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Contact", path: "/contact" },
+  ]),
+);
+upsertJsonLd("dietrix-contact-schema", {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": `${absoluteUrl("/contact")}#contactpage`,
+  url: absoluteUrl("/contact"),
+  name: "Contact Dietrix Fit",
+  about: { "@id": `${siteUrl}/#organization` },
+  mainEntity: {
+    "@id": `${siteUrl}/#organization`,
+    "@type": "MedicalBusiness",
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: contactEmail,
+      contactType: "customer support",
+      areaServed: "Worldwide",
+      availableLanguage: ["English"],
+    },
+  },
+});
 
 const responseStats = [
   { value: "24h", label: "average reply window" },
@@ -24,7 +51,7 @@ const contactChannels = [
   {
     label: "WhatsApp",
     value: "+92 0300 7626555",
-    href: "https://wa.me/+92 0300 7626555",
+    href: "https://wa.me/923007626555",
     note: "Fastest path for slot questions and quick consultation support.",
   },
   {
@@ -88,7 +115,7 @@ const marketSupportNotes = [
           <UiButton to="/booking" size="lg">Book Consultation</UiButton>
           <a
             class="hero-whatsapp"
-            href="https://wa.me/+92 0300 7626555"
+            href="https://wa.me/923007626555"
             target="_blank"
             rel="noreferrer"
           >

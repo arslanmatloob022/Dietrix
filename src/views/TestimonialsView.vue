@@ -6,6 +6,7 @@ import SectionTitle from "../components/ui/SectionTitle.vue";
 import UiButton from "../components/ui/UiButton.vue";
 import { testimonials, transformations } from "../data/content";
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
+import { buildBreadcrumbSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
 import { absoluteUrl, siteUrl } from "../data/site";
 
@@ -26,6 +27,18 @@ upsertJsonLd("dietrix-testimonials-schema", {
     "@id": `${siteUrl}/#organization`,
   },
 });
+
+upsertJsonLd(
+  "dietrix-testimonials-breadcrumb-schema",
+  buildBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Testimonials", path: "/testimonials" },
+  ]),
+);
+
+// Note: Review/AggregateRating schema is deliberately NOT added here.
+// scripts/verify-crawl-signals.mjs enforces this at build time (self-published
+// reviews of your own business are a known Google review-snippet policy risk).
 
 const proofStats = [
   {

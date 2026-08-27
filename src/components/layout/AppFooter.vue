@@ -126,7 +126,7 @@ import BrandMark from "../ui/BrandMark.vue";
               rimshanaseer101@gmail.com
             </a>
             <a
-              href="https://wa.me/+92 0300 7626555"
+              href="https://wa.me/923007626555"
               target="_blank"
               rel="noreferrer"
               class="contact-item"

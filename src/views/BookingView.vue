@@ -1,13 +1,39 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import UiButton from "../components/ui/UiButton.vue";
-import { useSeo } from "../composables/useSeo";
+import { upsertJsonLd, useSeo } from "../composables/useSeo";
+import { buildBreadcrumbSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
+import { absoluteUrl, siteUrl } from "../data/site";
 import { submitBooking } from "../services/bookingService";
 import type { BookingPayload } from "../types/models";
 import { ensureMotion } from "../lib/motion";
 
 useSeo(pageSeo.booking);
+upsertJsonLd(
+  "dietrix-booking-breadcrumb-schema",
+  buildBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Booking", path: "/booking" },
+  ]),
+);
+upsertJsonLd("dietrix-booking-schema", {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": `${absoluteUrl("/booking")}#service`,
+  name: "Online Nutrition Consultation Booking",
+  serviceType: "Nutrition Consultation",
+  provider: { "@id": `${siteUrl}/#organization` },
+  areaServed: "Worldwide",
+  url: absoluteUrl("/booking"),
+  offers: {
+    "@type": "Offer",
+    priceCurrency: "USD",
+    price: "50",
+    url: absoluteUrl("/booking"),
+    availability: "https://schema.org/InStock",
+  },
+});
 
 const bookingStore = reactive({
   selectedDate: "",

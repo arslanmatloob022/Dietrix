@@ -10,12 +10,19 @@ import {
   trustBadges,
 } from "../data/content";
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
-import { buildPersonSchema } from "../data/seo";
+import { buildBreadcrumbSchema, buildPersonSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
 import { ensureMotion } from "../lib/motion";
 
 useSeo(pageSeo.about);
 upsertJsonLd("dietrix-person-schema", buildPersonSchema());
+upsertJsonLd(
+  "dietrix-about-breadcrumb-schema",
+  buildBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+  ]),
+);
 
 const carePrinciples = [
   {
