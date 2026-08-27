@@ -66,22 +66,132 @@ const bookingStore = reactive({
   },
 });
 
+// Consultation slots are held in clinic time (Pakistan Standard Time, UTC+5,
+// no daylight saving) and converted to whatever timezone the visitor picks.
+const CLINIC_TIMEZONE = "Asia/Karachi";
+const CLINIC_UTC_OFFSET = "+05:00";
+const DAY_MS = 86_400_000;
+
 const times = ["08:00", "09:30", "11:00", "13:00", "15:30", "17:00", "19:00"];
 
-const availableDays = computed(() =>
-  Array.from({ length: 14 }, (_, index) => {
-    const date = new Date();
-    date.setDate(date.getDate() + index);
+const timezoneOptions = [
+  { value: "Asia/Karachi", label: "Pakistan (PKT)" },
+  { value: "Asia/Dubai", label: "Dubai / UAE (GST)" },
+  { value: "Asia/Riyadh", label: "Saudi Arabia (AST)" },
+  { value: "Europe/London", label: "United Kingdom (GMT/BST)" },
+  { value: "Europe/Berlin", label: "Germany (CET/CEST)" },
+  { value: "Europe/Paris", label: "France (CET/CEST)" },
+  { value: "America/New_York", label: "US Eastern (ET)" },
+  { value: "America/Chicago", label: "US Central (CT)" },
+  { value: "America/Denver", label: "US Mountain (MT)" },
+  { value: "America/Los_Angeles", label: "US Pacific (PT)" },
+  { value: "America/Toronto", label: "Canada Eastern (ET)" },
+  { value: "America/Vancouver", label: "Canada Pacific (PT)" },
+  { value: "Australia/Sydney", label: "Australia Eastern (AET)" },
+  { value: "Australia/Perth", label: "Australia Western (AWST)" },
+];
+
+// `now` is seeded at prerender time and refreshed on mount so the statically
+// generated date strip never serves stale (already-passed) days.
+const now = ref(new Date());
+const viewerTimezone = ref(CLINIC_TIMEZONE);
+
+function detectTimezone() {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || CLINIC_TIMEZONE;
+  } catch {
+    return CLINIC_TIMEZONE;
+  }
+}
+
+const timezoneChoices = computed(() => {
+  const known = timezoneOptions.some(
+    (option) => option.value === viewerTimezone.value,
+  );
+  return known
+    ? timezoneOptions
+    : [
+        { value: viewerTimezone.value, label: viewerTimezone.value.replace(/_/g, " ") },
+        ...timezoneOptions,
+      ];
+});
+
+const timezoneLabel = computed(
+  () =>
+    timezoneChoices.value.find(
+      (option) => option.value === viewerTimezone.value,
+    )?.label ?? viewerTimezone.value.replace(/_/g, " "),
+);
+
+/** YYYY-MM-DD for a given instant, read in a specific timezone. */
+function isoDateIn(date: Date, timeZone: string) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
+/** The exact instant a clinic-time slot occurs. */
+function slotInstant(iso: string, time: string) {
+  return new Date(`${iso}T${time}:00${CLINIC_UTC_OFFSET}`);
+}
+
+const availableDays = computed(() => {
+  const start = new Date(`${isoDateIn(now.value, CLINIC_TIMEZONE)}T00:00:00Z`);
+
+  return Array.from({ length: 14 }, (_, index) => {
+    const date = new Date(start.getTime() + index * DAY_MS);
     return {
       iso: date.toISOString().split("T")[0],
-      label: date.toLocaleDateString("en-US", {
+      label: new Intl.DateTimeFormat("en-US", {
+        timeZone: "UTC",
         weekday: "short",
         month: "short",
         day: "numeric",
-      }),
+      }).format(date),
     };
-  }),
-);
+  });
+});
+
+/** A clinic slot rendered in the visitor's timezone. */
+const visibleSlots = computed(() => {
+  const iso = bookingStore.selectedDate;
+  if (!iso) {
+    return times.map((time) => ({
+      time,
+      label: "",
+      dayNote: "",
+      past: false,
+    }));
+  }
+
+  const selectedDayNumber = Math.round(
+    new Date(`${iso}T00:00:00Z`).getTime() / DAY_MS,
+  );
+
+  return times.map((time) => {
+    const instant = slotInstant(iso, time);
+    const viewerIso = isoDateIn(instant, viewerTimezone.value);
+    const viewerDayNumber = Math.round(
+      new Date(`${viewerIso}T00:00:00Z`).getTime() / DAY_MS,
+    );
+    const shift = viewerDayNumber - selectedDayNumber;
+
+    return {
+      time,
+      label: new Intl.DateTimeFormat("en-US", {
+        timeZone: viewerTimezone.value,
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      }).format(instant),
+      dayNote: shift === 0 ? "" : shift > 0 ? "next day" : "previous day",
+      past: instant.getTime() <= now.value.getTime(),
+    };
+  });
+});
 
 const form = reactive({ name: "", email: "", healthGoal: "", notes: "" });
 const errors = reactive({ slot: "", name: "", email: "", healthGoal: "" });
@@ -159,8 +269,38 @@ const selectedAppointment = computed(() => {
     return "No date chosen";
   }
 
-  return `${bookingStore.selectedDate} at ${bookingStore.selectedTime}`;
+  const instant = slotInstant(
+    bookingStore.selectedDate,
+    bookingStore.selectedTime,
+  );
+
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: viewerTimezone.value,
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZoneName: "short",
+  }).format(instant);
 });
+
+// Sent with the reservation so the confirmation email is unambiguous.
+const appointmentForRecord = computed(() => {
+  if (!bookingStore.selectedDate || !bookingStore.selectedTime) return "";
+  return `${bookingStore.selectedTime} PKT (${selectedAppointment.value} — ${viewerTimezone.value})`;
+});
+
+onMounted(() => {
+  now.value = new Date();
+  viewerTimezone.value = detectTimezone();
+});
+
+function changeTimezone(event: Event) {
+  const value = (event.target as HTMLSelectElement).value;
+  if (value) viewerTimezone.value = value;
+}
 
 function pickDate(date: string) {
   bookingStore.clearStatus();
@@ -198,7 +338,7 @@ async function reserveSlot() {
     email: form.email,
     healthGoal: form.healthGoal,
     date: bookingStore.selectedDate,
-    time: bookingStore.selectedTime,
+    time: appointmentForRecord.value,
     notes: form.notes,
   });
 
@@ -414,20 +554,39 @@ onUnmounted(() => {
         <div class="selector-block">
           <div class="selector-title">
             <span>Time</span>
-            <small>Local availability</small>
+            <small>Shown in {{ timezoneLabel }}</small>
+          </div>
+          <div class="timezone-field">
+            <label for="booking-timezone">Your timezone</label>
+            <select
+              id="booking-timezone"
+              class="timezone-select"
+              :value="viewerTimezone"
+              @change="changeTimezone"
+            >
+              <option
+                v-for="option in timezoneChoices"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
           </div>
           <div class="time-grid" role="listbox" aria-label="Select time">
             <button
-              v-for="time in times"
-              :key="time"
+              v-for="slot in visibleSlots"
+              :key="slot.time"
               class="slot-button time-button"
-              :disabled="!bookingStore.selectedDate"
-              :class="{ active: bookingStore.selectedTime === time }"
+              :disabled="!bookingStore.selectedDate || slot.past"
+              :class="{ active: bookingStore.selectedTime === slot.time }"
               type="button"
-              @click="pickSlot(bookingStore.selectedDate, time)"
+              @click="pickSlot(bookingStore.selectedDate, slot.time)"
             >
-              <strong>{{ time }}</strong>
-              <span>{{ parseInt(time) < 12 ? "AM" : "PM" }}</span>
+              <strong>{{ slot.label || "--" }}</strong>
+              <span v-if="slot.past">Passed</span>
+              <span v-else-if="slot.dayNote">{{ slot.dayNote }}</span>
+              <span v-else>Available</span>
             </button>
           </div>
         </div>
@@ -1128,6 +1287,29 @@ onUnmounted(() => {
 .selector-title small {
   color: var(--emerald-700);
   font-weight: 850;
+}
+
+.timezone-field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.timezone-field label {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.timezone-select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: inherit;
 }
 
 .date-grid,
