@@ -62,10 +62,32 @@ export type TrustBadge = {
 
 export type BlogCategory = 'Weight Loss' | 'Diet Plans' | 'Health Conditions'
 
+export type BlogTable = {
+    caption?: string
+    columns: string[]
+    rows: string[][]
+    footnote?: string
+}
+
 export type BlogSection = {
     heading: string
     subheading?: string
     paragraphs: string[]
+    bullets?: string[]
+    steps?: string[]
+    table?: BlogTable
+    callout?: string
+    links?: InternalLink[]
+}
+
+export type BlogFaq = {
+    question: string
+    answer: string
+}
+
+export type BlogSource = {
+    label: string
+    detail?: string
 }
 
 export type InternalLink = {
@@ -81,9 +103,18 @@ export type BlogPost = {
     category: BlogCategory
     excerpt: string
     publishedAt: string
-    readTime: string
+    updatedAt?: string
+    /** Optional override. Omit to derive the badge from actual body length. */
+    readTime?: string
     heroImage: string
+    heroImageAlt?: string
     sections: BlogSection[]
+    /** Written per article. Falls back to section headings when absent. */
+    keyTakeaways?: string[]
+    faqs?: BlogFaq[]
+    sources?: BlogSource[]
+    /** Curated blog-to-blog links, highest priority in the related module. */
+    relatedSlugs?: string[]
     internalLinks: InternalLink[]
 }
 

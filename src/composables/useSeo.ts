@@ -45,7 +45,10 @@ export function useSeo(meta: SiteMeta) {
     const canonicalUrl = absoluteUrl(canonicalPath)
     const robots = meta.robots ?? 'index, follow, max-image-preview:large'
     const type = meta.type === 'article' ? 'article' : 'website'
-    const image = meta.image ?? DEFAULT_SOCIAL_IMAGE
+    const rawImage = meta.image ?? DEFAULT_SOCIAL_IMAGE
+    // Social crawlers reject relative image paths, so self-hosted assets
+    // referenced as /media/... are resolved against the site origin.
+    const image = rawImage.startsWith('http') ? rawImage : absoluteUrl(rawImage)
     const googleVerification = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION as string | undefined
 
     if (import.meta.env.SSR) {

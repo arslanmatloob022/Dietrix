@@ -7,6 +7,7 @@ import EmptyState from "../components/ui/EmptyState.vue";
 import SectionTitle from "../components/ui/SectionTitle.vue";
 import UiButton from "../components/ui/UiButton.vue";
 import { blogPosts } from "../data/content";
+import { readingTime } from "../data/readingTime";
 import { removeJsonLd, upsertJsonLd, useSeo } from "../composables/useSeo";
 import {
   buildArticleSchema,
@@ -24,28 +25,34 @@ const article = computed(() => {
   return blogPosts.find((post) => post.slug === slug) || null;
 });
 
-const relatedPosts = computed(() => {
-  if (!article.value) {
+// Curated links win, then same-category posts, then anything else, so every
+// article always ships three onward paths instead of one.
+const RELATED_COUNT = 3;
+
+const fallbackRelatedPosts = computed(() => {
+  const current = article.value;
+  if (!current) {
     return [];
   }
 
-  return blogPosts
-    .filter(
-      (post) =>
-        post.slug !== article.value?.slug &&
-        post.category === article.value?.category,
-    )
-    .slice(0, 2);
-});
+  const bySlug = new Map(blogPosts.map((post) => [post.slug, post]));
+  const picked: typeof blogPosts = [];
 
-const fallbackRelatedPosts = computed(() => {
-  if (!article.value || relatedPosts.value.length) {
-    return relatedPosts.value;
-  }
+  const add = (post?: (typeof blogPosts)[number]) => {
+    if (!post) return;
+    if (post.slug === current.slug) return;
+    if (picked.some((existing) => existing.slug === post.slug)) return;
+    if (picked.length >= RELATED_COUNT) return;
+    picked.push(post);
+  };
 
-  return blogPosts
-    .filter((post) => post.slug !== article.value?.slug)
-    .slice(0, 2);
+  (current.relatedSlugs ?? []).forEach((slug) => add(bySlug.get(slug)));
+  blogPosts
+    .filter((post) => post.category === current.category)
+    .forEach(add);
+  blogPosts.forEach(add);
+
+  return picked;
 });
 
 const articleStats = computed(() => {
@@ -54,7 +61,7 @@ const articleStats = computed(() => {
   }
 
   return [
-    { label: "Reading time", value: article.value.readTime },
+    { label: "Reading time", value: readingTime(article.value) },
     { label: "Frameworks", value: `${article.value.sections.length}` },
     { label: "Category", value: article.value.category },
   ];
@@ -65,15 +72,46 @@ const keyTakeaways = computed(() => {
     return [];
   }
 
-  return article.value.sections.map((section) => ({
-    title: section.heading,
-    detail: section.paragraphs[0],
-  }));
+  return (
+    article.value.keyTakeaways ??
+    article.value.sections.map((section) => section.heading)
+  );
 });
+
+const publishedLabel = computed(() =>
+  article.value
+    ? new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(new Date(`${article.value.publishedAt}T00:00:00Z`))
+    : "",
+);
+
+const updatedLabel = computed(() =>
+  article.value?.updatedAt
+    ? new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(new Date(`${article.value.updatedAt}T00:00:00Z`))
+    : "",
+);
 
 const articleFaqs = computed(() => {
   if (!article.value) {
     return [];
+  }
+
+  const authored = article.value.faqs;
+  if (authored?.length) {
+    return authored.map((faq, index) => ({
+      id: `${article.value?.slug}-faq-${index + 1}`,
+      question: faq.question,
+      answer: faq.answer,
+    }));
   }
 
   return [
@@ -144,7 +182,13 @@ watchEffect(() => {
       <header class="article-hero reveal">
         <div class="hero-copy">
           <p class="meta">
-            By {{ nutritionistName }} · {{ article.category }} · {{ article.readTime }}
+            By {{ nutritionistName }} · {{ article.category }} ·
+            <time :datetime="article.publishedAt">{{ publishedLabel }}</time>
+            · {{ readingTime(article) }}
+          </p>
+          <p v-if="updatedLabel" class="meta meta-updated">
+            Last updated
+            <time :datetime="article.updatedAt">{{ updatedLabel }}</time>
           </p>
           <h1>{{ article.title }}</h1>
           <p class="excerpt">{{ article.excerpt }}</p>
@@ -159,7 +203,7 @@ watchEffect(() => {
         <div class="hero-media glass-card">
           <img
             :src="article.heroImage"
-            :alt="`${article.title} nutrition article by ${nutritionistName}`"
+            :alt="article.heroImageAlt || article.title"
             loading="lazy"
           />
           <div class="media-overlay" aria-hidden="true"></div>
@@ -197,9 +241,7 @@ watchEffect(() => {
           <div class="takeaway-card glass-card">
             <p class="toc-label">Key Takeaways</p>
             <ul>
-              <li v-for="item in keyTakeaways" :key="item.title">
-                {{ item.title }}
-              </li>
+              <li v-for="item in keyTakeaways" :key="item">{{ item }}</li>
             </ul>
           </div>
         </aside>
@@ -218,10 +260,61 @@ watchEffect(() => {
               {{ paragraph }}
             </p>
 
-            <div class="action-note">
-              <strong>Practical nutrition cue</strong>
-              <span>{{ keyTakeaways[index]?.detail }}</span>
-            </div>
+            <ul v-if="section.bullets?.length" class="section-list">
+              <li v-for="bullet in section.bullets" :key="bullet">
+                {{ bullet }}
+              </li>
+            </ul>
+
+            <ol v-if="section.steps?.length" class="section-steps">
+              <li v-for="step in section.steps" :key="step">{{ step }}</li>
+            </ol>
+
+            <figure v-if="section.table" class="section-table">
+              <figcaption v-if="section.table.caption">
+                {{ section.table.caption }}
+              </figcaption>
+              <div class="table-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th
+                        v-for="column in section.table.columns"
+                        :key="column"
+                        scope="col"
+                      >
+                        {{ column }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="(row, rowIndex) in section.table.rows"
+                      :key="rowIndex"
+                    >
+                      <td v-for="(cell, cellIndex) in row" :key="cellIndex">
+                        {{ cell }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p v-if="section.table.footnote" class="table-footnote">
+                {{ section.table.footnote }}
+              </p>
+            </figure>
+
+            <p v-if="section.callout" class="section-callout">
+              {{ section.callout }}
+            </p>
+
+            <p
+              v-for="link in section.links || []"
+              :key="link.to"
+              class="section-link"
+            >
+              <RouterLink :to="link.to">{{ link.label }}</RouterLink>
+            </p>
           </section>
 
           <section class="resource-panel reveal">
@@ -234,6 +327,35 @@ watchEffect(() => {
                 <RouterLink :to="item.to">{{ item.label }}</RouterLink>
               </li>
             </ul>
+          </section>
+
+          <section
+            v-if="article.sources?.length"
+            class="article-sources reveal"
+          >
+            <p class="meta">Sources</p>
+            <ul>
+              <li v-for="source in article.sources" :key="source.label">
+                <strong>{{ source.label }}</strong>
+                <span v-if="source.detail"> — {{ source.detail }}</span>
+              </li>
+            </ul>
+          </section>
+
+          <section class="article-author reveal">
+            <p class="meta">About the author</p>
+            <h2>Written by {{ nutritionistName }}</h2>
+            <p>
+              Certified Clinical Nutritionist (M.Sc. Clinical Nutrition) and
+              founder of Dietrix Fit. I build online nutrition plans around
+              Pakistani and South Asian food for clients in 14+ countries,
+              because a plan that removes roti is a plan nobody keeps.
+            </p>
+            <div class="author-links">
+              <RouterLink to="/about">More about Rimsha</RouterLink>
+              <RouterLink to="/services">See nutrition programs</RouterLink>
+              <RouterLink to="/booking">Book a consultation</RouterLink>
+            </div>
           </section>
 
           <section class="article-faq reveal">
@@ -254,7 +376,7 @@ watchEffect(() => {
       <SectionTitle
         kicker="Continue Reading"
         title="More Nutrition Guides for the Same Journey"
-        description="Explore another practical framework before you choose your next action."
+        description="Three more guides that pick up where this one stops."
       />
       <div class="related-grid reveal-group">
         <BlogCard
@@ -290,6 +412,142 @@ watchEffect(() => {
 </template>
 
 <style>
+.meta-updated {
+  opacity: 0.7;
+}
+
+.section-list,
+.section-steps {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+  padding-left: 20px;
+}
+
+.section-list li,
+.section-steps li {
+  line-height: 1.7;
+}
+
+.section-list {
+  list-style: disc;
+}
+
+.section-steps {
+  list-style: decimal;
+}
+
+.section-table {
+  margin: 24px 0;
+}
+
+.section-table figcaption {
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+/* Wide tables scroll inside their own container so the page body never does. */
+.table-scroll {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.section-table table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 460px;
+}
+
+.section-table th,
+.section-table td {
+  padding: 11px 14px;
+  text-align: left;
+  font-size: 0.94rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.section-table th {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.section-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-footnote {
+  margin-top: 10px;
+  font-size: 0.86rem;
+  opacity: 0.75;
+  line-height: 1.6;
+}
+
+.section-callout {
+  margin: 20px 0;
+  padding: 14px 18px;
+  border-left: 3px solid currentColor;
+  border-radius: 0 12px 12px 0;
+  background: rgba(255, 255, 255, 0.05);
+  line-height: 1.7;
+}
+
+.section-link {
+  margin: 14px 0 0;
+  font-size: 0.95rem;
+}
+
+.section-link a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-sources ul {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.article-sources li {
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.article-author {
+  margin-top: 34px;
+  padding: 22px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.article-author h2 {
+  margin: 6px 0 10px;
+}
+
+.article-author p {
+  line-height: 1.7;
+}
+
+.author-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  font-size: 0.94rem;
+}
+
+.author-links a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .article-page {
   display: grid;
   gap: clamp(62px, 7vw, 96px);
@@ -583,25 +841,6 @@ watchEffect(() => {
   margin: 0;
   color: var(--ink-600);
   line-height: 1.82;
-}
-
-.action-note {
-  display: grid;
-  gap: 6px;
-  margin-top: 6px;
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.15);
-}
-
-.action-note strong {
-  color: var(--emerald-800);
-}
-
-.action-note span {
-  color: var(--ink-600);
-  line-height: 1.65;
 }
 
 .resource-panel {

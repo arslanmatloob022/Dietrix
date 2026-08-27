@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { readingTime } from "../../data/readingTime";
 import type { BlogPost } from "../../types/models";
-import { nutritionistName } from "../../data/seo";
 
 defineProps<{ post: BlogPost; featured?: boolean }>();
 </script>
@@ -14,12 +14,12 @@ defineProps<{ post: BlogPost; featured?: boolean }>();
     <div class="img-wrap">
       <img
         :src="post.heroImage"
-        :alt="`${post.title} nutrition guide by ${nutritionistName}`"
+        :alt="post.heroImageAlt || post.title"
         loading="lazy"
       />
       <div class="image-shade" aria-hidden="true"></div>
       <span class="category-badge">{{ post.category }}</span>
-      <span class="read-badge">{{ post.readTime }}</span>
+      <span class="read-badge">{{ readingTime(post) }}</span>
     </div>
 
     <div class="body">
