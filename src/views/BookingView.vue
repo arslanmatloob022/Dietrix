@@ -2,7 +2,7 @@
 import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import UiButton from "../components/ui/UiButton.vue";
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
-import { buildBreadcrumbSchema } from "../data/seo";
+import { buildBreadcrumbSchema, buildOrganizationSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
 import { absoluteUrl, siteUrl } from "../data/site";
 import { submitBooking } from "../services/bookingService";
@@ -10,6 +10,7 @@ import type { BookingPayload } from "../types/models";
 import { ensureMotion } from "../lib/motion";
 
 useSeo(pageSeo.booking);
+upsertJsonLd("dietrix-organization-schema", buildOrganizationSchema());
 upsertJsonLd(
   "dietrix-booking-breadcrumb-schema",
   buildBreadcrumbSchema([

@@ -8,6 +8,7 @@
     "generate:seo": "node scripts/generate-seo-assets.mjs",
     "prebuild": "node scripts/generate-seo-assets.mjs",
     "build": "vue-tsc -b && vite-ssg build",
+    "postbuild": "node scripts/verify-crawl-signals.mjs",
     "verify:crawl-signals": "node scripts/verify-crawl-signals.mjs",
     "verify:brand": "node scripts/verify-brand-assets.mjs",
     "preview": "vite preview"

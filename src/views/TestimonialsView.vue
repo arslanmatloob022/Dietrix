@@ -6,12 +6,13 @@ import SectionTitle from "../components/ui/SectionTitle.vue";
 import UiButton from "../components/ui/UiButton.vue";
 import { testimonials, transformations } from "../data/content";
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
-import { buildBreadcrumbSchema } from "../data/seo";
+import { buildBreadcrumbSchema, buildOrganizationSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
 import { absoluteUrl, siteUrl } from "../data/site";
 
 useSeo(pageSeo.testimonials);
 
+upsertJsonLd("dietrix-organization-schema", buildOrganizationSchema());
 upsertJsonLd("dietrix-testimonials-schema", {
   "@context": "https://schema.org",
   "@type": "CollectionPage",

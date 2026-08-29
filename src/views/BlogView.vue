@@ -9,6 +9,7 @@ import { upsertJsonLd, useSeo } from "../composables/useSeo";
 import {
   buildBreadcrumbSchema,
   buildFaqSchema,
+  buildOrganizationSchema,
   contentClusters,
   globalSeoFaqs,
 } from "../data/seo";
@@ -16,6 +17,7 @@ import { pageSeo } from "../data/pageSeo";
 import type { BlogCategory } from "../types/models";
 
 useSeo(pageSeo.blog);
+upsertJsonLd("dietrix-organization-schema", buildOrganizationSchema());
 upsertJsonLd("dietrix-blog-faq-schema", buildFaqSchema(globalSeoFaqs));
 upsertJsonLd(
   "dietrix-blog-breadcrumb-schema",

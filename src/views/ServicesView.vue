@@ -10,7 +10,7 @@ import { buildBreadcrumbSchema, buildOrganizationSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
 
 useSeo(pageSeo.services);
-upsertJsonLd("dietrix-services-schema", buildOrganizationSchema(services));
+upsertJsonLd("dietrix-organization-schema", buildOrganizationSchema(services));
 upsertJsonLd(
   "dietrix-services-breadcrumb-schema",
   buildBreadcrumbSchema([
