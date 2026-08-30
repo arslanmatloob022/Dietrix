@@ -10,11 +10,12 @@ import {
   trustBadges,
 } from "../data/content";
 import { upsertJsonLd, useSeo } from "../composables/useSeo";
-import { buildBreadcrumbSchema, buildPersonSchema } from "../data/seo";
+import { buildBreadcrumbSchema, buildOrganizationSchema, buildPersonSchema } from "../data/seo";
 import { pageSeo } from "../data/pageSeo";
 import { ensureMotion } from "../lib/motion";
 
 useSeo(pageSeo.about);
+upsertJsonLd("dietrix-organization-schema", buildOrganizationSchema());
 upsertJsonLd("dietrix-person-schema", buildPersonSchema());
 upsertJsonLd(
   "dietrix-about-breadcrumb-schema",

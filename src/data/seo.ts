@@ -1,5 +1,5 @@
 import type { BlogPost, FaqItem, ServiceItem } from "../types/models";
-import { certifications } from "./content";
+import { certifications, services as defaultServices } from "./content";
 import { absoluteUrl, contactEmail, nutritionistName, siteName, siteUrl, targetMarkets } from "./site";
 export { absoluteUrl, contactEmail, nutritionistName, siteName, siteUrl, targetMarkets } from "./site";
 
@@ -418,7 +418,7 @@ export const globalSeoFaqs: FaqItem[] = [
   },
 ];
 
-export function buildOrganizationSchema(services: ServiceItem[]) {
+export function buildOrganizationSchema(services: ServiceItem[] = defaultServices) {
   return {
     "@context": "https://schema.org",
     "@type": "MedicalBusiness",
@@ -544,7 +544,7 @@ export function buildArticleSchema(post: BlogPost) {
     headline: post.title,
     description: post.seoDescription,
     datePublished: post.publishedAt,
-    dateModified: post.publishedAt,
+    dateModified: post.updatedAt ?? post.publishedAt,
     articleSection: post.category,
     image: post.heroImage,
     author: {

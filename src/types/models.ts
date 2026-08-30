@@ -81,6 +81,7 @@ export type BlogPost = {
     category: BlogCategory
     excerpt: string
     publishedAt: string
+    updatedAt?: string
     readTime: string
     heroImage: string
     sections: BlogSection[]
