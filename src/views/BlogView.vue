@@ -23,7 +23,7 @@ upsertJsonLd(
   "dietrix-blog-breadcrumb-schema",
   buildBreadcrumbSchema([
     { name: "Home", path: "/" },
-    { name: "Nutrition Blog", path: "/blog" },
+    { name: "Nutrition Blog", path: "/blog/" },
   ]),
 );
 
@@ -91,8 +91,8 @@ const readerPaths = [
           of collecting more confusion.
         </p>
         <div class="hero-actions">
-          <UiButton to="/booking" size="lg">Ask for a Personal Plan</UiButton>
-          <UiButton to="/services" variant="outline" size="lg">
+          <UiButton to="/booking/" size="lg">Ask for a Personal Plan</UiButton>
+          <UiButton to="/services/" variant="outline" size="lg">
             Explore Services
           </UiButton>
         </div>

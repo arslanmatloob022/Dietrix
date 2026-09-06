@@ -7,7 +7,7 @@ defineProps<{ post: BlogPost; featured?: boolean }>();
 
 <template>
   <RouterLink
-    :to="`/blog/${post.slug}`"
+     :to="`/blog/${post.slug}/`"
     class="blog-card glass-card reveal"
     :class="{ 'blog-card--featured': featured }"
   >

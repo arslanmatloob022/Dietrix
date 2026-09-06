@@ -8,12 +8,12 @@ Audience: worldwide clients, including Pakistan, United Kingdom, England, United
 
 Important pages:
 - Home: https://dietrix.fit/
-- Services and pricing: https://dietrix.fit/services
-- Booking: https://dietrix.fit/booking
-- About Rimsha Naseer: https://dietrix.fit/about
-- Blog: https://dietrix.fit/blog
-- Testimonials: https://dietrix.fit/testimonials
-- Contact: https://dietrix.fit/contact
+- Services and pricing: https://dietrix.fit/services/
+- Booking: https://dietrix.fit/booking/
+- About Rimsha Naseer: https://dietrix.fit/about/
+- Blog: https://dietrix.fit/blog/
+- Testimonials: https://dietrix.fit/testimonials/
+- Contact: https://dietrix.fit/contact/
 
 High-intent topics:
 - online nutritionist consultation
@@ -37,9 +37,9 @@ Target market keywords:
 - online nutritionist World
 
 Blog articles:
-- https://dietrix.fit/blog/best-high-protein-breakfast-for-fat-loss
-- https://dietrix.fit/blog/pcos-diet-plan-basics-that-actually-work
-- https://dietrix.fit/blog/simple-weekly-diet-planning-for-busy-professionals
-- https://dietrix.fit/blog/diabetes-friendly-plate-method-for-busy-families
-- https://dietrix.fit/blog/gut-health-meal-rhythm-for-bloating-relief
-- https://dietrix.fit/blog/ramadan-nutrition-plan-for-energy-and-fat-loss
+- https://dietrix.fit/blog/best-high-protein-breakfast-for-fat-loss/
+- https://dietrix.fit/blog/pcos-diet-plan-basics-that-actually-work/
+- https://dietrix.fit/blog/simple-weekly-diet-planning-for-busy-professionals/
+- https://dietrix.fit/blog/diabetes-friendly-plate-method-for-busy-families/
+- https://dietrix.fit/blog/gut-health-meal-rhythm-for-bloating-relief/
+- https://dietrix.fit/blog/ramadan-nutrition-plan-for-energy-and-fat-loss/

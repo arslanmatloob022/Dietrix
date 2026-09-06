@@ -12,7 +12,7 @@ useSeo(pageSeo.notFound);
     <p>The page you requested is unavailable. Let us get you back on track.</p>
     <div class="actions">
       <UiButton to="/">Go to Home</UiButton>
-      <UiButton to="/booking" variant="outline">Book Consultation</UiButton>
+      <UiButton to="/booking/" variant="outline">Book Consultation</UiButton>
     </div>
   </main>
 </template>

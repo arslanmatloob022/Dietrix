@@ -72,8 +72,8 @@ if (existsSync(sitemapFile)) {
 
     check(url.origin === canonicalOrigin, `Noncanonical sitemap origin: ${urlString}`);
     check(
-      url.pathname === "/" || !url.pathname.endsWith("/"),
-      `Trailing-slash sitemap URL: ${urlString}`,
+      url.pathname === "/" || url.pathname.endsWith("/"),
+      `Non-trailing-slash sitemap URL: ${urlString}`,
     );
     check(existsSync(file), `No generated SSG document for ${urlString}: ${file}`);
 
@@ -101,7 +101,7 @@ if (existsSync(sitemapFile)) {
       }
 
       check(
-        target.pathname === "/" || !target.pathname.endsWith("/"),
+        target.pathname === "/" || target.pathname.endsWith("/"),
         `Internal link immediately redirects in ${file}: ${href}`,
       );
       check(
@@ -142,11 +142,11 @@ if (existsSync(sitemapFile)) {
     check(Boolean(collectionPage), "Testimonials JSON-LD has no CollectionPage object");
     if (collectionPage) {
       check(
-        collectionPage.url === `${canonicalOrigin}/testimonials`,
+        collectionPage.url === `${canonicalOrigin}/testimonials/`,
         "CollectionPage.url is not the canonical testimonials URL",
       );
       check(
-        collectionPage["@id"] === `${canonicalOrigin}/testimonials#collection`,
+        collectionPage["@id"] === `${canonicalOrigin}/testimonials/#collection`,
         "CollectionPage @id is not stable",
       );
       check(

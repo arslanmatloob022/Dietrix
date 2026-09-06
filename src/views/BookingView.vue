@@ -15,23 +15,23 @@ upsertJsonLd(
   "dietrix-booking-breadcrumb-schema",
   buildBreadcrumbSchema([
     { name: "Home", path: "/" },
-    { name: "Booking", path: "/booking" },
+    { name: "Booking", path: "/booking/" },
   ]),
 );
 upsertJsonLd("dietrix-booking-schema", {
   "@context": "https://schema.org",
   "@type": "Service",
-  "@id": `${absoluteUrl("/booking")}#service`,
+  "@id": `${absoluteUrl("/booking/")}#service`,
   name: "Online Nutrition Consultation Booking",
   serviceType: "Nutrition Consultation",
   provider: { "@id": `${siteUrl}/#organization` },
   areaServed: "Worldwide",
-  url: absoluteUrl("/booking"),
+  url: absoluteUrl("/booking/"),
   offers: {
     "@type": "Offer",
     priceCurrency: "USD",
     price: "50",
-    url: absoluteUrl("/booking"),
+    url: absoluteUrl("/booking/"),
     availability: "https://schema.org/InStock",
   },
 });
@@ -322,7 +322,7 @@ onUnmounted(() => {
           <a class="booking-primary-link" href="#booking-form">
             Choose My Slot
           </a>
-          <UiButton to="/services" variant="outline" size="lg">
+          <UiButton to="/services/" variant="outline" size="lg">
             Compare Programs
           </UiButton>
         </div>
@@ -582,8 +582,8 @@ onUnmounted(() => {
         </p>
       </div>
       <div class="booking-cta-actions">
-        <UiButton to="/contact" size="lg">Ask a Question</UiButton>
-        <UiButton to="/services" variant="outline" size="lg">
+        <UiButton to="/contact/" size="lg">Ask a Question</UiButton>
+        <UiButton to="/services/" variant="outline" size="lg">
           Explore Services
         </UiButton>
       </div>

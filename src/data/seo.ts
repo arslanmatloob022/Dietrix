@@ -540,7 +540,7 @@ export function buildArticleSchema(post: BlogPost) {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
+    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}/`),
     headline: post.title,
     description: post.seoDescription,
     datePublished: post.publishedAt,

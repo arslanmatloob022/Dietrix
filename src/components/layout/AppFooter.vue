@@ -87,12 +87,12 @@ import BrandMark from "../ui/BrandMark.vue";
           <h3>Quick Links</h3>
           <nav aria-label="Footer navigation" class="footer-links">
             <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/about">About</RouterLink>
-            <RouterLink to="/services">Services & Pricing</RouterLink>
-            <RouterLink to="/booking">Book Consultation</RouterLink>
-            <RouterLink to="/testimonials">Success Stories</RouterLink>
-            <RouterLink to="/blog">Nutrition Blog</RouterLink>
-            <RouterLink to="/contact">Contact</RouterLink>
+            <RouterLink to="/about/">About</RouterLink>
+            <RouterLink to="/services/">Services & Pricing</RouterLink>
+            <RouterLink to="/booking/">Book Consultation</RouterLink>
+            <RouterLink to="/testimonials/">Success Stories</RouterLink>
+            <RouterLink to="/blog/">Nutrition Blog</RouterLink>
+            <RouterLink to="/contact/">Contact</RouterLink>
           </nav>
         </div>
 
@@ -162,7 +162,7 @@ import BrandMark from "../ui/BrandMark.vue";
               Responds within 1 business day
             </p>
           </div>
-          <RouterLink to="/booking" class="book-cta">
+          <RouterLink to="/booking/" class="book-cta">
             Book a Consultation →
           </RouterLink>
         </div>

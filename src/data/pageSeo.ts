@@ -51,7 +51,7 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
     title: "About Rimsha Naseer, Nutritionist | Dietrix",
     description:
       "Meet Rimsha Naseer, certified clinical nutritionist offering evidence-based online diet plans for weight loss, PCOS, diabetes, and gut health care worldwide.",
-    path: "/about",
+    path: "/about/",
     keywords: [
       "Rimsha Naseer nutritionist",
       "certified clinical nutritionist",
@@ -63,7 +63,7 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
     title: "Diet Plans Pakistan, USA, UK & Global | Dietrix",
     description:
       "Compare online diet plans for Pakistan, UK, USA, Canada, Germany, France, KSA, Dubai, and Australia for weight loss, PCOS, and diabetes support online.",
-    path: "/services",
+    path: "/services/",
     keywords: [
       "custom diet plan for weight loss",
       "diet plan Pakistan",
@@ -86,7 +86,7 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
     title: "Book Online Nutritionist Worldwide | Dietrix",
     description:
       "Book an online nutritionist for Pakistan, USA, UK, Canada, Germany, France, KSA, Dubai, or Australia and get a custom diet plan from home today online.",
-    path: "/booking",
+    path: "/booking/",
     keywords: [
       "book nutrition consultation online",
       "book nutritionist Pakistan online",
@@ -103,7 +103,7 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
     title: "Global Nutrition Blog: Weight Loss Diet Plans",
     description:
       "Read nutrition guides for Pakistan, UK, USA, Canada, Germany, France, KSA, Dubai, and Australia on weight loss, PCOS, diabetes, and meal planning tips.",
-    path: "/blog",
+    path: "/blog/",
     keywords: [
       "nutrition blog",
       "Pakistan nutrition blog",
@@ -120,7 +120,7 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
     title: "Nutritionist Reviews & Results | Dietrix",
     description:
       "See Dietrix Fit reviews, transformation stories, and client results from online weight loss, PCOS, diabetes, and meal planning coaching worldwide.",
-    path: "/testimonials",
+    path: "/testimonials/",
     keywords: [
       "online nutritionist reviews",
       "nutrition coaching testimonials",
@@ -131,7 +131,7 @@ export const pageSeo: Record<PageSeoKey, PageSeo> = {
     title: "Contact Online Nutritionist Worldwide | Dietrix",
     description:
       "Contact Dietrix Fit for online diet plans in Pakistan, USA, UK, Canada, Germany, France, KSA, Dubai, Australia, and worldwide support from home.",
-    path: "/contact",
+    path: "/contact/",
     keywords: [
       "contact online nutritionist",
       "contact nutritionist Pakistan",

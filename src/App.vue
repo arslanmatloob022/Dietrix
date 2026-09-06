@@ -140,7 +140,7 @@ onUnmounted(() => {
     <AppFooter />
     <FloatingChatbot />
     <RouterLink
-      to="/booking"
+      to="/booking/"
       class="mobile-book-cta"
       aria-label="Book nutrition consultation"
     >

@@ -10,12 +10,12 @@ const scrolled = ref(false);
 
 const links = [
   { label: "Home", to: "/" },
-  { label: "About", to: "/about" },
-  { label: "Services", to: "/services" },
-  { label: "Booking", to: "/booking" },
-  { label: "Blog", to: "/blog" },
-  { label: "Testimonials", to: "/testimonials" },
-  { label: "Contact", to: "/contact" },
+  { label: "About", to: "/about/" },
+  { label: "Services", to: "/services/" },
+  { label: "Booking", to: "/booking/" },
+  { label: "Blog", to: "/blog/" },
+  { label: "Testimonials", to: "/testimonials/" },
+  { label: "Contact", to: "/contact/" },
 ];
 
 function onScroll() {
@@ -69,7 +69,7 @@ watch(
         </RouterLink>
       </nav>
 
-      <UiButton to="/booking" size="sm" aria-label="Book consultation now">
+      <UiButton to="/booking/" size="sm" aria-label="Book consultation now">
         Book Now
       </UiButton>
     </div>

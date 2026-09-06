@@ -39,7 +39,7 @@ const supportTag = computed(() => {
       </li>
     </ul>
     <p class="scarcity">{{ tier.scarcity }}</p>
-    <UiButton to="/booking" :variant="tier.highlighted ? 'primary' : 'outline'">
+      <UiButton to="/booking/" :variant="tier.highlighted ? 'primary' : 'outline'">
       {{ tier.ctaText }}
     </UiButton>
   </article>

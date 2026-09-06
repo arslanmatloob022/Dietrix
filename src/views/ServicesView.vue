@@ -15,7 +15,7 @@ upsertJsonLd(
   "dietrix-services-breadcrumb-schema",
   buildBreadcrumbSchema([
     { name: "Home", path: "/" },
-    { name: "Services", path: "/services" },
+    { name: "Services", path: "/services/" },
   ]),
 );
 
@@ -109,8 +109,8 @@ const comparisonRows = [
           designed by a clinical nutritionist and delivered from home.
         </p>
         <div class="hero-actions">
-          <UiButton to="/booking" size="lg">Book Consultation</UiButton>
-          <UiButton to="/contact" variant="outline" size="lg">
+          <UiButton to="/booking/" size="lg">Book Consultation</UiButton>
+          <UiButton to="/contact/" variant="outline" size="lg">
             Ask Which Plan Fits
           </UiButton>
         </div>
@@ -232,9 +232,9 @@ const comparisonRows = [
         title="Unsure Which Plan Fits You Best?"
         description="Book a discovery consultation and get matched with the ideal nutrition program for your body, condition, routine and support needs."
         primary-text="Book Consultation"
-        primary-to="/booking"
+        primary-to="/booking/"
         secondary-text="Ask in Chatbot"
-        secondary-to="/contact"
+        secondary-to="/contact/"
       />
     </section>
   </main>

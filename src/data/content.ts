@@ -367,8 +367,8 @@ export const blogPosts: BlogPost[] = [
             },
         ],
         internalLinks: [
-            { label: 'Explore our weight loss services', to: '/services' },
-            { label: 'Book a 1-on-1 consultation', to: '/booking' },
+            { label: 'Explore our weight loss services', to: '/services/' },
+            { label: 'Book a 1-on-1 consultation', to: '/booking/' },
         ],
     },
     {
@@ -424,8 +424,8 @@ export const blogPosts: BlogPost[] = [
             },
         ],
         internalLinks: [
-            { label: 'See our medical nutrition therapy program', to: '/services' },
-            { label: 'Speak with our nutritionist', to: '/contact' },
+            { label: 'See our medical nutrition therapy program', to: '/services/' },
+            { label: 'Speak with our nutritionist', to: '/contact/' },
         ],
     },
     {
@@ -481,8 +481,8 @@ export const blogPosts: BlogPost[] = [
             },
         ],
         internalLinks: [
-            { label: 'View custom diet blueprint service', to: '/services' },
-            { label: 'Reserve a planning consultation', to: '/booking' },
+            { label: 'View custom diet blueprint service', to: '/services/' },
+            { label: 'Reserve a planning consultation', to: '/booking/' },
         ],
     },
     {
@@ -530,8 +530,8 @@ export const blogPosts: BlogPost[] = [
             },
         ],
         internalLinks: [
-            { label: 'Explore medical nutrition therapy', to: '/services' },
-            { label: 'Book diabetes nutrition support', to: '/booking' },
+            { label: 'Explore medical nutrition therapy', to: '/services/' },
+            { label: 'Book diabetes nutrition support', to: '/booking/' },
         ],
     },
     {
@@ -579,8 +579,8 @@ export const blogPosts: BlogPost[] = [
             },
         ],
         internalLinks: [
-            { label: 'See custom diet blueprint service', to: '/services' },
-            { label: 'Ask about gut nutrition support', to: '/contact' },
+            { label: 'See custom diet blueprint service', to: '/services/' },
+            { label: 'Ask about gut nutrition support', to: '/contact/' },
         ],
     },
     {
@@ -628,8 +628,8 @@ export const blogPosts: BlogPost[] = [
             },
         ],
         internalLinks: [
-            { label: 'Start a weight loss coaching plan', to: '/services' },
-            { label: 'Book Ramadan nutrition consultation', to: '/booking' },
+            { label: 'Start a weight loss coaching plan', to: '/services/' },
+            { label: 'Book Ramadan nutrition consultation', to: '/booking/' },
         ],
     },
 ]

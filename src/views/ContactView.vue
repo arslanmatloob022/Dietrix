@@ -13,14 +13,14 @@ upsertJsonLd(
   "dietrix-contact-breadcrumb-schema",
   buildBreadcrumbSchema([
     { name: "Home", path: "/" },
-    { name: "Contact", path: "/contact" },
+    { name: "Contact", path: "/contact/" },
   ]),
 );
 upsertJsonLd("dietrix-contact-schema", {
   "@context": "https://schema.org",
   "@type": "ContactPage",
-  "@id": `${absoluteUrl("/contact")}#contactpage`,
-  url: absoluteUrl("/contact"),
+  "@id": `${absoluteUrl("/contact/")}#contactpage`,
+  url: absoluteUrl("/contact/"),
   name: "Contact Dietrix Fit",
   about: { "@id": `${siteUrl}/#organization` },
   mainEntity: {
@@ -113,7 +113,7 @@ const marketSupportNotes = [
           easy to start from home.
         </p>
         <div class="hero-actions">
-          <UiButton to="/booking" size="lg">Book Consultation</UiButton>
+          <UiButton to="/booking/" size="lg">Book Consultation</UiButton>
           <a
             class="hero-whatsapp"
             href="https://wa.me/923007626555"
@@ -184,10 +184,10 @@ const marketSupportNotes = [
           <span>Priority path</span>
           <h3>Ready to start? Reserve a consultation slot first.</h3>
           <div class="stacked-buttons">
-            <UiButton to="/booking" :full-width="true">
+            <UiButton to="/booking/" :full-width="true">
               Book Consultation
             </UiButton>
-            <UiButton to="/services" variant="outline" :full-width="true">
+            <UiButton to="/services/" variant="outline" :full-width="true">
               View Services
             </UiButton>
           </div>

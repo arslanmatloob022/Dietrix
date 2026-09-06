@@ -21,7 +21,7 @@ upsertJsonLd(
   "dietrix-about-breadcrumb-schema",
   buildBreadcrumbSchema([
     { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
+    { name: "About", path: "/about/" },
   ]),
 );
 
@@ -247,8 +247,8 @@ onUnmounted(() => {
         </p>
         <p class="hero-story">{{ nutritionistProfile.story }}</p>
         <div class="hero-actions">
-          <UiButton to="/booking" size="lg">Book Consultation</UiButton>
-          <UiButton to="/services" variant="outline" size="lg">
+          <UiButton to="/booking/" size="lg">Book Consultation</UiButton>
+          <UiButton to="/services/" variant="outline" size="lg">
             View Nutrition Programs
           </UiButton>
         </div>
@@ -442,9 +442,9 @@ onUnmounted(() => {
         title="Ready to Work Together on Your Nutrition Goals?"
         description="Start with a personalized consultation and get a plan aligned to your medical context, lifestyle, culture, schedule and long-term health goals."
         primary-text="Book Consultation"
-        primary-to="/booking"
+        primary-to="/booking/"
         secondary-text="View Services"
-        secondary-to="/services"
+        secondary-to="/services/"
       />
     </section>
   </main>

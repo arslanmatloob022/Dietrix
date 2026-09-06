@@ -575,13 +575,13 @@ const processSteps = [
           </p>
 
           <div class="hero-actions">
-            <RouterLink to="/booking" class="hero-btn-primary magnetic">
+            <RouterLink to="/booking/" class="hero-btn-primary magnetic">
               Book Free Consultation
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </RouterLink>
-            <RouterLink to="/services" class="hero-btn-outline magnetic">Explore Plans</RouterLink>
+            <RouterLink to="/services/" class="hero-btn-outline magnetic">Explore Plans</RouterLink>
           </div>
 
           <div class="hero-proof">
@@ -866,13 +866,13 @@ const processSteps = [
           </div>
 
           <div class="bowl-actions">
-            <RouterLink to="/booking" class="bowl-btn magnetic">
+            <RouterLink to="/booking/" class="bowl-btn magnetic">
               Build My Plate
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </RouterLink>
-            <RouterLink to="/services" class="bowl-link">See Nutrition Plans</RouterLink>
+            <RouterLink to="/services/" class="bowl-link">See Nutrition Plans</RouterLink>
           </div>
         </div>
       </div>
@@ -891,7 +891,7 @@ const processSteps = [
         <ServiceCard v-for="service in services" :key="service.id" :item="service" />
       </div>
       <div class="section-action reveal">
-        <UiButton to="/services" variant="outline" size="lg">View All Plans and Pricing</UiButton>
+        <UiButton to="/services/" variant="outline" size="lg">View All Plans and Pricing</UiButton>
       </div>
     </section>
 
@@ -923,7 +923,7 @@ const processSteps = [
           </div>
         </div>
         <div class="section-action" style="margin-top: 52px">
-          <RouterLink to="/booking" class="hero-btn-primary magnetic">
+          <RouterLink to="/booking/" class="hero-btn-primary magnetic">
             Start Your Transformation
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -987,7 +987,7 @@ const processSteps = [
             </div>
           </div>
           <div class="expert-cta">
-            <RouterLink to="/about" class="hero-btn-primary magnetic">
+            <RouterLink to="/about/" class="hero-btn-primary magnetic">
               Learn My Story
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1011,7 +1011,7 @@ const processSteps = [
         <TransformationCard v-for="item in transformations" :key="item.id" :item="item" />
       </div>
       <div class="section-action reveal">
-        <UiButton to="/testimonials" variant="outline" size="lg">See All Stories</UiButton>
+        <UiButton to="/testimonials/" variant="outline" size="lg">See All Stories</UiButton>
       </div>
     </section>
 
@@ -1032,7 +1032,7 @@ const processSteps = [
           <TestimonialCard v-for="item in testimonials" :key="item.id" :testimonial="item" />
         </div>
         <div class="section-action">
-          <RouterLink to="/testimonials" class="testimonials-cta magnetic">
+          <RouterLink to="/testimonials/" class="testimonials-cta magnetic">
             Read All Success Stories
             <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1082,7 +1082,7 @@ const processSteps = [
         <BlogCard v-for="post in blogPosts" :key="post.slug" :post="post" />
       </div>
       <div class="section-action reveal">
-        <UiButton to="/blog" variant="outline" size="lg">Browse All Articles</UiButton>
+        <UiButton to="/blog/" variant="outline" size="lg">Browse All Articles</UiButton>
       </div>
     </section>
 
@@ -1094,9 +1094,9 @@ const processSteps = [
         title="Ready to Transform Your Health?"
         description="Join 1,800+ clients worldwide who changed their nutrition and their life. Limited new spots available each month."
         primary-text="Book Your Consultation"
-        primary-to="/booking"
+        primary-to="/booking/"
         secondary-text="Chat with Assistant"
-        secondary-to="/contact"
+        secondary-to="/contact/"
         kicker="Start Today"
       />
     </section>

@@ -16,8 +16,8 @@ upsertJsonLd("dietrix-organization-schema", buildOrganizationSchema());
 upsertJsonLd("dietrix-testimonials-schema", {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "@id": `${absoluteUrl("/testimonials")}#collection`,
-  url: absoluteUrl("/testimonials"),
+  "@id": `${absoluteUrl("/testimonials/")}#collection`,
+  url: absoluteUrl("/testimonials/"),
   name: "Dietrix Fit Client Success Stories",
   description:
     "Client reviews, nutrition coaching outcomes, before-after highlights, and remote consultation proof for Dietrix Fit.",
@@ -33,7 +33,7 @@ upsertJsonLd(
   "dietrix-testimonials-breadcrumb-schema",
   buildBreadcrumbSchema([
     { name: "Home", path: "/" },
-    { name: "Testimonials", path: "/testimonials" },
+    { name: "Testimonials", path: "/testimonials/" },
   ]),
 );
 
@@ -174,8 +174,8 @@ const globalReach = [
         </p>
 
         <div class="hero-actions">
-          <UiButton to="/booking" size="lg">Book Consultation</UiButton>
-          <UiButton to="/services" variant="outline" size="lg">
+          <UiButton to="/booking/" size="lg">Book Consultation</UiButton>
+          <UiButton to="/services/" variant="outline" size="lg">
             View Programs
           </UiButton>
         </div>
@@ -345,9 +345,9 @@ const globalReach = [
         title="Ready for a Result Story That Feels Like Yours?"
         description="Book your consultation and get a calm, evidence-based nutrition strategy designed around your body, schedule, culture and health condition."
         primary-text="Book Consultation"
-        primary-to="/booking"
+        primary-to="/booking/"
         secondary-text="Explore Services"
-        secondary-to="/services"
+        secondary-to="/services/"
       />
     </section>
   </main>

@@ -53,16 +53,16 @@ function lastCommitDate(relativePath) {
 
 const staticRoutes = [
   { path: "/", priority: "1.0", changefreq: "weekly", lastmod: lastCommitDate("src/views/HomeView.vue") },
-  { path: "/services", priority: "0.95", changefreq: "weekly", lastmod: lastCommitDate("src/views/ServicesView.vue") },
-  { path: "/booking", priority: "0.9", changefreq: "weekly", lastmod: lastCommitDate("src/views/BookingView.vue") },
-  { path: "/blog", priority: "0.9", changefreq: "weekly", lastmod: lastCommitDate("src/views/BlogView.vue") },
-  { path: "/about", priority: "0.82", changefreq: "monthly", lastmod: lastCommitDate("src/views/AboutView.vue") },
-  { path: "/testimonials", priority: "0.82", changefreq: "monthly", lastmod: lastCommitDate("src/views/TestimonialsView.vue") },
-  { path: "/contact", priority: "0.8", changefreq: "monthly", lastmod: lastCommitDate("src/views/ContactView.vue") },
+  { path: "/services/", priority: "0.95", changefreq: "weekly", lastmod: lastCommitDate("src/views/ServicesView.vue") },
+  { path: "/booking/", priority: "0.9", changefreq: "weekly", lastmod: lastCommitDate("src/views/BookingView.vue") },
+  { path: "/blog/", priority: "0.9", changefreq: "weekly", lastmod: lastCommitDate("src/views/BlogView.vue") },
+  { path: "/about/", priority: "0.82", changefreq: "monthly", lastmod: lastCommitDate("src/views/AboutView.vue") },
+  { path: "/testimonials/", priority: "0.82", changefreq: "monthly", lastmod: lastCommitDate("src/views/TestimonialsView.vue") },
+  { path: "/contact/", priority: "0.8", changefreq: "monthly", lastmod: lastCommitDate("src/views/ContactView.vue") },
 ];
 
 const blogRoutes = blogSlugs.map((slug, index) => ({
-  path: `/blog/${slug}`,
+  path: `/blog/${slug}/`,
   priority: "0.78",
   changefreq: "monthly",
   lastmod: blogPublishDates[index] ?? today,
@@ -112,12 +112,12 @@ Audience: worldwide clients, including ${targetMarkets.join(", ")}.
 
 Important pages:
 - Home: ${absolute("/")}
-- Services and pricing: ${absolute("/services")}
-- Booking: ${absolute("/booking")}
-- About Rimsha Naseer: ${absolute("/about")}
-- Blog: ${absolute("/blog")}
-- Testimonials: ${absolute("/testimonials")}
-- Contact: ${absolute("/contact")}
+- Services and pricing: ${absolute("/services/")}
+- Booking: ${absolute("/booking/")}
+- About Rimsha Naseer: ${absolute("/about/")}
+- Blog: ${absolute("/blog/")}
+- Testimonials: ${absolute("/testimonials/")}
+- Contact: ${absolute("/contact/")}
 
 High-intent topics:
 - online nutritionist consultation
@@ -136,7 +136,7 @@ ${targetMarkets
   .join("\n")}
 
 Blog articles:
-${blogSlugs.map((slug) => `- ${absolute(`/blog/${slug}`)}`).join("\n")}
+${blogSlugs.map((slug) => `- ${absolute(`/blog/${slug}/`)}`).join("\n")}
 `;
 
 mkdirSync(publicDir, { recursive: true });

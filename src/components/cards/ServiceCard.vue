@@ -45,8 +45,8 @@ const featureProgress = computed(
         <span class="check" aria-hidden="true"></span>{{ feature }}
       </li>
     </ul>
-    <UiButton to="/booking" variant="secondary" class="cta">{{
-      item.ctaText
+    <UiButton to="/booking/" variant="secondary" class="cta">{{
+        item.ctaText
     }}</UiButton>
   </article>
 </template>

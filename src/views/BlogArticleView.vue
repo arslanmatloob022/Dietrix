@@ -120,7 +120,7 @@ watchEffect(() => {
   useSeo({
     title: article.value.seoTitle,
     description: article.value.seoDescription,
-    path: `/blog/${article.value.slug}`,
+    path: `/blog/${article.value.slug}/`,
     type: "article",
     image: article.value.heroImage,
     keywords: [article.value.category, article.value.title],
@@ -134,8 +134,8 @@ watchEffect(() => {
     "dietrix-article-breadcrumb-schema",
     buildBreadcrumbSchema([
       { name: "Home", path: "/" },
-      { name: "Nutrition Blog", path: "/blog" },
-      { name: article.value.title, path: `/blog/${article.value.slug}` },
+      { name: "Nutrition Blog", path: "/blog/" },
+      { name: article.value.title, path: `/blog/${article.value.slug}/` },
     ]),
   );
 });
@@ -152,8 +152,8 @@ watchEffect(() => {
           <h1>{{ article.title }}</h1>
           <p class="excerpt">{{ article.excerpt }}</p>
           <div class="hero-actions">
-            <UiButton to="/booking" size="lg">Get Personal Guidance</UiButton>
-            <UiButton to="/blog" variant="outline" size="lg">
+            <UiButton to="/booking/" size="lg">Get Personal Guidance</UiButton>
+            <UiButton to="/blog/" variant="outline" size="lg">
               Back to Blog
             </UiButton>
           </div>
@@ -273,9 +273,9 @@ watchEffect(() => {
         title="Need Personalized Guidance Beyond This Article?"
         description="Move from information to implementation with a customized online nutrition consultation."
         primary-text="Book Consultation"
-        primary-to="/booking"
+        primary-to="/booking/"
         secondary-text="Back to Blog"
-        secondary-to="/blog"
+        secondary-to="/blog/"
       />
     </section>
   </main>
@@ -287,7 +287,7 @@ watchEffect(() => {
         title="We could not find this article"
         description="No data available to show"
       />
-      <RouterLink to="/blog" class="back-link">Return to Blog</RouterLink>
+      <RouterLink to="/blog/" class="back-link">Return to Blog</RouterLink>
     </section>
   </main>
 </template>
