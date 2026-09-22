@@ -430,6 +430,15 @@ async function initAnimations() {
           .to('.bs4', { y: -30, opacity: 1, duration: 0.08 }, 0.935)
           .to('.bs4', { y: -48, opacity: 0, duration: 0.1  }, 0.955)
 
+        if (scrub) {
+          // Fade the whole scene out before the pin releases — without this,
+          // the fully-filled bowl gets abruptly cut off by the shrinking pin
+          // box the instant it unpins, overlapping the next section's content.
+          // Only for the desktop/pinned path: the mobile timeline plays once
+          // on enter and must stay visible afterward, not fade to nothing.
+          tl.to('.bowl-section', { opacity: 0, duration: 0.18, ease: 'power1.in' }, 1.02)
+        }
+
         return tl
       }
 
@@ -575,13 +584,13 @@ const processSteps = [
           </p>
 
           <div class="hero-actions">
-            <RouterLink to="/booking/" class="hero-btn-primary magnetic">
+            <RouterLink to="/booking" class="hero-btn-primary magnetic">
               Book Free Consultation
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </RouterLink>
-            <RouterLink to="/services/" class="hero-btn-outline magnetic">Explore Plans</RouterLink>
+            <RouterLink to="/services" class="hero-btn-outline magnetic">Explore Plans</RouterLink>
           </div>
 
           <div class="hero-proof">
@@ -866,13 +875,13 @@ const processSteps = [
           </div>
 
           <div class="bowl-actions">
-            <RouterLink to="/booking/" class="bowl-btn magnetic">
+            <RouterLink to="/booking" class="bowl-btn magnetic">
               Build My Plate
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </RouterLink>
-            <RouterLink to="/services/" class="bowl-link">See Nutrition Plans</RouterLink>
+            <RouterLink to="/services" class="bowl-link">See Nutrition Plans</RouterLink>
           </div>
         </div>
       </div>
@@ -891,7 +900,7 @@ const processSteps = [
         <ServiceCard v-for="service in services" :key="service.id" :item="service" />
       </div>
       <div class="section-action reveal">
-        <UiButton to="/services/" variant="outline" size="lg">View All Plans and Pricing</UiButton>
+        <UiButton to="/services" variant="outline" size="lg">View All Plans and Pricing</UiButton>
       </div>
     </section>
 
@@ -923,7 +932,7 @@ const processSteps = [
           </div>
         </div>
         <div class="section-action" style="margin-top: 52px">
-          <RouterLink to="/booking/" class="hero-btn-primary magnetic">
+          <RouterLink to="/booking" class="hero-btn-primary magnetic">
             Start Your Transformation
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -987,7 +996,7 @@ const processSteps = [
             </div>
           </div>
           <div class="expert-cta">
-            <RouterLink to="/about/" class="hero-btn-primary magnetic">
+            <RouterLink to="/about" class="hero-btn-primary magnetic">
               Learn My Story
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1011,7 +1020,7 @@ const processSteps = [
         <TransformationCard v-for="item in transformations" :key="item.id" :item="item" />
       </div>
       <div class="section-action reveal">
-        <UiButton to="/testimonials/" variant="outline" size="lg">See All Stories</UiButton>
+        <UiButton to="/testimonials" variant="outline" size="lg">See All Stories</UiButton>
       </div>
     </section>
 
@@ -1032,7 +1041,7 @@ const processSteps = [
           <TestimonialCard v-for="item in testimonials" :key="item.id" :testimonial="item" />
         </div>
         <div class="section-action">
-          <RouterLink to="/testimonials/" class="testimonials-cta magnetic">
+          <RouterLink to="/testimonials" class="testimonials-cta magnetic">
             Read All Success Stories
             <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1082,7 +1091,7 @@ const processSteps = [
         <BlogCard v-for="post in blogPosts" :key="post.slug" :post="post" />
       </div>
       <div class="section-action reveal">
-        <UiButton to="/blog/" variant="outline" size="lg">Browse All Articles</UiButton>
+        <UiButton to="/blog" variant="outline" size="lg">Browse All Articles</UiButton>
       </div>
     </section>
 
@@ -1094,9 +1103,9 @@ const processSteps = [
         title="Ready to Transform Your Health?"
         description="Join 1,800+ clients worldwide who changed their nutrition and their life. Limited new spots available each month."
         primary-text="Book Your Consultation"
-        primary-to="/booking/"
+        primary-to="/booking"
         secondary-text="Chat with Assistant"
-        secondary-to="/contact/"
+        secondary-to="/contact"
         kicker="Start Today"
       />
     </section>
@@ -1517,6 +1526,10 @@ const processSteps = [
 
 .bowl-section-wrap {
   position: relative;
+  min-height: 100vh; /* GSAP pins this element (position: fixed) while scrubbing —
+    without an explicit height here it only grows to fit its content box, so once
+    fixed it can end shorter than the viewport and expose whatever has already
+    scrolled into place underneath it. */
   background: linear-gradient(148deg, #011810 0%, #022c22 36%, #041b36 78%, #020e1a 100%);
   z-index: 2; /* stays above adjacent light sections during GSAP pin */
 }

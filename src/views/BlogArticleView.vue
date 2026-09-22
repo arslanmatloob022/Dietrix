@@ -72,32 +72,7 @@ const keyTakeaways = computed(() => {
   }));
 });
 
-const articleFaqs = computed(() => {
-  if (!article.value) {
-    return [];
-  }
-
-  return [
-    {
-      id: `${article.value.slug}-faq-1`,
-      question: "Should I use this article as my full diet plan?",
-      answer:
-        "Use this article as education and a starting framework. A full diet plan should consider your medical history, routine, preferences, labs, appetite, and progress signals.",
-    },
-    {
-      id: `${article.value.slug}-faq-2`,
-      question: "When should I book an online nutrition consultation?",
-      answer:
-        "Book a consultation when you need a personalized plan, have PCOS, diabetes, thyroid or gut concerns, feel stuck with weight loss, or want accountability.",
-    },
-    {
-      id: `${article.value.slug}-faq-3`,
-      question: "Can Dietrix Fit support clients outside Pakistan?",
-      answer:
-        "Yes. Dietrix Fit is remote-first and supports international clients through online consultations, digital plans, and progress reviews.",
-    },
-  ];
-});
+const articleFaqs = computed(() => article.value?.articleFaqs ?? []);
 
 function sectionId(heading: string) {
   return heading
@@ -120,7 +95,7 @@ watchEffect(() => {
   useSeo({
     title: article.value.seoTitle,
     description: article.value.seoDescription,
-    path: `/blog/${article.value.slug}/`,
+    path: `/blog/${article.value.slug}`,
     type: "article",
     image: article.value.heroImage,
     keywords: [article.value.category, article.value.title],
@@ -134,8 +109,8 @@ watchEffect(() => {
     "dietrix-article-breadcrumb-schema",
     buildBreadcrumbSchema([
       { name: "Home", path: "/" },
-      { name: "Nutrition Blog", path: "/blog/" },
-      { name: article.value.title, path: `/blog/${article.value.slug}/` },
+      { name: "Nutrition Blog", path: "/blog" },
+      { name: article.value.title, path: `/blog/${article.value.slug}` },
     ]),
   );
 });
@@ -152,8 +127,8 @@ watchEffect(() => {
           <h1>{{ article.title }}</h1>
           <p class="excerpt">{{ article.excerpt }}</p>
           <div class="hero-actions">
-            <UiButton to="/booking/" size="lg">Get Personal Guidance</UiButton>
-            <UiButton to="/blog/" variant="outline" size="lg">
+            <UiButton to="/booking" size="lg">Get Personal Guidance</UiButton>
+            <UiButton to="/blog" variant="outline" size="lg">
               Back to Blog
             </UiButton>
           </div>
@@ -273,9 +248,9 @@ watchEffect(() => {
         title="Need Personalized Guidance Beyond This Article?"
         description="Move from information to implementation with a customized online nutrition consultation."
         primary-text="Book Consultation"
-        primary-to="/booking/"
+        primary-to="/booking"
         secondary-text="Back to Blog"
-        secondary-to="/blog/"
+        secondary-to="/blog"
       />
     </section>
   </main>
@@ -287,7 +262,7 @@ watchEffect(() => {
         title="We could not find this article"
         description="No data available to show"
       />
-      <RouterLink to="/blog/" class="back-link">Return to Blog</RouterLink>
+      <RouterLink to="/blog" class="back-link">Return to Blog</RouterLink>
     </section>
   </main>
 </template>

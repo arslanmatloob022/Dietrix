@@ -86,6 +86,7 @@ export type BlogPost = {
     heroImage: string
     sections: BlogSection[]
     internalLinks: InternalLink[]
+    articleFaqs: FaqItem[]
 }
 
 export type LeadSource = 'contact' | 'chatbot' | 'home-cta' | 'blog' | 'services'
