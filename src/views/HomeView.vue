@@ -431,12 +431,13 @@ async function initAnimations() {
           .to('.bs4', { y: -48, opacity: 0, duration: 0.1  }, 0.955)
 
         if (scrub) {
-          // Fade the whole scene out before the pin releases — without this,
-          // the fully-filled bowl gets abruptly cut off by the shrinking pin
-          // box the instant it unpins, overlapping the next section's content.
-          // Only for the desktop/pinned path: the mobile timeline plays once
-          // on enter and must stay visible afterward, not fade to nothing.
-          tl.to('.bowl-section', { opacity: 0, duration: 0.18, ease: 'power1.in' }, 1.02)
+          // Fade the WRAP (not just the inner content) before the pin releases.
+          // .bowl-section-wrap carries its own opaque dark background and sits at
+          // z-index:2 so it stays above later sections while pinned — fading only
+          // the inner .bowl-section left that background fully opaque for the
+          // entire pin range, hiding whatever had already scrolled into place
+          // underneath it until the pin finally let go.
+          tl.to(bowlWrap, { opacity: 0, duration: 0.18, ease: 'power1.in' }, 1.02)
         }
 
         return tl
