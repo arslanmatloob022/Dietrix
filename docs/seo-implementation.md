@@ -1,6 +1,6 @@
 # Dietrix Fit SEO Implementation
 
-This file summarizes the implemented SEO foundation for `dietrix.fit`.
+This file summarizes the implemented SEO foundation for `dietrixfit.com`.
 
 ## Page Meta Map
 
@@ -101,20 +101,30 @@ Environment-ready integrations:
 - `VITE_GA_ID` injects Google Analytics
 - `VITE_GOOGLE_SITE_VERIFICATION` injects Google Search Console verification
 
+## Domain migration (dietrix.fit -> dietrixfit.com)
+
+The canonical domain is now `dietrixfit.com`. The previous domain,
+`dietrix.fit`, permanently 301-redirects every URL to its equivalent on
+the new domain (both `netlify.toml` and `deploy/nginx/dietrix.conf`) —
+this preserves indexing/authority instead of starting from zero. A new
+Search Console property must be verified for `dietrixfit.com`; the old
+property's verification token does not carry over and was removed from
+`index.html` rather than left pointing at the wrong domain.
+
 ## Sitemap URL
 
-The canonical sitemap is `https://dietrix.fit/sitemap_index.xml`. It was
-renamed from `/sitemap.xml` on 2026-08-13 after that URL accumulated weeks
-of "Couldn't fetch" history in Search Console during a hosting outage —
-Google re-verifies a previously-failing URL on a slower schedule than a
-fresh one. `/sitemap.xml` now 301-redirects to the new URL (both
-`netlify.toml` and `deploy/nginx/dietrix.conf`); it should stay retired
-rather than reused for a future sitemap.
+The canonical sitemap is `https://dietrixfit.com/sitemap.xml`. It briefly
+lived at `/sitemap_index.xml` on the old `dietrix.fit` domain (2026-08-13
+through the domain migration) to shed a "Couldn't fetch" history in
+Search Console from a hosting outage. Since the domain migration is
+itself a clean slate in Search Console, the sitemap has been restored to
+the conventional `/sitemap.xml` path.
 
 ## Next Off-Site SEO Work
 
-- In Search Console, remove the old `https://dietrix.fit/sitemap.xml`
-  submission and submit `https://dietrix.fit/sitemap_index.xml` instead.
+- Verify a new Search Console property for `dietrixfit.com`, submit
+  `https://dietrixfit.com/sitemap.xml`, and use "Change of Address" in the
+  old `dietrix.fit` property's settings to signal the migration directly.
 - Register Google Business Profile when a public business address or service-area profile is ready.
 - Build backlinks from health blogs, fitness websites, women health directories, and nutrition guest posts.
 - Turn testimonials into shareable case studies and infographics.

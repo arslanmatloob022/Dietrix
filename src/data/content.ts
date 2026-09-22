@@ -366,9 +366,26 @@ export const blogPosts: BlogPost[] = [
                 ],
             },
         ],
+        articleFaqs: [
+            {
+                id: 'best-high-protein-breakfast-for-fat-loss-faq-1',
+                question: 'How much protein should I eat at breakfast for fat loss?',
+                answer: 'Aim for 25 to 35 grams from sources like eggs, Greek yogurt, tofu, cottage cheese, or a quality protein blend, paired with fiber-rich foods.',
+            },
+            {
+                id: 'best-high-protein-breakfast-for-fat-loss-faq-2',
+                question: 'What foods should I avoid for a high-protein breakfast?',
+                answer: 'Avoid ultra-processed breakfast bars marketed as healthy — most are low in protein and high in sugar alcohols that can trigger hunger rebounds later in the day.',
+            },
+            {
+                id: 'best-high-protein-breakfast-for-fat-loss-faq-3',
+                question: 'What if I have low appetite in the morning?',
+                answer: 'Start with a lighter protein smoothie and scale up the portion over 1 to 2 weeks rather than forcing a full plate immediately.',
+            },
+        ],
         internalLinks: [
-            { label: 'Explore our weight loss services', to: '/services/' },
-            { label: 'Book a 1-on-1 consultation', to: '/booking/' },
+            { label: 'Explore our weight loss services', to: '/services' },
+            { label: 'Book a 1-on-1 consultation', to: '/booking' },
         ],
     },
     {
@@ -423,9 +440,26 @@ export const blogPosts: BlogPost[] = [
                 ],
             },
         ],
+        articleFaqs: [
+            {
+                id: 'pcos-diet-plan-basics-that-actually-work-faq-1',
+                question: 'How often should I eat with PCOS?',
+                answer: 'Space meals 3 to 4 hours apart to avoid repetitive grazing and support a clearer hunger rhythm, building each plate around protein, fiber, and controlled carbohydrate portions.',
+            },
+            {
+                id: 'pcos-diet-plan-basics-that-actually-work-faq-2',
+                question: 'How long before a PCOS diet plan shows results?',
+                answer: 'Consistency for at least 8 to 12 weeks is essential before evaluating progress — track cycle length, energy, and cravings weekly to spot real trends.',
+            },
+            {
+                id: 'pcos-diet-plan-basics-that-actually-work-faq-3',
+                question: 'Does nutrition alone manage PCOS symptoms?',
+                answer: 'Nutrition is powerful, but sleep regularity and strength training are major multipliers — paired interventions consistently outperform diet changes alone.',
+            },
+        ],
         internalLinks: [
-            { label: 'See our medical nutrition therapy program', to: '/services/' },
-            { label: 'Speak with our nutritionist', to: '/contact/' },
+            { label: 'See our medical nutrition therapy program', to: '/services' },
+            { label: 'Speak with our nutritionist', to: '/contact' },
         ],
     },
     {
@@ -480,9 +514,26 @@ export const blogPosts: BlogPost[] = [
                 ],
             },
         ],
+        articleFaqs: [
+            {
+                id: 'simple-weekly-diet-planning-for-busy-professionals-faq-1',
+                question: 'How much time does weekly diet planning actually take?',
+                answer: 'A single 60-minute weekly session to define protein anchors, a grocery list, and fallback meals for high-stress days is enough to stay consistent.',
+            },
+            {
+                id: 'simple-weekly-diet-planning-for-busy-professionals-faq-2',
+                question: 'How many meal options do I need to plan?',
+                answer: 'Two breakfast options, two lunch options, and three dinner templates rotated through the week are enough to reduce decision fatigue without feeling repetitive.',
+            },
+            {
+                id: 'simple-weekly-diet-planning-for-busy-professionals-faq-3',
+                question: 'How do I stay on track over weekends?',
+                answer: "Decide your restaurant strategy, hydration target, and protein anchors before Friday arrives, so one relaxed meal doesn't turn into three chaotic days.",
+            },
+        ],
         internalLinks: [
-            { label: 'View custom diet blueprint service', to: '/services/' },
-            { label: 'Reserve a planning consultation', to: '/booking/' },
+            { label: 'View custom diet blueprint service', to: '/services' },
+            { label: 'Reserve a planning consultation', to: '/booking' },
         ],
     },
     {
@@ -529,9 +580,26 @@ export const blogPosts: BlogPost[] = [
                 ],
             },
         ],
+        articleFaqs: [
+            {
+                id: 'diabetes-friendly-plate-method-for-busy-families-faq-1',
+                question: 'Can diabetic meal plans include rice, roti, or potatoes?',
+                answer: 'Yes — these can fit many diabetes plans when portions are intentional and paired with protein and fiber. The key is how much and how often, not total avoidance.',
+            },
+            {
+                id: 'diabetes-friendly-plate-method-for-busy-families-faq-2',
+                question: 'Do I need to cook separate meals for a family member with diabetes?',
+                answer: 'No — adjusting the shared family meal (more salad, more protein, reduced refined portions, better timing) usually works better than isolating one person with separate diet food.',
+            },
+            {
+                id: 'diabetes-friendly-plate-method-for-busy-families-faq-3',
+                question: "Is one high blood sugar reading a sign the plan isn't working?",
+                answer: 'One reading is information, not a verdict — reviewing patterns around breakfast, late dinners, stress, sleep, and post-meal walking gives a much clearer picture.',
+            },
+        ],
         internalLinks: [
-            { label: 'Explore medical nutrition therapy', to: '/services/' },
-            { label: 'Book diabetes nutrition support', to: '/booking/' },
+            { label: 'Explore medical nutrition therapy', to: '/services' },
+            { label: 'Book diabetes nutrition support', to: '/booking' },
         ],
     },
     {
@@ -578,9 +646,26 @@ export const blogPosts: BlogPost[] = [
                 ],
             },
         ],
+        articleFaqs: [
+            {
+                id: 'gut-health-meal-rhythm-for-bloating-relief-faq-1',
+                question: 'Will eating more fiber immediately reduce bloating?',
+                answer: 'Not necessarily — sudden fiber increases can worsen bloating, so legumes, vegetables, seeds, and whole grains should be added gradually while monitoring tolerance and hydration.',
+            },
+            {
+                id: 'gut-health-meal-rhythm-for-bloating-relief-faq-2',
+                question: 'How long does it take to identify bloating triggers?',
+                answer: 'Patterns usually become clearer after about two weeks of calm tracking of meals, stress, sleep, caffeine, dairy, and eating speed, rather than one day of strict elimination.',
+            },
+            {
+                id: 'gut-health-meal-rhythm-for-bloating-relief-faq-3',
+                question: 'When should bloating be checked by a doctor instead of a nutritionist?',
+                answer: 'Persistent pain, unexplained weight loss, blood in stool, or severe symptoms should be reviewed by a qualified medical professional — nutrition coaching supports day-to-day structure, not red-flag symptoms.',
+            },
+        ],
         internalLinks: [
-            { label: 'See custom diet blueprint service', to: '/services/' },
-            { label: 'Ask about gut nutrition support', to: '/contact/' },
+            { label: 'See custom diet blueprint service', to: '/services' },
+            { label: 'Ask about gut nutrition support', to: '/contact' },
         ],
     },
     {
@@ -627,9 +712,26 @@ export const blogPosts: BlogPost[] = [
                 ],
             },
         ],
+        articleFaqs: [
+            {
+                id: 'ramadan-nutrition-plan-for-energy-and-fat-loss-faq-1',
+                question: 'What should suhoor include for steady energy during fasting?',
+                answer: 'Protein, slow carbohydrates, fiber, and hydration — such as eggs with roti and vegetables, Greek yogurt with oats and fruit, or lentils with salad.',
+            },
+            {
+                id: 'ramadan-nutrition-plan-for-energy-and-fat-loss-faq-2',
+                question: 'How can I avoid overeating at iftar?',
+                answer: 'Start with water and a small portion, pause briefly, then build a balanced plate — this reduces the rebound-overeating pattern that long fasting hours can trigger.',
+            },
+            {
+                id: 'ramadan-nutrition-plan-for-energy-and-fat-loss-faq-3',
+                question: 'Does Ramadan fasting make it harder to keep protein intake up?',
+                answer: 'Protein intake often drops because meals become snack-heavy, so anchoring both suhoor and iftar with a clear protein source is important for maintaining fullness and muscle.',
+            },
+        ],
         internalLinks: [
-            { label: 'Start a weight loss coaching plan', to: '/services/' },
-            { label: 'Book Ramadan nutrition consultation', to: '/booking/' },
+            { label: 'Start a weight loss coaching plan', to: '/services' },
+            { label: 'Book Ramadan nutrition consultation', to: '/booking' },
         ],
     },
 ]

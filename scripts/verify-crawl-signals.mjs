@@ -3,9 +3,9 @@ import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const distDir = resolve(root, "dist");
-const sitemapFile = resolve(distDir, "sitemap_index.xml");
+const sitemapFile = resolve(distDir, "sitemap.xml");
 const nginxFile = resolve(root, "deploy/nginx/dietrix.conf");
-const canonicalOrigin = "https://dietrix.fit";
+const canonicalOrigin = "https://dietrixfit.com";
 
 const failures = [];
 
@@ -56,7 +56,7 @@ function walk(value, visit) {
   Object.values(value).forEach((entry) => walk(entry, visit));
 }
 
-check(existsSync(sitemapFile), "dist/sitemap_index.xml is missing; run the production build first");
+check(existsSync(sitemapFile), "dist/sitemap.xml is missing; run the production build first");
 check(existsSync(nginxFile), "deploy/nginx/dietrix.conf is missing");
 
 if (existsSync(sitemapFile)) {
@@ -72,8 +72,8 @@ if (existsSync(sitemapFile)) {
 
     check(url.origin === canonicalOrigin, `Noncanonical sitemap origin: ${urlString}`);
     check(
-      url.pathname === "/" || url.pathname.endsWith("/"),
-      `Non-trailing-slash sitemap URL: ${urlString}`,
+      url.pathname === "/" || !url.pathname.endsWith("/"),
+      `Trailing-slash sitemap URL: ${urlString}`,
     );
     check(existsSync(file), `No generated SSG document for ${urlString}: ${file}`);
 
@@ -94,14 +94,17 @@ if (existsSync(sitemapFile)) {
       }
 
       if (target.origin !== canonicalOrigin) {
-        if (/^https?:\/\/(www\.)?dietrix\.fit/i.test(href)) {
+        if (/^https?:\/\/(www\.)?dietrixfit\.com/i.test(href)) {
           failures.push(`Internal link uses a noncanonical origin in ${file}: ${href}`);
+        }
+        if (/^https?:\/\/(www\.)?dietrix\.fit/i.test(href)) {
+          failures.push(`Internal link still points at the retired dietrix.fit domain in ${file}: ${href}`);
         }
         continue;
       }
 
       check(
-        target.pathname === "/" || target.pathname.endsWith("/"),
+        target.pathname === "/" || !target.pathname.endsWith("/"),
         `Internal link immediately redirects in ${file}: ${href}`,
       );
       check(
@@ -142,11 +145,11 @@ if (existsSync(sitemapFile)) {
     check(Boolean(collectionPage), "Testimonials JSON-LD has no CollectionPage object");
     if (collectionPage) {
       check(
-        collectionPage.url === `${canonicalOrigin}/testimonials/`,
+        collectionPage.url === `${canonicalOrigin}/testimonials`,
         "CollectionPage.url is not the canonical testimonials URL",
       );
       check(
-        collectionPage["@id"] === `${canonicalOrigin}/testimonials/#collection`,
+        collectionPage["@id"] === `${canonicalOrigin}/testimonials#collection`,
         "CollectionPage @id is not stable",
       );
       check(
