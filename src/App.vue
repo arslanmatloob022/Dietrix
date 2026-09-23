@@ -22,7 +22,7 @@ async function attachGsapReveals() {
   // Kill previous triggers to avoid accumulation on route change
   revealTriggers.forEach((t) => t?.kill?.())
   revealTriggers = []
-
+// App cod estores at nest
   // ── Staggered reveal groups (spring bounce, bigger offset) ───────────
   document.querySelectorAll<HTMLElement>('.reveal-group').forEach((group) => {
     const children = Array.from(group.children) as HTMLElement[]
