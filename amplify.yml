@@ -1,0 +1,26 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Force pnpm regardless of which lockfile Amplify's auto-detection
+        # notices first — package.json pins pnpm via "packageManager", and a
+        # stray package-lock.json in the repo could otherwise steer Amplify
+        # toward npm, which would skip the pnpm-specific dependency tree.
+        - corepack enable
+        - corepack prepare pnpm@10.15.1 --activate
+        - pnpm install --frozen-lockfile
+    build:
+      commands:
+        # pnpm run build already runs the "prebuild" (generate-seo-assets.mjs,
+        # which writes sitemap.xml/robots.txt/llms.txt into public/) and
+        # "postbuild" (verify-crawl-signals.mjs) lifecycle scripts defined in
+        # package.json — no need to call them separately here.
+        - pnpm run build
+  artifacts:
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*

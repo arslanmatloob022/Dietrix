@@ -1,4 +1,13 @@
-# AWS/Nginx deployment for canonical Dietrix URLs
+# AWS/Nginx deployment for canonical Dietrix URLs (historical)
+
+> **Superseded.** Production now runs on AWS Amplify Hosting — see
+> [`aws-amplify-deployment.md`](./aws-amplify-deployment.md). This doc is
+> kept because its routing policy (no trailing slash, real 404s, no SPA
+> fallback) is exactly what got translated into Amplify's rewrite rules,
+> and because the `dietrix.fit` retired-domain redirect may still need to
+> run from a small nginx instance rather than Amplify (Amplify can't do a
+> per-domain redirect within one app) — see the "Custom domain" section
+> of the Amplify doc.
 
 The production domain is **dietrixfit.com**. The previous domain,
 `dietrix.fit`, is retired and permanently 301-redirects every URL to its

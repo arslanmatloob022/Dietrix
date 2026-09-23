@@ -1,3 +1,8 @@
+# NOTE: not the active deployment target. Production runs on AWS Amplify
+# Hosting (see docs/aws-amplify-deployment.md); this file has no effect
+# there. Kept only as a working reference for the same routing policy in
+# Netlify's rule syntax, in case Netlify is ever used again.
+#
 # Netlify configuration for Dietrix — vite-ssg (Static Site Generation)
 # dirStyle: 'nested' produces dist/about/index.html, dist/services/index.html, etc.
 # Without explicit rewrites, Netlify's "pretty-URLs" issues a 301 from /about → /about/
