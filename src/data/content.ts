@@ -734,4 +734,296 @@ export const blogPosts: BlogPost[] = [
             { label: 'Book Ramadan nutrition consultation', to: '/booking' },
         ],
     },
+    {
+        slug: 'heart-healthy-diet-plan-for-cholesterol-and-blood-pressure',
+        title: 'Heart-Healthy Diet Plan for Cholesterol and Blood Pressure Control',
+        seoTitle: 'Heart-Healthy Diet Plan Online | Dietrix Fit',
+        seoDescription:
+            'Build a heart-healthy diet plan that lowers LDL cholesterol and blood pressure with fiber, healthy fats, sodium control, and sustainable meal structure.',
+        category: 'Health Conditions',
+        excerpt:
+            'Heart health improves through direction, not deprivation. Fiber, potassium, and the right fats do more than any single "superfood."',
+        publishedAt: '2026-05-14',
+        readTime: '8 min read',
+        heroImage:
+            'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80',
+        sections: [
+            {
+                heading: 'Why Fiber and Sodium Are the Two Levers That Matter Most',
+                paragraphs: [
+                    'Soluble fiber from oats, beans, and lentils binds cholesterol in the digestive tract and helps lower LDL over 4 to 6 weeks of consistent intake. Aim for at least 25 to 30 grams of total fiber daily.',
+                    'Sodium works the opposite way on blood pressure. Most excess sodium comes from packaged and restaurant food, not the salt shaker, so cooking more meals at home is usually the single biggest lever.',
+                ],
+            },
+            {
+                heading: 'Choose Fats That Work For Your Arteries',
+                subheading: 'Not all fats affect cholesterol the same way',
+                paragraphs: [
+                    'Replace saturated fats — found in fried foods, fatty cuts of meat, and butter — with unsaturated sources like olive oil, nuts, seeds, and fatty fish.',
+                    'Fatty fish such as salmon, mackerel, and sardines twice a week supply omega-3s that support healthy triglyceride levels.',
+                ],
+            },
+            {
+                heading: 'Build a Heart-Healthy Plate',
+                paragraphs: [
+                    'Fill half the plate with vegetables and fruit, a quarter with whole grains like oats, quinoa, or brown rice, and a quarter with lean protein or legumes, finished with a drizzle of olive oil.',
+                    'This structure naturally raises potassium and fiber while lowering sodium and saturated fat, without needing to count every gram.',
+                ],
+            },
+            {
+                heading: 'Common Mistakes That Stall Progress',
+                paragraphs: [
+                    '"Low-fat" packaged snacks often replace fat with refined sugar and sodium, which can worsen triglycerides and blood pressure despite the label.',
+                    "Skipping potassium-rich foods like bananas, potatoes, and leafy greens is a common oversight — potassium helps counter sodium's effect on blood pressure.",
+                ],
+            },
+            {
+                heading: 'What to Track Over Time',
+                paragraphs: [
+                    'Blood pressure readings, waist circumference, and lipid panel results (LDL, HDL, triglycerides) every 3 months give a clearer picture than daily weight alone.',
+                    'Give any heart-healthy eating pattern at least 8 to 12 weeks before reassessing — cholesterol and blood pressure respond to consistency, not single meals.',
+                ],
+            },
+        ],
+        articleFaqs: [
+            {
+                id: 'heart-healthy-diet-plan-for-cholesterol-and-blood-pressure-faq-1',
+                question: 'What foods lower cholesterol fastest?',
+                answer: 'Soluble fiber from oats, beans, and lentils binds cholesterol in the gut and can help lower LDL within 4 to 6 weeks of consistently eating 25 to 30 grams of total fiber daily.',
+            },
+            {
+                id: 'heart-healthy-diet-plan-for-cholesterol-and-blood-pressure-faq-2',
+                question: 'Does cutting salt really lower blood pressure?',
+                answer: 'Yes — most excess sodium comes from packaged and restaurant food rather than the salt shaker, so cooking more meals at home is usually the biggest single lever for blood pressure.',
+            },
+            {
+                id: 'heart-healthy-diet-plan-for-cholesterol-and-blood-pressure-faq-3',
+                question: 'How often should I eat fish for heart health?',
+                answer: 'Aim for fatty fish like salmon, mackerel, or sardines twice a week to supply omega-3s that support healthy triglyceride levels.',
+            },
+        ],
+        internalLinks: [
+            { label: 'Explore heart-healthy nutrition coaching', to: '/services' },
+            { label: 'Book a heart-health consultation', to: '/booking' },
+        ],
+    },
+    {
+        slug: 'thyroid-friendly-nutrition-for-hypothyroidism',
+        title: 'Thyroid-Friendly Nutrition: What to Eat for Hypothyroidism',
+        seoTitle: 'Thyroid-Friendly Diet Plan | Dietrix Fit',
+        seoDescription:
+            'Learn thyroid-friendly nutrition for hypothyroidism — iodine, selenium, and iron-aware meal planning, medication timing, and foods that support energy.',
+        category: 'Health Conditions',
+        excerpt:
+            'Thyroid nutrition works best as steady support around your treatment, not a replacement for it. Timing and specific nutrients matter more than any food to avoid.',
+        publishedAt: '2026-06-22',
+        readTime: '8 min read',
+        heroImage:
+            'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1200&q=80',
+        sections: [
+            {
+                heading: 'Nutrition Supports Your Treatment, It Does Not Replace It',
+                paragraphs: [
+                    'If you take thyroid medication, food and supplement timing matters more than any specific ingredient. Take levothyroxine on an empty stomach and wait 30 to 60 minutes before eating or drinking coffee.',
+                    'Calcium, iron, and high-fiber supplements taken too close to your dose can reduce absorption — space them at least 4 hours apart.',
+                ],
+            },
+            {
+                heading: 'Nutrients That Matter Most',
+                subheading: 'Iodine, selenium, iron, and zinc',
+                paragraphs: [
+                    'Iodine and selenium support thyroid hormone production. Iodized salt, dairy, eggs, and seafood cover most needs without extra supplementation for most people.',
+                    'Iron deficiency is common alongside hypothyroidism and can worsen fatigue. Pair iron-rich foods like lean red meat or lentils with vitamin C sources to improve absorption.',
+                ],
+            },
+            {
+                heading: 'Foods That Get Unfairly Blamed',
+                paragraphs: [
+                    'Raw cruciferous vegetables like broccoli and cabbage contain compounds that can interfere with iodine uptake in very large, raw quantities — but cooking largely deactivates this effect, so normal servings of cooked vegetables are not a concern.',
+                    'Gluten-free eating only helps thyroid symptoms if you also have celiac disease or a diagnosed gluten sensitivity. Cutting it without a reason adds restriction without benefit.',
+                ],
+            },
+            {
+                heading: 'Eating for Energy and Metabolism',
+                paragraphs: [
+                    'Hypothyroidism can slow metabolism and increase fatigue, so protein at each meal and consistent meal timing help stabilize energy better than skipping meals to compensate.',
+                    'Strength training two to three times weekly supports the muscle mass that hypothyroidism can gradually reduce, complementing nutrition rather than replacing it.',
+                ],
+            },
+            {
+                heading: 'What to Track With Your Doctor',
+                paragraphs: [
+                    'TSH, free T4, and sometimes free T3 lab values guide medication dosing — nutrition changes should be reviewed alongside these results, not instead of them.',
+                    'Track energy, weight trend, hair and skin changes, and digestion over 8 to 12 week windows to see whether nutrition adjustments are helping.',
+                ],
+            },
+        ],
+        articleFaqs: [
+            {
+                id: 'thyroid-friendly-nutrition-for-hypothyroidism-faq-1',
+                question: 'When should I eat after taking thyroid medication?',
+                answer: 'Wait 30 to 60 minutes after levothyroxine before eating or drinking coffee, and space calcium, iron, or high-fiber supplements at least 4 hours from your dose to protect absorption.',
+            },
+            {
+                id: 'thyroid-friendly-nutrition-for-hypothyroidism-faq-2',
+                question: 'Do I need to avoid broccoli and cabbage with hypothyroidism?',
+                answer: 'No — the compounds in cruciferous vegetables that affect iodine uptake are largely deactivated by cooking, so normal cooked servings are not a concern for most people.',
+            },
+            {
+                id: 'thyroid-friendly-nutrition-for-hypothyroidism-faq-3',
+                question: 'Should I go gluten-free for my thyroid?',
+                answer: 'Only if you also have celiac disease or a diagnosed gluten sensitivity — without one of those, cutting gluten adds restriction without a proven thyroid benefit.',
+            },
+        ],
+        internalLinks: [
+            { label: 'See our thyroid-aware nutrition coaching', to: '/services' },
+            { label: 'Talk to our nutritionist about your labs', to: '/contact' },
+        ],
+    },
+    {
+        slug: 'sports-nutrition-basics-for-strength-training-and-recovery',
+        title: 'Sports Nutrition Basics for Strength Training and Recovery',
+        seoTitle: 'Sports Nutrition Coaching Online | Dietrix Fit',
+        seoDescription:
+            'Sports nutrition basics for strength training — protein targets, pre and post-workout meals, hydration, and recovery nutrition that actually moves the needle.',
+        category: 'Diet Plans',
+        excerpt:
+            'Performance nutrition is mostly about daily protein and consistent fueling. Pre-workout snacks and supplements matter far less than most people assume.',
+        publishedAt: '2026-07-30',
+        readTime: '7 min read',
+        heroImage:
+            'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=1200&q=80',
+        sections: [
+            {
+                heading: 'Total Daily Protein Beats Perfect Timing',
+                paragraphs: [
+                    'For strength training, aim for 1.6 to 2.2 grams of protein per kilogram of bodyweight spread across 3 to 4 meals — this range consistently supports muscle repair and growth better than any single "anabolic window" strategy.',
+                    'Hitting your daily protein target matters far more than eating it within 30 minutes of training, despite what most supplement marketing implies.',
+                ],
+            },
+            {
+                heading: 'What to Eat Before Training',
+                subheading: 'Fuel without stomach discomfort',
+                paragraphs: [
+                    'A meal with carbohydrate and moderate protein 2 to 3 hours before training gives steady energy without digestive discomfort — think rice with chicken, or oats with yogurt.',
+                    'If training soon after waking, a smaller carbohydrate-forward snack like a banana or toast is usually easier to tolerate than a full meal.',
+                ],
+            },
+            {
+                heading: 'Recovery Nutrition That Actually Helps',
+                paragraphs: [
+                    'Within 1 to 2 hours after training, a meal combining protein and carbohydrate — such as a protein shake with fruit, or eggs with toast — replenishes glycogen and supports muscle repair.',
+                    'Sleep and total daily calories affect recovery more than the exact post-workout meal, so consistent sleep and adequate energy intake should come first.',
+                ],
+            },
+            {
+                heading: 'Hydration and Electrolytes',
+                paragraphs: [
+                    'Losing more than 2 percent of bodyweight in sweat during training measurably reduces performance — weighing yourself before and after a session once is enough to estimate your typical sweat loss.',
+                    'For sessions under 60 minutes, water is usually enough; longer or hotter sessions benefit from adding sodium and electrolytes.',
+                ],
+            },
+            {
+                heading: 'Do You Need Supplements?',
+                paragraphs: [
+                    'Creatine monohydrate (3 to 5 grams daily) and a protein supplement to close daily protein gaps are the two most evidence-backed additions — everything else is optional on top of a solid food-first plan.',
+                    'No supplement compensates for inconsistent training, inadequate sleep, or a protein-deficient diet, so build the fundamentals first.',
+                ],
+            },
+        ],
+        articleFaqs: [
+            {
+                id: 'sports-nutrition-basics-for-strength-training-and-recovery-faq-1',
+                question: 'How much protein do I need for strength training?',
+                answer: 'Aim for 1.6 to 2.2 grams of protein per kilogram of bodyweight daily, spread across 3 to 4 meals — this supports muscle repair better than timing protein around a narrow post-workout window.',
+            },
+            {
+                id: 'sports-nutrition-basics-for-strength-training-and-recovery-faq-2',
+                question: 'What should I eat before a workout?',
+                answer: 'A meal with carbohydrate and moderate protein 2 to 3 hours before training, like rice with chicken or oats with yogurt, provides steady energy without digestive discomfort.',
+            },
+            {
+                id: 'sports-nutrition-basics-for-strength-training-and-recovery-faq-3',
+                question: 'Are supplements necessary for muscle growth?',
+                answer: 'Creatine monohydrate and a protein supplement to close daily protein gaps are the most evidence-backed options, but no supplement replaces consistent training, sleep, and a protein-adequate diet.',
+            },
+        ],
+        internalLinks: [
+            { label: 'Explore performance nutrition coaching', to: '/services' },
+            { label: 'Book a sports nutrition consultation', to: '/booking' },
+        ],
+    },
+    {
+        slug: 'plant-based-weight-loss-meal-plan-for-beginners',
+        title: 'Plant-Based Weight Loss: A Practical Meal Plan for Beginners',
+        seoTitle: 'Plant-Based Weight Loss Plan | Dietrix Fit',
+        seoDescription:
+            'A practical plant-based weight loss meal plan for beginners covering protein sources, meal structure, and common mistakes that stall fat loss.',
+        category: 'Weight Loss',
+        excerpt:
+            'Plant-based weight loss fails most often from too little protein, not too many carbs. Fix the protein gap first and the rest gets easier.',
+        publishedAt: '2026-09-05',
+        readTime: '7 min read',
+        heroImage:
+            'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=1200&q=80',
+        sections: [
+            {
+                heading: 'Solve the Protein Gap First',
+                paragraphs: [
+                    'Most plant-based diets fall short on protein, not calories. Tofu, tempeh, lentils, chickpeas, edamame, and seitan all deliver 15 to 20 grams of protein per serving and should anchor every meal.',
+                    'Aim for at least 1.2 to 1.6 grams of protein per kilogram of bodyweight daily during a fat-loss phase, split across three or four plant-protein-forward meals.',
+                ],
+            },
+            {
+                heading: 'Build a Plate That Actually Fills You Up',
+                subheading: 'Volume and fiber do the heavy lifting',
+                paragraphs: [
+                    'Combine a plant protein, a high-fiber vegetable, a whole grain or starchy vegetable, and a small amount of fat like avocado, nuts, or tahini — this combination slows digestion and extends fullness.',
+                    'Legumes and whole grains together also form complete protein profiles, so variety across the week matters more than any single "perfect" ingredient.',
+                ],
+            },
+            {
+                heading: 'Avoid the Ultra-Processed Trap',
+                paragraphs: [
+                    'Plant-based does not automatically mean lower-calorie — vegan burgers, dairy-free desserts, and meat substitutes are often highly processed and calorie-dense.',
+                    'Read labels for added oils and sugar; whole-food plant proteins are usually more filling per calorie than their processed alternatives.',
+                ],
+            },
+            {
+                heading: 'Micronutrients Worth Watching',
+                paragraphs: [
+                    'Vitamin B12, iron, zinc, calcium, and omega-3s need deliberate planning on a fully plant-based diet — a B12 supplement is considered necessary for anyone eating no animal products.',
+                    'Pair iron-rich plant foods like lentils and spinach with vitamin C sources such as citrus or peppers to improve absorption.',
+                ],
+            },
+            {
+                heading: 'A Sample Day to Start With',
+                paragraphs: [
+                    'Breakfast: tofu scramble with vegetables and whole-grain toast. Lunch: lentil and quinoa bowl with roasted vegetables and tahini. Dinner: chickpea curry with brown rice and a side salad.',
+                    'Repeat simple templates like this for 2 to 3 weeks before adjusting — consistency reveals what is actually working better than frequent recipe changes.',
+                ],
+            },
+        ],
+        articleFaqs: [
+            {
+                id: 'plant-based-weight-loss-meal-plan-for-beginners-faq-1',
+                question: 'Can you lose weight on a plant-based diet without eating meat?',
+                answer: 'Yes — the key is closing the protein gap with tofu, tempeh, lentils, chickpeas, and edamame, aiming for 1.2 to 1.6 grams of protein per kilogram of bodyweight daily.',
+            },
+            {
+                id: 'plant-based-weight-loss-meal-plan-for-beginners-faq-2',
+                question: 'Is plant-based food automatically lower calorie?',
+                answer: 'No — vegan burgers, dairy-free desserts, and many meat substitutes are often highly processed and calorie-dense, so whole-food plant proteins are usually the better choice for fat loss.',
+            },
+            {
+                id: 'plant-based-weight-loss-meal-plan-for-beginners-faq-3',
+                question: 'What nutrients should I watch on a plant-based diet?',
+                answer: 'Vitamin B12, iron, zinc, calcium, and omega-3s need deliberate planning — a B12 supplement is considered necessary for anyone eating no animal products.',
+            },
+        ],
+        internalLinks: [
+            { label: 'Start a plant-based weight loss plan', to: '/services' },
+            { label: 'Book a plant-based nutrition consultation', to: '/booking' },
+        ],
+    },
 ]
