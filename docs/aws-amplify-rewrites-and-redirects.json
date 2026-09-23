@@ -1,0 +1,29 @@
+[
+  { "source": "/about/", "target": "/about", "status": "301" },
+  { "source": "/services/", "target": "/services", "status": "301" },
+  { "source": "/booking/", "target": "/booking", "status": "301" },
+  { "source": "/blog/", "target": "/blog", "status": "301" },
+  { "source": "/testimonials/", "target": "/testimonials", "status": "301" },
+  { "source": "/contact/", "target": "/contact", "status": "301" },
+  { "source": "/blog/best-high-protein-breakfast-for-fat-loss/", "target": "/blog/best-high-protein-breakfast-for-fat-loss", "status": "301" },
+  { "source": "/blog/pcos-diet-plan-basics-that-actually-work/", "target": "/blog/pcos-diet-plan-basics-that-actually-work", "status": "301" },
+  { "source": "/blog/simple-weekly-diet-planning-for-busy-professionals/", "target": "/blog/simple-weekly-diet-planning-for-busy-professionals", "status": "301" },
+  { "source": "/blog/diabetes-friendly-plate-method-for-busy-families/", "target": "/blog/diabetes-friendly-plate-method-for-busy-families", "status": "301" },
+  { "source": "/blog/gut-health-meal-rhythm-for-bloating-relief/", "target": "/blog/gut-health-meal-rhythm-for-bloating-relief", "status": "301" },
+  { "source": "/blog/ramadan-nutrition-plan-for-energy-and-fat-loss/", "target": "/blog/ramadan-nutrition-plan-for-energy-and-fat-loss", "status": "301" },
+
+  { "source": "/about", "target": "/about/index.html", "status": "200" },
+  { "source": "/services", "target": "/services/index.html", "status": "200" },
+  { "source": "/booking", "target": "/booking/index.html", "status": "200" },
+  { "source": "/blog", "target": "/blog/index.html", "status": "200" },
+  { "source": "/testimonials", "target": "/testimonials/index.html", "status": "200" },
+  { "source": "/contact", "target": "/contact/index.html", "status": "200" },
+  { "source": "/blog/best-high-protein-breakfast-for-fat-loss", "target": "/blog/best-high-protein-breakfast-for-fat-loss/index.html", "status": "200" },
+  { "source": "/blog/pcos-diet-plan-basics-that-actually-work", "target": "/blog/pcos-diet-plan-basics-that-actually-work/index.html", "status": "200" },
+  { "source": "/blog/simple-weekly-diet-planning-for-busy-professionals", "target": "/blog/simple-weekly-diet-planning-for-busy-professionals/index.html", "status": "200" },
+  { "source": "/blog/diabetes-friendly-plate-method-for-busy-families", "target": "/blog/diabetes-friendly-plate-method-for-busy-families/index.html", "status": "200" },
+  { "source": "/blog/gut-health-meal-rhythm-for-bloating-relief", "target": "/blog/gut-health-meal-rhythm-for-bloating-relief/index.html", "status": "200" },
+  { "source": "/blog/ramadan-nutrition-plan-for-energy-and-fat-loss", "target": "/blog/ramadan-nutrition-plan-for-energy-and-fat-loss/index.html", "status": "200" },
+
+  { "source": "/<*>", "target": "/404/index.html", "status": "404" }
+]
